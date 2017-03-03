@@ -297,7 +297,7 @@ namespace Deploy.Controllers
         }
 
 
-        public async void SaveToAzure(int Id)
+        public async Task<IActionResult> SaveToAzure(int Id)
         {
             var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
 
@@ -320,11 +320,12 @@ namespace Deploy.Controllers
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("tighedeployment1", "3jh8Xg/Wxod2E6HQQI2cNGSf11HuBnqB4XYe8xRBN044y+1GQCXrh+rNO0bJ6KahXbd8XREekyrujyyJCSFm6A=="), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("testcontainer");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference("json");
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference("params.json");
             using (var filestream = System.IO.File.OpenRead(@"C:\temp\writelines.txt"))
             {
                 await blockBlob.UploadFromStreamAsync(filestream);
             }
+            return RedirectToAction("IndexSelected", new { id = tennantParams.FirstOrDefault().DeployTypeID });
         }
 
 
