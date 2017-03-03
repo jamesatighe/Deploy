@@ -1,0 +1,46 @@
+@model Deploy.ViewModel.TennantDeployParams
+
+@{
+    ViewData["Title"] = "Deployment";
+}
+
+<h2>Deployment Parameters</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.DeployTypeID" class="btn btn-warning btn-lg"><span class="glyphicon glyphicon-wrench" ></span> Edit</a>
+    <button class="btn btn-lg btn-success"><span class="glyphicon glyphicon-cloud-upload"></span>@Html.ActionLink(" Save to Azure", "SaveToAzure",new { id = Model.DeployTypeID })</button>
+    <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Save to Azure</a>
+    <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
+</p>
+<p>
+    You are currently adding deployment parameters for: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.DeployName)</span>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Parameter Name
+                </th>
+                <th>
+                    Parameter Value
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@for (var i = 0; i < Model.DeployParams.Count(); i++) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.TennantParams[i].ParamValue)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

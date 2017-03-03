@@ -1,0 +1,79 @@
+@model Deploy.ViewModel.TennantDeployParams
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Parameter</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>TennantParam</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="DeployName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="DeployName" class="form-control" />
+                <span asp-validation-for="DeployName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="TennantName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TennantName" class="form-control" />
+                <span asp-validation-for="TennantName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="DeployTypeID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="DeployTypeID" class="form-control" />
+                <span asp-validation-for="DeployTypeID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group hidden">
+            <label asp-for="TennantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TennantID" class="form-control" />
+                <span asp-validation-for="TennantID" class="text-danger"></span>
+            </div>
+        </div>
+        @for (var i = 0; i < Model.ParamName.Count(); i++)
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
+                <div class="col-md-10">
+                    <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group hidden">
+                <label class="col-md-2 control-label">Parameter Name </label>
+                <div class="col-md-10">
+                    <input asp-for="@Model.ParamName[i]" name="ParamName[@(i)]" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group hidden">
+                <div class="col-md-2 control-label" style="font-weight:bold">@Html.DisplayNameFor(modelItem => Model.TennantParamID)</div>
+                <div class="col-md-10">
+                    <input asp-for="@Model.TennantParamID[i]" name="TennantParamID[@(i)]" class="form-control" />
+                </div>
+            </div>
+
+
+        }
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default btn-success" />
+                <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

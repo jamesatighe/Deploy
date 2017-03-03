@@ -1,0 +1,58 @@
+@model Deploy.ViewModel.TenantDeploys
+
+@{
+    ViewData["Title"] = "IndexSelected";
+}
+
+<h2>Deployment List</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;" >@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+
+<p>
+    <a asp-action="Create" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
+    <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Deploy Name
+                </th>
+            <th>
+                Tenant ID
+            </th>
+            <th>
+                Tennant Name
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.DeployTypes) {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(item.DeployName))
+                {
+                    @Html.ActionLink(item.DeployName, "DeployParams", new { Id = item.DeployTypeID })
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TennantID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tennants.TennantName)
+            </td>
+            <td>
+                <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-cloud-upload"></span> Save to Azure</a>
+                <a asp-action="Edit" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.DeployTypeID"class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.DeployTypeID"class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

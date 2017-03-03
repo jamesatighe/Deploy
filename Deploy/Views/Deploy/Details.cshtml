@@ -1,0 +1,44 @@
+@model Deploy.ViewModel.TenantDeploys
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Tennant List</h2>
+
+<div>
+    <h4>Details</h4>
+    <p>
+        <a asp-action="Edit" asp-route-id="@Model.TennantID" class="btn btn-warning btn-lg"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+        <a asp-action="IndexCount" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+        <a asp-action="Delete" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+    </p>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TennantName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TennantName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+    </dl>
+</div>
+
