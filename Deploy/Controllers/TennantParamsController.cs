@@ -12,23 +12,22 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Text;
+using System.IO;
 
 namespace Deploy.Controllers
 {
     public class TennantParamsController : Controller
     {
         private readonly DeployDBContext _context;
+        private AzureStorageConfig _storageConfig;
 
-        public TennantParamsController(DeployDBContext context)
+        public TennantParamsController(DeployDBContext context, IOptions<AzureStorageConfig> config)
         {
-            _context = context;    
+            _context = context;
+            _storageConfig = config.Value;
         }
 
-        //private AzureStorageConfig _storageConfig;
-        //public TennantParamsController(IOptions<AzureStorageConfig> config)
-        //{
-        //    _storageConfig = config.Value;
-        //}
 
         // GET: TennantParams
         public async Task<IActionResult> IndexSelected(int Id)
@@ -300,9 +299,10 @@ namespace Deploy.Controllers
         public async Task<IActionResult> SaveToAzure(int Id)
         {
             var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
+            var deployTypes =  _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
 
             var JsonList = new Dictionary<string, string>();
-
+            string filename = deployTypes.DeployName + "-" + deployTypes.Tennants.TennantName + ".json";
 
             foreach (var param in tennantParams)
             {
@@ -314,18 +314,23 @@ namespace Deploy.Controllers
 
             }
             string json1 = JsonConvert.SerializeObject(JsonList);
-        
+
             System.IO.File.WriteAllText(@"C:\temp\WriteLines.txt", json1);
 
-            CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("tighedeployment1", "3jh8Xg/Wxod2E6HQQI2cNGSf11HuBnqB4XYe8xRBN044y+1GQCXrh+rNO0bJ6KahXbd8XREekyrujyyJCSFm6A=="), true);
+            CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("testcontainer");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference("params.json");
-            using (var filestream = System.IO.File.OpenRead(@"C:\temp\writelines.txt"))
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(filename);
+
+            using (Stream s = GenerateStreamFromString(json1))
             {
-                await blockBlob.UploadFromStreamAsync(filestream);
+                await blockBlob.UploadFromStreamAsync(s);
             }
-            return RedirectToAction("IndexSelected", new { id = tennantParams.FirstOrDefault().DeployTypeID });
+                //using (var filestream = System.IO.File.OpenRead(@"C:\temp\writelines.txt"))
+                //{
+                //    await blockBlob.UploadFromStreamAsync(filestream);
+                //}
+                return RedirectToAction("IndexSelected", new { id = tennantParams.FirstOrDefault().DeployTypeID });
         }
 
 
@@ -350,6 +355,15 @@ namespace Deploy.Controllers
 
         // }
 
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
         private bool TennantParamExists(int id)
         {
             return _context.TennantParams.Any(e => e.TennantParamID == id);
