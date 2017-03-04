@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Tennants.TennantName)
             </td>
             <td>
-                <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-cloud-upload"></span> Save to Azure</a>
+                <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-cloud-upload"></span> Save to Azure</a>
                 <a asp-action="Edit" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a> 
                 <a asp-action="Details" asp-route-id="@item.DeployTypeID"class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a> 
                 <a asp-action="Delete" asp-route-id="@item.DeployTypeID"class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>

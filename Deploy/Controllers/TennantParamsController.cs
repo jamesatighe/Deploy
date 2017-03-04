@@ -46,7 +46,7 @@ namespace Deploy.Controllers
                     viewModel.TennantName = DeployTypes.Tennants.TennantName;
                     viewModel.TennantID = DeployTypes.Tennants.TennantID;
 
-                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "AD").ToListAsync();
+                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "ADS").ToListAsync();
                     var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
                     viewModel.DeployParams = new List<DeployParam>();
                     foreach (var Param in Params)
@@ -74,7 +74,7 @@ namespace Deploy.Controllers
                     viewModel.TennantName = DeployTypes.Tennants.TennantName;
                                         viewModel.TennantID = DeployTypes.Tennants.TennantID;
 
-                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "RDS").ToListAsync();
+                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "RDSS").ToListAsync();
                     var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
                     viewModel.DeployParams = new List<DeployParam>();
                     foreach (var Param in Params)
@@ -134,7 +134,7 @@ namespace Deploy.Controllers
 
             if (viewModel.DeployName.Contains("Identity"))
             {
-                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "AD").ToListAsync();
+                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "ADS").ToListAsync();
                 viewModel.DeployParams = new List<DeployParam>();
                 viewModel.TennantName = deploy.Tennants.TennantName;
                 viewModel.TennantID = deploy.Tennants.TennantID;
@@ -155,7 +155,7 @@ namespace Deploy.Controllers
 
             if (viewModel.DeployName.Contains("RDS"))
             {
-                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "RDS").ToListAsync();
+                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "RDSS").ToListAsync();
                 viewModel.DeployParams = new List<DeployParam>();
                 viewModel.TennantName = deploy.Tennants.TennantName;
                 viewModel.TennantID = deploy.Tennants.TennantID;
@@ -299,30 +299,67 @@ namespace Deploy.Controllers
         public async Task<IActionResult> SaveToAzure(int Id)
         {
             var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-            var deployTypes =  _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
 
-            var JsonList = new Dictionary<string, string>();
+            
             string filename = deployTypes.DeployName + "-" + deployTypes.Tennants.TennantName + ".json";
 
-            foreach (var param in tennantParams)
+            var JsonHeader = new Dictionary<string, string>();
+            JsonHeader.Add("$schema" ,"https:\\schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#");
+            JsonHeader.Add("contentVersion", "1.0.0.0");
+
+            //Create String Builder to hold generated Json parameters file.
+            StringBuilder tempjson = new StringBuilder();
+            tempjson.AppendLine("{");
+            tempjson.AppendLine("\t\"$schema\": \"https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#\",");
+            tempjson.AppendLine("\t\"contentVersion\": \"1.0.0.0\",");
+            tempjson.AppendLine("\t\"parameters\": {");
+
+            //Loop through each parameter for the deployment and add them under the parameters Json key.
+            for (var i = 0; i < tennantParams.Count(); i++)
             {
-                JsonList.Add(param.ParamName, param.ParamValue);
+                tempjson.AppendLine("\t\t\"" + tennantParams[i].ParamName.ToString() + "\": {");
+                if (tennantParams[i].ParamName == "domainAdminUserName")
+                {
 
-                // Json = new TennantParamJSON();
-                //Json.ParamName = param.ParamName;
-                //Json.ParamValue = param.ParamValue;
+                    tempjson.AppendLine("\t\t\t\"value\": " + "\"" + tennantParams[i].ParamValue.ToString().Replace(@"\",@"\\") + "\"");
+                }
+                else if (tennantParams[i].ParamName == "dnsServers")
+                {
+                    tempjson.AppendLine("\t\t\t\"value\": [");
+                    tempjson.AppendLine("\t\t\t\t" + tennantParams[i].ParamValue.ToString());
+                    tempjson.AppendLine("\t\t\t]");
+                }
+                else
+                {
+                    tempjson.AppendLine("\t\t\t\"value\": " + "\"" + tennantParams[i].ParamValue.ToString() + "\"");
+                }
+                if (i < tennantParams.Count -1)
+                {
+                    tempjson.AppendLine("\t\t},");
+                }
 
-            }
-            string json1 = JsonConvert.SerializeObject(JsonList);
+                if (i == tennantParams.Count -1)
+                {
+                    tempjson.AppendLine("\t\t}");
+                }
+ 
+            };
 
-            System.IO.File.WriteAllText(@"C:\temp\WriteLines.txt", json1);
+            tempjson.AppendLine("\t}");
+            tempjson.AppendLine("}");
+
+            var jsonfull = tempjson.ToString();
+ 
+
+            System.IO.File.WriteAllText(@"C:\temp\WriteLines.txt", jsonfull);
 
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("testcontainer");
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(filename);
 
-            using (Stream s = GenerateStreamFromString(json1))
+            using (Stream s = GenerateStreamFromString(jsonfull))
             {
                 await blockBlob.UploadFromStreamAsync(s);
             }
@@ -330,7 +367,7 @@ namespace Deploy.Controllers
                 //{
                 //    await blockBlob.UploadFromStreamAsync(filestream);
                 //}
-                return RedirectToAction("IndexSelected", new { id = tennantParams.FirstOrDefault().DeployTypeID });
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
         }
 
 
