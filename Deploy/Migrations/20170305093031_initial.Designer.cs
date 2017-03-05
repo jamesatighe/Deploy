@@ -8,8 +8,8 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    [Migration("20170302131014_initial4")]
-    partial class initial4
+    [Migration("20170305093031_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,8 @@ namespace Deploy.Migrations
                 {
                     b.Property<int>("DeployParamID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ParameterDeployType");
 
                     b.Property<string>("ParameterName");
 
@@ -83,6 +85,10 @@ namespace Deploy.Migrations
                     b.Property<int>("DeployParamID");
 
                     b.Property<int>("DeployTypeID");
+
+                    b.Property<string>("ParamName");
+
+                    b.Property<string>("ParamType");
 
                     b.Property<string>("ParamValue");
 

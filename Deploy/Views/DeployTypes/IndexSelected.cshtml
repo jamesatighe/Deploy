@@ -12,7 +12,20 @@
 <p>
     <a asp-action="Create" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
     <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
-
+    @{
+        var saveCount = 0;
+        for (var i = 0; i < Model.DeployTypes.Count(); i++)
+        {
+            if (Model.DeployTypes[i].DeploySaved == "Yes")
+            {
+                saveCount++;
+            }
+        }
+        if (saveCount == Model.DeployTypes.Count)
+        {
+             <a class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+         }
+     }
 </p>
 <table class="table">
     <thead>
@@ -46,6 +59,7 @@
                 @Html.DisplayFor(modelItem => item.Tennants.TennantName)
             </td>
             <td>
+ 
                 <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-cloud-upload"></span> Save to Azure</a>
                 <a asp-action="Edit" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a> 
                 <a asp-action="Details" asp-route-id="@item.DeployTypeID"class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a> 
@@ -55,4 +69,5 @@
 }
     </tbody>
 </table>
+
 

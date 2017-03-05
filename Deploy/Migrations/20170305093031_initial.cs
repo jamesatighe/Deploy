@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Deploy.Migrations
 {
-    public partial class initial2 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,6 +54,8 @@ namespace Deploy.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DeployParamID = table.Column<int>(nullable: false),
                     DeployTypeID = table.Column<int>(nullable: false),
+                    ParamName = table.Column<string>(nullable: true),
+                    ParamType = table.Column<string>(nullable: true),
                     ParamValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -73,6 +75,7 @@ namespace Deploy.Migrations
                 {
                     DeployParamID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ParameterDeployType = table.Column<string>(nullable: true),
                     ParameterName = table.Column<string>(nullable: true),
                     ParameterType = table.Column<string>(nullable: true),
                     TennantParamID = table.Column<int>(nullable: true)

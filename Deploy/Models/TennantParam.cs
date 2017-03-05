@@ -11,11 +11,10 @@ namespace Deploy.Models
         public int DeployTypeID { get; set; }
         public int DeployParamID { get; set; }
         public string ParamValue { get; set; }
-        public string ParamName{ get; set; }
+        public string ParamName { get; set; }
+        public string ParamType { get; set; }
 
         public List<DeployParam> DeployParams { get; set; }
-
-
 
     }
 }

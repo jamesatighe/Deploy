@@ -8,8 +8,8 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    [Migration("20170302130221_initial3")]
-    partial class initial3
+    [Migration("20170305100411_removetennantparamIDfromdeploytype")]
+    partial class removetennantparamIDfromdeploytype
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,8 @@ namespace Deploy.Migrations
                 {
                     b.Property<int>("DeployParamID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ParameterDeployType");
 
                     b.Property<string>("ParameterName");
 
@@ -42,9 +44,9 @@ namespace Deploy.Migrations
 
                     b.Property<string>("DeployName");
 
-                    b.Property<int>("TennantID");
+                    b.Property<string>("DeploySaved");
 
-                    b.Property<int>("TennantParamID");
+                    b.Property<int>("TennantID");
 
                     b.HasKey("DeployTypeID");
 
@@ -84,6 +86,10 @@ namespace Deploy.Migrations
 
                     b.Property<int>("DeployTypeID");
 
+                    b.Property<string>("ParamName");
+
+                    b.Property<string>("ParamType");
+
                     b.Property<string>("ParamValue");
 
                     b.HasKey("TennantParamID");
@@ -110,7 +116,7 @@ namespace Deploy.Migrations
 
             modelBuilder.Entity("Deploy.Models.TennantParam", b =>
                 {
-                    b.HasOne("Deploy.Models.DeployType", "DeployTypes")
+                    b.HasOne("Deploy.Models.DeployType")
                         .WithMany("TennantParams")
                         .HasForeignKey("DeployTypeID")
                         .OnDelete(DeleteBehavior.Cascade);

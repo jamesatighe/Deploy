@@ -10,7 +10,7 @@ namespace Deploy.Models
         public int DeployTypeID { get; set; }
         public int TennantID { get; set; }
         public string DeployName { get; set; }
-        public int TennantParamID { get; set; }
+        public string DeploySaved { get; set; }
 
         public virtual IList<TennantParam> TennantParams { get; set; }
         public virtual Tennant Tennants { get; set; }

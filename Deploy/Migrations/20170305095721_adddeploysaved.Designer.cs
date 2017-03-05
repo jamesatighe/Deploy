@@ -8,8 +8,8 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    [Migration("20170302125948_initial2")]
-    partial class initial2
+    [Migration("20170305095721_adddeploysaved")]
+    partial class adddeploysaved
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,8 @@ namespace Deploy.Migrations
                 {
                     b.Property<int>("DeployParamID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ParameterDeployType");
 
                     b.Property<string>("ParameterName");
 
@@ -41,6 +43,8 @@ namespace Deploy.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("DeployName");
+
+                    b.Property<string>("DeploySaved");
 
                     b.Property<int>("TennantID");
 
@@ -84,6 +88,10 @@ namespace Deploy.Migrations
 
                     b.Property<int>("DeployTypeID");
 
+                    b.Property<string>("ParamName");
+
+                    b.Property<string>("ParamType");
+
                     b.Property<string>("ParamValue");
 
                     b.HasKey("TennantParamID");
@@ -110,7 +118,7 @@ namespace Deploy.Migrations
 
             modelBuilder.Entity("Deploy.Models.TennantParam", b =>
                 {
-                    b.HasOne("Deploy.Models.DeployType", "DeployTypes")
+                    b.HasOne("Deploy.Models.DeployType")
                         .WithMany("TennantParams")
                         .HasForeignKey("DeployTypeID")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -21,6 +21,8 @@ namespace Deploy.Migrations
                     b.Property<int>("DeployParamID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ParameterDeployType");
+
                     b.Property<string>("ParameterName");
 
                     b.Property<string>("ParameterType");
@@ -41,9 +43,9 @@ namespace Deploy.Migrations
 
                     b.Property<string>("DeployName");
 
-                    b.Property<int>("TennantID");
+                    b.Property<string>("DeploySaved");
 
-                    b.Property<int>("TennantParamID");
+                    b.Property<int>("TennantID");
 
                     b.HasKey("DeployTypeID");
 
@@ -84,6 +86,8 @@ namespace Deploy.Migrations
                     b.Property<int>("DeployTypeID");
 
                     b.Property<string>("ParamName");
+
+                    b.Property<string>("ParamType");
 
                     b.Property<string>("ParamValue");
 

@@ -41,16 +41,19 @@ namespace Deploy.Controllers
                 viewModel.TennantID = Id;
                 viewModel.TennantName = "";
                 viewModel.TennantName = deployTypes.First().Tennants.TennantName;
-
+   
                 viewModel.DeployTypes = new List<Deploy.Models.DeployType>();
                 foreach (var deployType in deployTypes)
                 {
+
                     viewModel.DeployTypes.Add(new DeployType()
                     {
                         DeployName = deployType.DeployName,
                         DeployTypeID = deployType.DeployTypeID,
                         TennantID = deployType.TennantID,
-                        Tennants = deployType.Tennants
+                        Tennants = deployType.Tennants,
+                        DeploySaved = deployType.DeploySaved
+                        
                     });
                 }
 
@@ -96,6 +99,7 @@ namespace Deploy.Controllers
             var viewModel = new TenantDeploys();
             viewModel.TennantID = Id;
             viewModel.TennantName = tennant.TennantName;
+            viewModel.DeploySaved = "No";
             
             return View(viewModel);
         
@@ -135,7 +139,7 @@ namespace Deploy.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DeployTypeID,TennantID,DeployName")] DeployType deployType)
+        public async Task<IActionResult> Create(DeployType deployType)
         {
             if (ModelState.IsValid)
             {

@@ -39,6 +39,7 @@ namespace Deploy.Controllers
                 
                 var viewModel = new TennantDeployParams();
                 viewModel.DeployName = DeployTypes.DeployName;
+                viewModel.DeploySaved = DeployTypes.DeploySaved;
 
                 if (viewModel.DeployName == "Identity Small")
                 {
@@ -46,7 +47,7 @@ namespace Deploy.Controllers
                     viewModel.TennantName = DeployTypes.Tennants.TennantName;
                     viewModel.TennantID = DeployTypes.Tennants.TennantID;
 
-                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "ADS").ToListAsync();
+                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADS").ToListAsync();
                     var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
                     viewModel.DeployParams = new List<DeployParam>();
                     foreach (var Param in Params)
@@ -55,7 +56,7 @@ namespace Deploy.Controllers
                         {
                             DeployParamID = Param.DeployParamID,
                             ParameterName = Param.ParameterName,
-                            ParameterType = Param.ParameterType
+                            ParameterDeployType = Param.ParameterDeployType
                         });
                     }
                     viewModel.TennantParams = new List<TennantParam>();
@@ -74,7 +75,7 @@ namespace Deploy.Controllers
                     viewModel.TennantName = DeployTypes.Tennants.TennantName;
                                         viewModel.TennantID = DeployTypes.Tennants.TennantID;
 
-                    var Params = await _context.DeployParms.Where(d => d.ParameterType == "RDSS").ToListAsync();
+                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSS").ToListAsync();
                     var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
                     viewModel.DeployParams = new List<DeployParam>();
                     foreach (var Param in Params)
@@ -83,7 +84,7 @@ namespace Deploy.Controllers
                         {
                             DeployParamID = Param.DeployParamID,
                             ParameterName = Param.ParameterName,
-                            ParameterType = Param.ParameterType
+                            ParameterDeployType = Param.ParameterDeployType
                         });
                     }
                     viewModel.TennantParams = new List<TennantParam>();
@@ -131,13 +132,15 @@ namespace Deploy.Controllers
 
             viewModel.DeployTypeID = Id;
             viewModel.DeployName = deploy.DeployName;
+            viewModel.DeploySaved = deploy.DeploySaved;
 
             if (viewModel.DeployName.Contains("Identity"))
             {
-                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "ADS").ToListAsync();
+                var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADS").ToListAsync();
                 viewModel.DeployParams = new List<DeployParam>();
                 viewModel.TennantName = deploy.Tennants.TennantName;
                 viewModel.TennantID = deploy.Tennants.TennantID;
+
                 //viewModel.DeployParamID = new List<int>();
 
                 foreach (var param in parameters)
@@ -148,14 +151,15 @@ namespace Deploy.Controllers
                     {
                         DeployParamID = param.DeployParamID,
                         ParameterName = param.ParameterName,
-                        ParameterType = param.ParameterType
+                        ParameterType = param.ParameterType,
+                        ParameterDeployType = param.ParameterDeployType
                     });
                 }
             }
 
             if (viewModel.DeployName.Contains("RDS"))
             {
-                var parameters = await _context.DeployParms.Where(d => d.ParameterType == "RDSS").ToListAsync();
+                var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSS").ToListAsync();
                 viewModel.DeployParams = new List<DeployParam>();
                 viewModel.TennantName = deploy.Tennants.TennantName;
                 viewModel.TennantID = deploy.Tennants.TennantID;
@@ -169,7 +173,8 @@ namespace Deploy.Controllers
                     {
                         DeployParamID = param.DeployParamID,
                         ParameterName = param.ParameterName,
-                        ParameterType = param.ParameterType
+                        ParameterType = param.ParameterType,
+                        ParameterDeployType = param.ParameterDeployType
                     });
                 }
             }
@@ -193,6 +198,7 @@ namespace Deploy.Controllers
                     tennantparam.DeployParamID = tennantDeployParams.DeployParamID[i];
                     tennantparam.ParamValue = tennantDeployParams.ParamValue[i];
                     tennantparam.ParamName = tennantDeployParams.ParamName[i];
+                    tennantparam.ParamType = tennantDeployParams.ParamType[i];
                     tennantparam.DeployTypeID = tennantDeployParams.DeployTypeID;
                     _context.Add(tennantparam);
                     await _context.SaveChangesAsync();
@@ -216,6 +222,7 @@ namespace Deploy.Controllers
 
             viewModel.ParamName = new List<string>();
             viewModel.ParamValue = new List<string>();
+            viewModel.ParamType = new List<string>();
             viewModel.TennantParamID = new List<int>();
 
             foreach (var param in parameters)
@@ -223,6 +230,7 @@ namespace Deploy.Controllers
                 viewModel.TennantParamID.Add(param.TennantParamID);
                 viewModel.ParamName.Add(param.ParamName);
                 viewModel.ParamValue.Add(param.ParamValue);
+                viewModel.ParamType.Add(param.ParamType);
             }
             return View(viewModel);
         }
@@ -319,12 +327,12 @@ namespace Deploy.Controllers
             for (var i = 0; i < tennantParams.Count(); i++)
             {
                 tempjson.AppendLine("\t\t\"" + tennantParams[i].ParamName.ToString() + "\": {");
-                if (tennantParams[i].ParamName == "domainAdminUserName")
+                if (tennantParams[i].ParamType == "domainadmin")
                 {
 
                     tempjson.AppendLine("\t\t\t\"value\": " + "\"" + tennantParams[i].ParamValue.ToString().Replace(@"\",@"\\") + "\"");
                 }
-                else if (tennantParams[i].ParamName == "dnsServers")
+                else if (tennantParams[i].ParamType == "array")
                 {
                     tempjson.AppendLine("\t\t\t\"value\": [");
                     tempjson.AppendLine("\t\t\t\t" + tennantParams[i].ParamValue.ToString());
@@ -363,11 +371,11 @@ namespace Deploy.Controllers
             {
                 await blockBlob.UploadFromStreamAsync(s);
             }
-                //using (var filestream = System.IO.File.OpenRead(@"C:\temp\writelines.txt"))
-                //{
-                //    await blockBlob.UploadFromStreamAsync(filestream);
-                //}
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+
+            deployTypes.DeploySaved = "Yes";
+            _context.Update(deployTypes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
         }
 
 
