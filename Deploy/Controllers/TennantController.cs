@@ -11,11 +11,11 @@ using Deploy.ViewModel;
 
 namespace Deploy.Controllers
 {
-    public class DeployController : Controller
+    public class TennantController : Controller
     {
         private readonly DeployDBContext _context;
 
-        public DeployController(DeployDBContext context)
+        public TennantController(DeployDBContext context)
         {
             _context = context;    
         }
@@ -37,7 +37,12 @@ namespace Deploy.Controllers
                 {
                     TennantID = tennant.TennantID,
                     TennantName = tennant.TennantName,
-                    DeployCount = tennant.DeployTypes.Count
+                    DeployCount = tennant.DeployTypes.Count,
+                    AzureTennantID = tennant.AzureTennantID,
+                    ResourceGroupName = tennant.ResourceGroupName,
+                    AzureClientID = tennant.AzureClientID,
+                    AzureClientSecret = tennant.AzureClientSecret,
+                    AzureSubscriptionID = tennant.AzureSubscriptionID
                 });
             }
             return View(viewModel);
@@ -63,6 +68,11 @@ namespace Deploy.Controllers
             viewModel.FirstName = tennants.FirstName;
             viewModel.LastName = tennants.LastName;
             viewModel.EmailAddress = tennants.EmailAddress;
+            viewModel.AzureTennantID = tennants.AzureTennantID;
+            viewModel.ResourceGroupName = tennants.ResourceGroupName;
+            viewModel.AzureClientID = tennants.AzureClientID;
+            viewModel.AzureClientSecret = tennants.AzureClientSecret;
+            viewModel.AzureSubscriptionID = tennants.AzureSubscriptionID;
 
             return View(viewModel);
 
@@ -82,7 +92,7 @@ namespace Deploy.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TennantID,TennantName","FirstName","LastName","EmailAddress")] Tennant tennant)
+        public async Task<IActionResult> Create(Tennant tennant)
         {
             if (ModelState.IsValid)
             {
@@ -112,6 +122,11 @@ namespace Deploy.Controllers
             viewModel.FirstName = tennant.FirstName;
             viewModel.LastName = tennant.LastName;
             viewModel.EmailAddress = tennant.EmailAddress;
+            viewModel.AzureTennantID = tennant.AzureTennantID;
+            viewModel.ResourceGroupName = tennant.ResourceGroupName;
+            viewModel.AzureClientID = tennant.AzureClientID;
+            viewModel.AzureClientSecret = tennant.AzureClientSecret;
+            viewModel.AzureSubscriptionID = tennant.AzureSubscriptionID;
 
             return View(viewModel);
         }
@@ -121,7 +136,7 @@ namespace Deploy.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TennantID,TennantName","FirstName","LastName","EmailAddress")] Tennant tennant)
+        public async Task<IActionResult> Edit(int id, Tennant tennant)
         {
             if (id != tennant.TennantID)
             {

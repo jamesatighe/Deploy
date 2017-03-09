@@ -13,6 +13,11 @@ namespace Deploy.Models
         [Required]
         [Display(Name = "Tennant Name")]
         public string TennantName { get; set; }
+        public string AzureTennantID { get; set; }
+        public string AzureSubscriptionID { get; set; }
+        public string ResourceGroupName { get; set; }
+        public string AzureClientID { get; set; }
+        public string AzureClientSecret { get; set; }
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

@@ -14,7 +14,9 @@
     <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @if (Model.DeploySaved == "Yes")
     {
-        <a class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+        <a asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+        <a asp-action="GetDeploy" asp-route-id="@Model.DeployTypeID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
+
     }
 </p>
 <p>

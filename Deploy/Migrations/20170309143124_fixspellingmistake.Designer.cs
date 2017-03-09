@@ -8,9 +8,10 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    partial class DeployDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170309143124_fixspellingmistake")]
+    partial class fixspellingmistake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

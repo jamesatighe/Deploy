@@ -8,9 +8,10 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    partial class DeployDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170306095605_setallfiledsrequired3")]
+    partial class setallfiledsrequired3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -43,11 +44,7 @@ namespace Deploy.Migrations
 
                     b.Property<string>("DeployName");
 
-                    b.Property<string>("DeployResult");
-
                     b.Property<string>("DeploySaved");
-
-                    b.Property<string>("DeployState");
 
                     b.Property<int>("TennantID");
 
@@ -63,14 +60,6 @@ namespace Deploy.Migrations
                     b.Property<int>("TennantID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AzureClientID");
-
-                    b.Property<string>("AzureClientSecret");
-
-                    b.Property<string>("AzureSubscriptionID");
-
-                    b.Property<string>("AzureTennantID");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired();
 
@@ -79,8 +68,6 @@ namespace Deploy.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired();
-
-                    b.Property<string>("ResourceGroupName");
 
                     b.Property<string>("TennantName")
                         .IsRequired();

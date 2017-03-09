@@ -8,9 +8,10 @@ using Deploy.DAL;
 namespace Deploy.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    partial class DeployDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170308122245_subscriptionid")]
+    partial class subscriptionid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -67,7 +68,7 @@ namespace Deploy.Migrations
 
                     b.Property<string>("AzureClientSecret");
 
-                    b.Property<string>("AzureSubscriptionID");
+                    b.Property<string>("AzureSubcriptionID");
 
                     b.Property<string>("AzureTennantID");
 

@@ -82,7 +82,7 @@ namespace Deploy
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Deploy}/{action=IndexCount}/{id?}");
+                    template: "{controller=Tennant}/{action=IndexCount}/{id?}");
             });
         }
     }

@@ -16,7 +16,24 @@ namespace Deploy.ViewModel
         public string DeployName { get; set; }
         public int DeployTypeID { get; set; }
         public string DeploySaved { get; set; }
+        public string  DeployState { get; set; }
+        public string DeployResult { get; set; }
+        [Required(ErrorMessage = "You must enter a Azure Tennant ID for Deployment!")]
+        [Display(Name = "Azure Tennant ID")]
+        public string AzureTennantID { get; set; }
+        [Required(ErrorMessage = "You must enter a Azure Subscription ID for Deployment!")]
+        [Display(Name = "Azure Subcription ID")]
+        public string AzureSubscriptionID { get; set; }
+        [Required(ErrorMessage = "You must enter a Resource Group Name for Deployment!")]
+        [Display(Name = "Resource Group Name")]
+        public string ResourceGroupName { get; set; }
+        [Required(ErrorMessage = "You must enter a Azure Client for Deployment!")]
+        [Display(Name = "Azure Client ID")]
+        public string AzureClientID { get; set; }
 
+        [Required(ErrorMessage = "You must enter a Azure Client Secret for Deployment!")]
+        [Display(Name = "Azure Client Secret")]
+        public string AzureClientSecret { get; set; }
         public int DeployCount { get; set; }
         [Required]
         [Display(Name = "First Name")]
@@ -31,5 +48,6 @@ namespace Deploy.ViewModel
 
         public virtual List<DeployType> DeployTypes { get; set; }
         public virtual List<Tennant> Tennants { get; set; }
+        public virtual List <TennantParam> TennantParams { get; set; }
     }
 }

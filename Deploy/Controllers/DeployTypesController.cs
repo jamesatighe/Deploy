@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Deploy.DAL;
 using Deploy.Models;
 using Deploy.ViewModel;
+using System.Net;
 
 namespace Deploy.Controllers
 {
@@ -35,24 +36,26 @@ namespace Deploy.Controllers
             var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
             if (DeployExist != null)
             {
-                var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Where(d => d.TennantID == Id).ToListAsync();
+                var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Include(x => x.TennantParams).Where(d => d.TennantID == Id).ToListAsync();
+ 
                 //var deployTypes = await _context.DeployTypes.Where(d => d.TennantID == Id).ToListAsync();
                 var viewModel = new Deploy.ViewModel.TenantDeploys();
                 viewModel.TennantID = Id;
                 viewModel.TennantName = "";
                 viewModel.TennantName = deployTypes.First().Tennants.TennantName;
-   
                 viewModel.DeployTypes = new List<Deploy.Models.DeployType>();
                 foreach (var deployType in deployTypes)
                 {
-
                     viewModel.DeployTypes.Add(new DeployType()
                     {
                         DeployName = deployType.DeployName,
                         DeployTypeID = deployType.DeployTypeID,
                         TennantID = deployType.TennantID,
                         Tennants = deployType.Tennants,
-                        DeploySaved = deployType.DeploySaved
+                        DeploySaved = deployType.DeploySaved,
+                        TennantParams = deployType.TennantParams,
+                        DeployState = deployType.DeployState,
+                        DeployResult = deployType.DeployResult
                         
                     });
                 }
@@ -77,7 +80,7 @@ namespace Deploy.Controllers
                 return NotFound();
             }
 
-            var deployType = await _context.DeployTypes.Include(d => d.Tennants).SingleOrDefaultAsync(m => m.DeployTypeID == id);
+            var deployType = await _context.DeployTypes.Include(d => d.Tennants ).SingleOrDefaultAsync(m => m.DeployTypeID == id);
             if (deployType == null)
             {
                 return NotFound();
@@ -115,12 +118,9 @@ namespace Deploy.Controllers
             }
             else
             {
-                return RedirectToAction("IndexCount", "Deploy");
+                return RedirectToAction("IndexCount", "Tennant");
             }
-
-
         }
-
 
         public IActionResult Deploy(int Id)
         {
@@ -130,6 +130,16 @@ namespace Deploy.Controllers
         public IActionResult DeployParams(int Id)
         {
             return RedirectToAction("IndexSelected", "TennantParams", new { id = Id });
+        }
+
+        public IActionResult DeployResults(int Id)
+        {
+            var deployTypes = _context.DeployTypes.Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            var viewModel = new TenantDeploys();
+            viewModel.DeployTypeID = deployTypes.DeployTypeID;
+            viewModel.DeployResult = deployTypes.DeployResult;
+            viewModel.TennantID = deployTypes.TennantID;
+            return View(viewModel);
         }
 
 
@@ -143,8 +153,28 @@ namespace Deploy.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(deployType);
-                await _context.SaveChangesAsync();
+                if (deployType.DeployName == "RDS Small Solution")
+                {
+                    var newdeploy = new DeployType();
+                    newdeploy.DeployName = "Identity Small";
+                    newdeploy.DeploySaved = "No";
+                    newdeploy.TennantID = deployType.TennantID;
+
+                    _context.Add(newdeploy);
+                    await _context.SaveChangesAsync();
+
+                    var newdeploy1 = new DeployType();
+                    newdeploy1.DeployName = "RDS Small";
+                    newdeploy1.DeploySaved = "No";
+                    newdeploy1.TennantID = deployType.TennantID;
+                    _context.Add(newdeploy1);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _context.Add(deployType);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
             }
             ViewData["TennantID"] = new SelectList(_context.Tennants, "TennantID", "TennantID", deployType.TennantID);
