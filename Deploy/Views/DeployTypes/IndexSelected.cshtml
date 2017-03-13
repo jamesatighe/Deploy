@@ -14,17 +14,32 @@
     <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @{
         var saveCount = 0;
+        var deployCount = 0;
+
         for (var i = 0; i < Model.DeployTypes.Count(); i++)
         {
             if (Model.DeployTypes[i].DeploySaved == "Yes")
             {
                 saveCount++;
             }
+            if (Model.DeployTypes[i].DeployState != null)
+            {
+                deployCount++;
+            }
         }
         if (saveCount == Model.DeployTypes.Count)
         {
-             <a class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
-         }
+             <a asp-action="DeployToAzureSolution" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+        }
+        if (deployCount == Model.DeployTypes.Count)
+        {
+            <a asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
+
+        }
+
+
+
+
      }
 </p>
 <table class="table">

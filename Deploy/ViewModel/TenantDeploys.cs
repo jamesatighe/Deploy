@@ -18,6 +18,7 @@ namespace Deploy.ViewModel
         public string DeploySaved { get; set; }
         public string  DeployState { get; set; }
         public string DeployResult { get; set; }
+        public string AzureDeployName { get; set; }
         [Required(ErrorMessage = "You must enter a Azure Tennant ID for Deployment!")]
         [Display(Name = "Azure Tennant ID")]
         public string AzureTennantID { get; set; }

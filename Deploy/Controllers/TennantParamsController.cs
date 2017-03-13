@@ -324,20 +324,20 @@ namespace Deploy.Controllers
             string resourcegroupname = deployTypes.Tennants.ResourceGroupName;
             string resourcegroup = deployTypes.Tennants.ResourceGroupName;
             string azuredeploy = string.Empty;
+            string jsonResourceGroup = "{ \"location\": \"North Europe\" }";
 
             //Get Access Token from HTTP POST to Azure
             var results = RESTApi.PostAction(tennantID, clientID, secret);
             RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
             string accesstoken = AccessToken.access_token;
-
             var sasToken =  AzureHelper.GetSASToken(_storageConfig);
-
-            string jsonResourceGroup = "{ \"location\": \"North Europe\" }";
 
             //Create json for deployment to be amended.
             string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/Parameters/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
+
             //Set Deploy Template dependent on Deployment Type
+            //Add new Deployment Type logic here!
             if (deployTypes.DeployName == "Identity Small")
             {
                 jsonDeploy = jsonDeploy.Replace("{template}", "Identity/identitysmall.json");
@@ -363,24 +363,119 @@ namespace Deploy.Controllers
                 jsonDeploy = jsonDeploy.Replace("{parameters}", "rdsmedium-" + deployTypes.Tennants.TennantName + "-param.json");
                 azuredeploy = "rdsmedium";
             };
+            //end of deployment logic.
 
+            //Create resource group.
             var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonResourceGroup, true);
-            
 
+            //PUT request for deployment.
             var putcontent = RESTApi.PutAsync(subscriptionID,resourcegroupname,azuredeploy,accesstoken,jsonDeploy, false);
             JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
 
             //Update Deployment Type to show deployed
             deployTypes.DeployState = "Deployed";
             deployTypes.DeployResult = await putcontent;
-
             _context.Update(deployTypes);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
         }
 
-        public async Task<IActionResult> GetDeploy(int Id)
+
+        public async Task<IActionResult> DeployToAzureSolution(int Id)
+        {
+            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).ToListAsync();
+
+            //Declare variables for use
+            string tennantID = deployTypes.FirstOrDefault().Tennants.AzureTennantID;
+            string clientID = deployTypes[0].Tennants.AzureClientID;
+            string secret = deployTypes.FirstOrDefault().Tennants.AzureClientSecret;
+            string subscriptionID = deployTypes.FirstOrDefault().Tennants.AzureSubscriptionID;
+            string resourcegroupname = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
+            string resourcegroup = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
+            string azuredeploy = string.Empty;
+
+            int rdssmall = 0;
+
+            //Set Deploy Template if solution
+            //Add new Deployment Solution logic here!
+
+            foreach (var deploy in deployTypes)
+            {
+                if (deploy.AzureDeployName == "rdssmallsolution")
+                {
+                    rdssmall++;
+                }
+            }
+
+            //Logic if rdssmallsolution
+            if (rdssmall == 2)
+            {
+                var results = RESTApi.PostAction(tennantID, clientID, secret);
+                RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
+                string accesstoken = AccessToken.access_token;
+
+                var sasToken = AzureHelper.GetSASToken(_storageConfig);
+
+                string jsonResourceGroup = "{ \"location\": \"North Europe\" }";
+
+                //string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/Parameters/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+                string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\" } }";
+                jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
+
+                //Set Deploy Template dependent on Deployment Type
+                jsonDeploy = jsonDeploy.Replace("{template}", "Linked/rdssmallsolution-temp.json");
+                jsonDeploy = jsonDeploy.Replace("{parameters}", "identitysmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json");
+                azuredeploy = "rdssmallsolution";
+
+                CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                CloudBlobContainer container = blobClient.GetContainerReference("ansible/Linked");
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference("rdssmallsolution.json");
+
+                string linkedTemplate;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await blockBlob.DownloadToStreamAsync(memoryStream);
+                    linkedTemplate = Encoding.UTF8.GetString(memoryStream.ToArray());
+                }
+
+                linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identitysmall.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/identitysmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSSmallfull.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+
+                CloudBlockBlob blockBlob2 = container.GetBlockBlobReference("rdssmallsolution-temp.json");
+                using (Stream s = GenerateStreamFromString(linkedTemplate))
+                {
+                    await blockBlob2.UploadFromStreamAsync(s);
+                }
+
+                var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonResourceGroup, true);
+
+
+                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
+                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                //Update Deployment Type to show deployed
+                foreach (var deploy in deployTypes)
+                {
+                    deploy.DeployState = "Deployed";
+                    deploy.DeployResult = await putcontent;
+                    _context.Update(deploy);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            //End of rdssmallsolution logic loop.
+
+            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
+        }
+
+
+
+
+
+            public async Task<IActionResult> GetDeploy(int Id)
         {
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
 
@@ -390,25 +485,8 @@ namespace Deploy.Controllers
             string subscriptionID = deployTypes.Tennants.AzureSubscriptionID;
             string resourcegroupname = deployTypes.Tennants.ResourceGroupName;
             string resourcegroup = deployTypes.Tennants.ResourceGroupName;
-            string azuredeploy = string.Empty;
-            if (deployTypes.DeployName == "Identity Small")
-            {
-                azuredeploy = "identitysmall";
-            }
-            if (deployTypes.DeployName == "RDS Small")
-            {
-                azuredeploy = "rdssmall";
-            }
-            if (deployTypes.DeployName == "Identity")
-            {
-                azuredeploy = "identity";
-            }
-            if (deployTypes.DeployName == "RDS Medium")
-            {
-                azuredeploy = "rdsmedium";
-            }
-
-
+            string azuredeploy = deployTypes.AzureDeployName;
+        
             var results = RESTApi.PostAction(tennantID, clientID, secret);
             RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
             string accesstoken = AccessToken.access_token;
@@ -427,6 +505,60 @@ namespace Deploy.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+        }
+
+
+        public async Task<IActionResult> GetDeployAll(int Id)
+        {
+            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).ToListAsync();
+
+            string tennantID = deployTypes.FirstOrDefault().Tennants.AzureTennantID;
+            string clientID = deployTypes.FirstOrDefault().Tennants.AzureClientID;
+            string secret = deployTypes.FirstOrDefault().Tennants.AzureClientSecret;
+            string subscriptionID = deployTypes.FirstOrDefault().Tennants.AzureSubscriptionID;
+            string resourcegroupname = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
+            string resourcegroup = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
+            string azuredeploy = string.Empty;
+
+            //Add logic for getting deployment for solutions.
+            //Example for rdssmallsolution below.
+
+            foreach (var deploy in deployTypes)
+            {
+                if (deploy.AzureDeployName == "rdssmallsolution")
+                {
+                    if (deploy.DeployName == "Identity Small")
+                    {
+                        azuredeploy = "IDSmall";
+                    }
+                    if (deploy.DeployName == "RDS Small")
+                    {
+                        azuredeploy = "RDSSmall";
+                    }
+                }
+
+                azuredeploy = deploy.AzureDeployName;
+               
+                var results = RESTApi.PostAction(tennantID, clientID, secret);
+                RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
+                string accesstoken = AccessToken.access_token;
+
+                var getcontent = RESTApi.GetAsync(subscriptionID, resourcegroupname, accesstoken, azuredeploy);
+
+                if (await getcontent == null)
+                {
+                      deploy.DeployResult = "";
+                }
+                else
+                {
+                    deploy.DeployResult = await getcontent;
+                }
+                _context.Update(deploy);
+                await _context.SaveChangesAsync();
+            }
+            //End of solution logic loop.
+
+            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.FirstOrDefault().TennantID });
         }
 
 

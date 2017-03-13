@@ -13,7 +13,7 @@ namespace Deploy.Models
         public string DeploySaved { get; set; }
         public string DeployState { get; set; }
         public string DeployResult { get; set; }
-
+        public string AzureDeployName { get; set; }
         public virtual IList<TennantParam> TennantParams { get; set; }
         public virtual Tennant Tennants { get; set; }
     }

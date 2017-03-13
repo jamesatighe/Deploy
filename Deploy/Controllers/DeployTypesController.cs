@@ -153,13 +153,14 @@ namespace Deploy.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Logic to generate valid viewmodel with AzureDeployName parameter.
                 if (deployType.DeployName == "RDS Small Solution")
                 {
                     var newdeploy = new DeployType();
                     newdeploy.DeployName = "Identity Small";
                     newdeploy.DeploySaved = "No";
                     newdeploy.TennantID = deployType.TennantID;
-
+                    newdeploy.AzureDeployName = "rdssmallsolution";
                     _context.Add(newdeploy);
                     await _context.SaveChangesAsync();
 
@@ -167,15 +168,66 @@ namespace Deploy.Controllers
                     newdeploy1.DeployName = "RDS Small";
                     newdeploy1.DeploySaved = "No";
                     newdeploy1.TennantID = deployType.TennantID;
+                    newdeploy.AzureDeployName = "rdssmallsolution";
                     _context.Add(newdeploy1);
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    _context.Add(deployType);
-                    await _context.SaveChangesAsync();
+                    if (deployType.DeployName == "RDS Small")
+                    {
+                        var newdeploy = new DeployType();
+                        newdeploy.DeployName = "RDS Small";
+                        newdeploy.DeploySaved = "No";
+                        newdeploy.TennantID = deployType.TennantID;
+                        newdeploy.AzureDeployName = "rdssmall";
+                        _context.Add(newdeploy);
+                        await _context.SaveChangesAsync();
+
+                    }
+                    else
+                    {
+                        if (deployType.DeployName == "Identity Small")
+                        {
+                            var newdeploy = new DeployType();
+                            newdeploy.DeployName = "Identity Small";
+                            newdeploy.DeploySaved = "No";
+                            newdeploy.TennantID = deployType.TennantID;
+                            newdeploy.AzureDeployName = "identitysmall";
+                            _context.Add(newdeploy);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            if (deployType.DeployName == "Identity Medium")
+                            {
+                                var newdeploy = new DeployType();
+                                newdeploy.DeployName = "Identity Medium";
+                                newdeploy.DeploySaved = "No";
+                                newdeploy.TennantID = deployType.TennantID;
+                                newdeploy.AzureDeployName = "identitymedium";
+                                _context.Add(newdeploy);
+                                await _context.SaveChangesAsync();
+
+                            }
+                            else
+                            {
+                                if (deployType.DeployName == "RDS Medium")
+                                {
+                                    var newdeploy = new DeployType();
+                                    newdeploy.DeployName = "RDS Medium";
+                                    newdeploy.DeploySaved = "No";
+                                    newdeploy.TennantID = deployType.TennantID;
+                                    newdeploy.AzureDeployName = "rdsmedium";
+                                    _context.Add(newdeploy);
+                                    await _context.SaveChangesAsync();
+
+                                }
+                            }
+                        }
+                    }
                 }
-                return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
+                    return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
             }
             ViewData["TennantID"] = new SelectList(_context.Tennants, "TennantID", "TennantID", deployType.TennantID);
             return View(deployType);
