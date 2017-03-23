@@ -2,9 +2,9 @@ c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Deb
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.runtimeconfig.json
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.runtimeconfig.dev.json
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.dll
-c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.csprojResolveAssemblyReference.cache
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.AssemblyInfo.cs
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.pdb
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.dll
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.pdb
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.csprojResolveAssemblyReference.cache

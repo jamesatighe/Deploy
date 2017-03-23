@@ -1,0 +1,56 @@
+@model IEnumerable<Deploy.ViewModel.TenantDeploys>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Tennant List</h2>
+<div>
+    <p>
+        Please select the tennant to manage.
+    </p>
+    <p>
+        If the tennant does not already exist please click the Create New button.
+    </p>
+</div>
+
+<a asp-action="Create" class="btn btn-success btn-lg">Create New</a>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Tennant Name
+                </th>
+                <th>
+                    Tennant ID
+                </th>
+                <th>
+                    Number of Deployments
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(item.TennantName))
+                {
+                    @Html.ActionLink(item.TennantName, "Deploy", new { Id = item.TennantID })
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TennantID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeployCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TennantID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+                <a asp-action="Details" asp-route-id="@item.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a>
+                <a asp-action="Delete" asp-route-id="@item.TennantID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

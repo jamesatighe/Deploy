@@ -76,10 +76,12 @@ namespace Deploy.Migrations
                     b.Property<string>("EmailAddress")
                         .IsRequired();
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
                     b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.Property<string>("ResourceGroupLocation")
                         .IsRequired();
 
                     b.Property<string>("ResourceGroupName");

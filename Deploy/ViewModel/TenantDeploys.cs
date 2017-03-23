@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Deploy.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Deploy.ViewModel
 {
@@ -35,6 +36,10 @@ namespace Deploy.ViewModel
         [Required(ErrorMessage = "You must enter a Azure Client Secret for Deployment!")]
         [Display(Name = "Azure Client Secret")]
         public string AzureClientSecret { get; set; }
+        [Required]
+        [Display(Name = "Resource Group Location")]
+        public string ResourceGroupLocation { get; set; }
+
         public int DeployCount { get; set; }
         [Required]
         [Display(Name = "First Name")]
@@ -46,6 +51,82 @@ namespace Deploy.ViewModel
         [Required(ErrorMessage = "The email address is required")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string EmailAddress { get; set; }
+        public List<SelectListItem> DeployNames { get; private set; }
+        public TenantDeploys()
+        {
+            var StandAloneDeploy = new SelectListGroup { Name = "Standalone Deployment" };
+            var SolutionDeploy = new SelectListGroup { Name = "Solutions" };
+            var SolutionExisting = new SelectListGroup { Name = "Solutions Existing Domain" };
+
+            DeployNames = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "VNET",
+                    Text = "Virtual Network",
+                    Group = StandAloneDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "Identity Small",
+                    Text = "Identity Small",
+                    Group = StandAloneDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "Identity Medium",
+                    Text = "Identity Medium",
+                    Group = StandAloneDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "RDS Small",
+                    Text = "RDS Small",
+                    Group = StandAloneDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "RDS Medium",
+                    Text = "RDS Medium",
+                    Group = StandAloneDeploy
+                },
+
+                new SelectListItem
+                {
+                    Value = "RDS Small Solution",
+                    Text = "RDS Small Solution",
+                    Group = SolutionDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "RDS Medium Solution",
+                    Text = "RDS Medium Solution",
+                    Group = SolutionDeploy
+                },
+                new SelectListItem
+                {
+                    Value = "RDS Small Solution",
+                    Text = "RDS Small Solution",
+                    Group = SolutionExisting
+                },
+                new SelectListItem
+                {
+                    Value = "RDS Medium Solution",
+                    Text = "RDS Medium Solution",
+                    Group = SolutionExisting
+                }
+            };
+        
+        }
+
+
+
+
+
+
+
+
+
 
         public virtual List<DeployType> DeployTypes { get; set; }
         public virtual List<Tennant> Tennants { get; set; }

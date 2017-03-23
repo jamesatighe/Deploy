@@ -9,9 +9,11 @@ using Deploy.DAL;
 using Deploy.Models;
 using Deploy.ViewModel;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Deploy.Controllers
 {
+    [Authorize(Policy = "Admins")]
     public class DeployTypesController : Controller
     {
         private readonly DeployDBContext _context;
@@ -22,16 +24,7 @@ namespace Deploy.Controllers
         }
 
    
-
-
-        // GET: DeployTypes
-        //public async Task<IActionResult> Index(int? id)
-        //{
-        //       var deployDBContext = _context.DeployTypes.Include(d => d.Tennants);
-        //        return View(await deployDBContext.ToListAsync());
-        //}
-
-        public async Task<IActionResult> IndexSelected(int Id)
+       public async Task<IActionResult> IndexSelected(int Id)
         {
             var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
             if (DeployExist != null)
@@ -55,8 +48,8 @@ namespace Deploy.Controllers
                         DeploySaved = deployType.DeploySaved,
                         TennantParams = deployType.TennantParams,
                         DeployState = deployType.DeployState,
-                        DeployResult = deployType.DeployResult
-                        
+                        DeployResult = deployType.DeployResult,
+                        AzureDeployName = deployType.AzureDeployName
                     });
                 }
 
@@ -90,6 +83,7 @@ namespace Deploy.Controllers
             viewModel.DeployTypeID = deployType.DeployTypeID;
             viewModel.DeployName = deployType.DeployName;
             viewModel.TennantName = deployType.Tennants.TennantName;
+            viewModel.ResourceGroupLocation = deployType.Tennants.ResourceGroupLocation;
 
             return View(viewModel);
         }
@@ -103,6 +97,7 @@ namespace Deploy.Controllers
             viewModel.TennantID = Id;
             viewModel.TennantName = tennant.TennantName;
             viewModel.DeploySaved = "No";
+            viewModel.ResourceGroupLocation = tennant.ResourceGroupLocation;
             
             return View(viewModel);
         
@@ -156,8 +151,9 @@ namespace Deploy.Controllers
                 //Logic to generate valid viewmodel with AzureDeployName parameter.
                 if (deployType.DeployName == "RDS Small Solution")
                 {
+
                     var newdeploy = new DeployType();
-                    newdeploy.DeployName = "Identity Small";
+                    newdeploy.DeployName = "RDSSmall (VNET)";
                     newdeploy.DeploySaved = "No";
                     newdeploy.TennantID = deployType.TennantID;
                     newdeploy.AzureDeployName = "rdssmallsolution";
@@ -165,63 +161,113 @@ namespace Deploy.Controllers
                     await _context.SaveChangesAsync();
 
                     var newdeploy1 = new DeployType();
-                    newdeploy1.DeployName = "RDS Small";
+                    newdeploy1.DeployName = "RDSSmall (IDS)";
                     newdeploy1.DeploySaved = "No";
                     newdeploy1.TennantID = deployType.TennantID;
-                    newdeploy.AzureDeployName = "rdssmallsolution";
+                    newdeploy1.AzureDeployName = "rdssmallsolution";
                     _context.Add(newdeploy1);
+                    await _context.SaveChangesAsync();
+
+                    var newdeploy2 = new DeployType();
+                    newdeploy2.DeployName = "RDSSmall (RDSS)";
+                    newdeploy2.DeploySaved = "No";
+                    newdeploy2.TennantID = deployType.TennantID;
+                    newdeploy2.AzureDeployName = "rdssmallsolution";
+                    _context.Add(newdeploy2);
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
-                    if (deployType.DeployName == "RDS Small")
+                    if (deployType.DeployName == "RDS Medium Solution")
                     {
                         var newdeploy = new DeployType();
-                        newdeploy.DeployName = "RDS Small";
+                        newdeploy.DeployName = "RDSMedium (VNET)";
                         newdeploy.DeploySaved = "No";
                         newdeploy.TennantID = deployType.TennantID;
-                        newdeploy.AzureDeployName = "rdssmall";
+                        newdeploy.AzureDeployName = "rdsmedsolution";
                         _context.Add(newdeploy);
                         await _context.SaveChangesAsync();
 
+                        var newdeploy1 = new DeployType();
+                        newdeploy1.DeployName = "RDSMedium (IDM)";
+                        newdeploy1.DeploySaved = "No";
+                        newdeploy1.TennantID = deployType.TennantID;
+                        newdeploy1.AzureDeployName = "rdsmedsolution";
+                        _context.Add(newdeploy1);
+                        await _context.SaveChangesAsync();
+
+                        var newdeploy2 = new DeployType();
+                        newdeploy2.DeployName = "RDSMedium (RDSM)";
+                        newdeploy2.DeploySaved = "No";
+                        newdeploy2.TennantID = deployType.TennantID;
+                        newdeploy2.AzureDeployName = "rdsmedsolution";
+                        _context.Add(newdeploy2);
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
-                        if (deployType.DeployName == "Identity Small")
+                        if (deployType.DeployName == "RDS Small")
                         {
                             var newdeploy = new DeployType();
-                            newdeploy.DeployName = "Identity Small";
+                            newdeploy.DeployName = "RDS Small";
                             newdeploy.DeploySaved = "No";
                             newdeploy.TennantID = deployType.TennantID;
-                            newdeploy.AzureDeployName = "identitysmall";
+                            newdeploy.AzureDeployName = "rdssmall";
                             _context.Add(newdeploy);
                             await _context.SaveChangesAsync();
+
                         }
                         else
                         {
-                            if (deployType.DeployName == "Identity Medium")
+                            if (deployType.DeployName == "Identity Small")
                             {
                                 var newdeploy = new DeployType();
-                                newdeploy.DeployName = "Identity Medium";
+                                newdeploy.DeployName = "Identity Small";
                                 newdeploy.DeploySaved = "No";
                                 newdeploy.TennantID = deployType.TennantID;
-                                newdeploy.AzureDeployName = "identitymedium";
+                                newdeploy.AzureDeployName = "identitysmall";
                                 _context.Add(newdeploy);
                                 await _context.SaveChangesAsync();
-
                             }
                             else
                             {
-                                if (deployType.DeployName == "RDS Medium")
+                                if (deployType.DeployName == "Identity Medium")
                                 {
                                     var newdeploy = new DeployType();
-                                    newdeploy.DeployName = "RDS Medium";
+                                    newdeploy.DeployName = "Identity Medium";
                                     newdeploy.DeploySaved = "No";
                                     newdeploy.TennantID = deployType.TennantID;
-                                    newdeploy.AzureDeployName = "rdsmedium";
+                                    newdeploy.AzureDeployName = "identitymedium";
                                     _context.Add(newdeploy);
                                     await _context.SaveChangesAsync();
 
+                                }
+                                else
+                                {
+                                    if (deployType.DeployName == "RDS Medium")
+                                    {
+                                        var newdeploy = new DeployType();
+                                        newdeploy.DeployName = "RDS Medium";
+                                        newdeploy.DeploySaved = "No";
+                                        newdeploy.TennantID = deployType.TennantID;
+                                        newdeploy.AzureDeployName = "rdsmedium";
+                                        _context.Add(newdeploy);
+                                        await _context.SaveChangesAsync();
+
+                                    }
+                                    else
+                                    {
+                                        if (deployType.DeployName == "VNET")
+                                        {
+                                            var newdeploy = new DeployType();
+                                            newdeploy.DeployName = "VNET";
+                                            newdeploy.DeploySaved = "No";
+                                            newdeploy.TennantID = deployType.TennantID;
+                                            newdeploy.AzureDeployName = "VNET";
+                                            _context.Add(newdeploy);
+                                            await _context.SaveChangesAsync();
+                                        }
+                                    }
                                 }
                             }
                         }

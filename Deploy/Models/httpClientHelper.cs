@@ -92,7 +92,7 @@ namespace Deploy.Models
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
             var response = httpClient.GetAsync(uri);
-            response.Result.EnsureSuccessStatusCode();
+            //response.Result.EnsureSuccessStatusCode();
             var result = response.Result.Content;
 
             return await result.ReadAsStringAsync();

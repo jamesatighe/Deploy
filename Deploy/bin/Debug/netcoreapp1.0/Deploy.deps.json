@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "81c881bee7827e91a3da6f6dc2536067c58581ae"
+    "signature": "5feddf61f8ca2d77f227a56d267aa1123d8346f4"
   },
   "compilationOptions": {
     "defines": [
@@ -23,6 +23,7 @@
     ".NETCoreApp,Version=v1.0": {
       "deploy/1.0.0": {
         "dependencies": {
+          "BuildBundlerMinifier": "2.4.337",
           "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
           "Microsoft.AspNetCore": "1.1.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "1.0.1",
@@ -49,6 +50,11 @@
         },
         "compile": {
           "Deploy.dll": {}
+        }
+      },
+      "buildbundlerminifier/2.4.337": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
         }
       },
       "microsoft.applicationinsights/2.2.0": {
@@ -4131,6 +4137,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "buildbundlerminifier/2.4.337": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lsRy1azgEqqElCwebIp/gsSAyGvHKQTN2Z3v92pJ3O1z4RLafFW0t3oIE4TJmiVVsn9tRN2YlXsPxA7HMW5ZNw==",
+      "path": "buildbundlerminifier/2.4.337",
+      "hashPath": "buildbundlerminifier.2.4.337.nupkg.sha512"
     },
     "microsoft.applicationinsights/2.2.0": {
       "type": "package",

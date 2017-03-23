@@ -41,12 +41,15 @@ namespace Deploy
             // Add framework services.
             services.AddMvc();
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=Deploy;Trusted_Connection=True;";
-            services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
             services.AddOptions();
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
             services.AddAuthentication(
             SharedOptions => SharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            services.AddAuthorization(options =>
+               {
+                   options.AddPolicy("Admins", policyBuilder => policyBuilder.RequireRole("DeployAdmins"));
+               });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,14 +78,14 @@ namespace Deploy
                 ClientSecret = Configuration["Authentication:AzureAd:ClientSecret"],
                 Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"],
                 CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"],
-                ResponseType = OpenIdConnectResponseType.CodeIdToken
+                ResponseType = OpenIdConnectResponseType.IdToken
             });
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Tennant}/{action=IndexCount}/{id?}");
+                    template: "{controller=Home}/{action=Index}");
             });
         }
     }

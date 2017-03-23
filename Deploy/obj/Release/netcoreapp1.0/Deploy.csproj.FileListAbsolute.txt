@@ -1,0 +1,10 @@
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.deps.json
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.runtimeconfig.json
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.runtimeconfig.dev.json
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.pdb
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.csprojResolveAssemblyReference.cache
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\UserSecretsAssemblyInfo.cs
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.AssemblyInfo.cs
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.pdb

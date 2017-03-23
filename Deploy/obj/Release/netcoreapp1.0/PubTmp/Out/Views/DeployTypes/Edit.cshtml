@@ -1,0 +1,45 @@
+@model Deploy.ViewModel.TenantDeploys
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>DeployType</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="DeployTypeID" />
+        <div class="form-group">
+            <label asp-for="DeployName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="DeployName" class="form-control">
+                    <option value="Identity Small">Identity Small</option>
+                    <option value="Identity Medium">Identity Medium</option>
+                    <option value="RDS Small">RDS Small</option>
+                    <option value="RDS Medium">RDS Medium</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group hidden">
+            <label asp-for="TennantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TennantID" class="form-control" />
+                <span asp-validation-for="TennantID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default btn-success"><span class="glyphicon glyphicon-ok"></span> Save</button>
+                <a asp-action="IndexSelected" asp-route-id="@Model.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
