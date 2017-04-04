@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Deploy.Controllers
 {
-    [Authorize(Policy = "Admins")]
+    //[Authorize(Policy = "Admins")]
     public class DeployTypesController : Controller
     {
         private readonly DeployDBContext _context;
@@ -36,7 +36,7 @@ namespace Deploy.Controllers
                 viewModel.TennantID = Id;
                 viewModel.TennantName = "";
                 viewModel.TennantName = deployTypes.First().Tennants.TennantName;
-                viewModel.DeployTypes = new List<Deploy.Models.DeployType>();
+                viewModel.DeployTypes = new List<DeployType>();
                 foreach (var deployType in deployTypes)
                 {
                     viewModel.DeployTypes.Add(new DeployType()

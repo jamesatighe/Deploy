@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
 
 namespace Deploy.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
@@ -29,9 +32,15 @@ namespace Deploy.Controllers
             return View();
         }
 
+        public IActionResult PowerShell()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
         }
+
     }
 }

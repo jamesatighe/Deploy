@@ -1,0 +1,9 @@
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\bin\Debug\netcoreapp1.0\Deploy.Service.deps.json
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\bin\Debug\netcoreapp1.0\Deploy.Service.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\bin\Debug\netcoreapp1.0\Deploy.Service.pdb
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\bin\Debug\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\bin\Debug\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\obj\Debug\netcoreapp1.0\Deploy.Service.csprojResolveAssemblyReference.cache
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\obj\Debug\netcoreapp1.0\Deploy.Service.AssemblyInfo.cs
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\obj\Debug\netcoreapp1.0\Deploy.Service.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.Service\obj\Debug\netcoreapp1.0\Deploy.Service.pdb

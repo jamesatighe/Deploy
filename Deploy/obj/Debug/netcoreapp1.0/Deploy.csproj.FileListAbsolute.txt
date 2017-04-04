@@ -6,5 +6,9 @@ c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Deb
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.pdb
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.dll
 c:\users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.pdb
-C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.csprojResolveAssemblyReference.cache
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.Service.dll
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\bin\Debug\netcoreapp1.0\Deploy.Service.pdb
+C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs

@@ -43,8 +43,17 @@
         {
             <div class="form-group">
                 <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
-                <div class="col-md-10">
+                <div class="col-md-4">
                     <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    @Model.ParamToolTip[i]
+                </div>
+            </div>
+            <div class="form-group hidden">
+                <label class="col-md-2 control-label">Parameter Tooltip </label>
+                <div class="col-md-10">
+                    <input asp-for="@Model.ParamToolTip[i]" name="ParamToolTip[@(i)]" class="form-control" />
                 </div>
             </div>
 

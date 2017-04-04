@@ -14,18 +14,18 @@
         <div class="form-group">
             <label asp-for="DeployName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DeployName" class="form-control" />
+                <input asp-for="DeployName" class="form-control" disabled />
                 <span asp-validation-for="DeployName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="TennantName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TennantName" class="form-control" />
+                <input asp-for="TennantName" class="form-control" disabled />
                 <span asp-validation-for="TennantName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group hidden">
             <label asp-for="DeployTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="DeployTypeID" class="form-control" />
@@ -43,8 +43,17 @@
         {
             <div class="form-group">
                 <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
-                <div class="col-md-10">
+                <div class="col-md-4">
                     <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    @Model.ParamToolTip[i]
+                </div>
+            </div>
+            <div class="form-group hidden">
+                <label class="col-md-2 control-label">Parameter Tooltip </label>
+                <div class="col-md-10">
+                    <input asp-for="@Model.ParamToolTip[i]" name="ParamToolTip[@(i)]" class="form-control" />
                 </div>
             </div>
 

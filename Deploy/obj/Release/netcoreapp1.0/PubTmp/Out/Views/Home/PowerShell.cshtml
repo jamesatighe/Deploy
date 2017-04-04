@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Azure App Registration";
+}
+
+<h2>Azure App Registration</h2>
+<p>The below PowerShell script is needed to be run to create the Azure App Registration.
+    This allows us to connect to the customer Azure tenant and run the relevant deployment scripts.
+</p>
+<div>
+    <pre>
+    $UserName = 'username@domain.com'
+    $Password = cat C:\securestring.txt | convertto-securestring
+    $Dom = 'tenant.onmicrosoft.com'
+    $Sec = 'Password'
+    $Display = 'Deployment'
+    $Homepage = 'https://www.cobweb.com/Deployment'
+    $Creds = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $UserName , $Password
+    Connect-MsolService -Credential $creds
+    $tenID = Get-MsolPartnerContract -DomainName $Dom | select-object tenantId
+    $acc = Add-AzureRmAccount -TenantId $tenID.TenantId -Credential $creds
+    $sub = Get-AzureRmSubscription -TenantId $tenID.TenantId
+    Select-AzureRmSubscription -SubscriptionId $sub.SubscriptionId
+    $app = New-AzureRmADApplication -DisplayName $Display -HomePage $Homepage -IdentifierUris $Homepage -Password $Sec
+    New-AzureRmADServicePrincipal -ApplicationId $app.ApplicationId
+    Start-Sleep -Seconds 10
+    New-AzureRmRoleAssignment -RoleDefinitionName Contributor -ServicePrincipalName $app.ApplicationId.Guid
+    </pre>
+</div>

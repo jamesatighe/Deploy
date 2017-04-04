@@ -21,6 +21,8 @@ namespace Deploy.Migrations
                     b.Property<int>("DeployParamID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ParamToolTip");
+
                     b.Property<string>("ParameterDeployType");
 
                     b.Property<string>("ParameterName");
@@ -104,6 +106,8 @@ namespace Deploy.Migrations
                     b.Property<int>("DeployTypeID");
 
                     b.Property<string>("ParamName");
+
+                    b.Property<string>("ParamToolTip");
 
                     b.Property<string>("ParamType");
 

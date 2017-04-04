@@ -14,18 +14,18 @@
         <div class="form-group">
             <label asp-for="DeployName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DeployName" class="form-control" />
+                <input asp-for="DeployName" class="form-control" disabled />
                 <span asp-validation-for="DeployName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="TennantName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TennantName" class="form-control" />
+                <input asp-for="TennantName" class="form-control" disabled />
                 <span asp-validation-for="TennantName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group hidden">
             <label asp-for="DeployTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="DeployTypeID" class="form-control" />
@@ -44,14 +44,23 @@
 
             <div class="form-group">
                 <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
-                <div class="col-md-10">
+                <div class="col-md-4">
                     <input asp-for="@Model.ParamValue" class="form-control" />
                     <span asp-validation-for="@Model.ParamValue" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    @Model.DeployParams[i].ParamToolTip
+                </div>
+            </div>
+            <div class="form-group hidden">
+                <label class="col-md-2 control-label">ParamToolTip</label>
+                <div class="col-md-4">
+                    <input asp-for="@Model.DeployParams[i].ParamToolTip" name="ParamToolTip[@(i)]" class="form-control" />
                 </div>
             </div>
             <div class="form-group hidden">
                 <label class="col-md-2 control-label">ParamName</label>
-                <div class="col-md-10">
+                <div class="col-md-4">
                     <input asp-for="@Model.DeployParams[i].ParameterName" name="ParamName[@(i)]" class="form-control" />
                 </div>
             </div>

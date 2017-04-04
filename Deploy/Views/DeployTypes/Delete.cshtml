@@ -13,7 +13,7 @@
        
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            <button type="submit" class="btn btn-danger" asp-route-id="@Model.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</button>
             <a asp-action="IndexSelected" asp-route-id="@Model.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
         </div>
     </form>

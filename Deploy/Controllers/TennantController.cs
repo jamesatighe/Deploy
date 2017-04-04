@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Deploy.Controllers
 {
-    [Authorize(Policy = "Admins")]
+    //[Authorize(Policy = "Admins")]
     public class TennantController : Controller
     {
         private readonly DeployDBContext _context;
@@ -124,6 +124,7 @@ namespace Deploy.Controllers
             viewModel.EmailAddress = tennant.EmailAddress;
             viewModel.AzureTennantID = tennant.AzureTennantID;
             viewModel.ResourceGroupName = tennant.ResourceGroupName;
+            viewModel.ResourceGroupLocation = tennant.ResourceGroupLocation;
             viewModel.AzureClientID = tennant.AzureClientID;
             viewModel.AzureClientSecret = tennant.AzureClientSecret;
             viewModel.AzureSubscriptionID = tennant.AzureSubscriptionID;
@@ -136,13 +137,8 @@ namespace Deploy.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Tennant tennant)
+        public async Task<IActionResult> Edit(Tennant tennant)
         {
-            if (id != tennant.TennantID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try

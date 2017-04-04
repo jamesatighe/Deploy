@@ -14,6 +14,7 @@ namespace Deploy.Models
         public string ParamValue { get; set; }
         public string ParamName { get; set; }
         public string ParamType { get; set; }
+        public string ParamToolTip { get; set; }
 
         public List<DeployParam> DeployParams { get; set; }
 
