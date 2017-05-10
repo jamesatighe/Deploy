@@ -14,18 +14,18 @@
         <div class="form-group">
             <label asp-for="DeployName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DeployName" class="form-control" />
+                <input asp-for="DeployName" class="form-control" disabled />
                 <span asp-validation-for="DeployName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="TennantName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TennantName" class="form-control" />
+                <input asp-for="TennantName" class="form-control" disabled />
                 <span asp-validation-for="TennantName" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group hidden">
             <label asp-for="DeployTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="DeployTypeID" class="form-control" />

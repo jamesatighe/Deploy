@@ -4,25 +4,37 @@
     ViewData["Title"] = "Deployment";
 }
 
+<div id="deployexists" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-content">
+        <div style="font-size:18px;">
+            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+            <p style="margin-top:15px">Please ensure you wish to re-deploy before proceeding.</p>
+            <p>All components will be returned to their originally provisioned state. This can lead to lost of configurations and resources.</p>
+            <button id="DeployExistsClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+            <a id="ReDeploy" asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" asp-route-force="True" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Redeploy">Redeploy</a>
+        </div>
+    </div>
+</div>
+
 <h2>Deployment Parameters</h2>
 <p>
     You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
 </p>
 <p>
     <a asp-action="Edit" asp-route-id="@Model.DeployTypeID" class="btn btn-warning btn-lg"><span class="glyphicon glyphicon-wrench" ></span> Edit</a>
-    <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-floppy-save"></span> Save to Azure</a>
+    <a asp-action="SaveToAzure"  asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
     <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @if (Model.DeploySaved == "Yes")
     {
-        <a asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
-        <a asp-action="GetDeploy" asp-route-id="@Model.DeployTypeID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
+        <a id="DeployToAzure" asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+        <a id="GetDeploy" asp-action="GetDeploy" asp-route-id="@Model.DeployTypeID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
 
     }
 </p>
 <p>
     You are currently viewing deployment parameters for: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.DeployName)</span>
 </p>
-<table class="table">
+<table class="table tablesorter-bootstrap">
     <thead>
         <tr>
                 <th>
@@ -47,5 +59,23 @@
 }
     </tbody>
 </table>
+@section Scripts {
+    <script language='javascript' type='text/javascript'>
+    $(document).ready(function () {
+        var dataexists = @ViewBag.DeployExists.ToString().ToLower();
+        if (dataexists)
+            $('#deployexists').fadeIn();
 
- 
+        var ua = navigator.userAgent.toLowerCase();
+        var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+        $('#DeployExistsClose').bind(ios_devices, function () {
+            $('#deployexists').fadeOut();
+        });
+
+        $('#ReDeploy').bind(ios_devices, function () {
+            $('#deployexists').fadeOut();
+        })
+
+    });
+    </script>
+}

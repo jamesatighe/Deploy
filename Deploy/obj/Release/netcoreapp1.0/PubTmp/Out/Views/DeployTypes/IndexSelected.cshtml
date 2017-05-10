@@ -10,7 +10,7 @@
 </p>
 
 <p>
-    <a asp-action="Create" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
+    <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
     <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @{
         var rdsSmallCount = 0;
@@ -21,34 +21,34 @@
         {
             if (Model.DeployTypes[i].DeploySaved == "Yes")
             {
-                if (Model.DeployTypes[i].AzureDeployName == "rdssmallsolution")
+                if (Model.DeployTypes[i].AzureDeployName.Contains("rdssmallsolution"))
                 {
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (VNET)")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (VNET)" && Model.DeployTypes[i].DeployState != "Deployed")
                     {
                         rdsSmallCount++;
                     }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (IDS)")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (IDS)" && Model.DeployTypes[i].DeployState != "Deployed")
                     {
                         rdsSmallCount++;
                     }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (RDSS)")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (RDSS)" && Model.DeployTypes[i].DeployState != "Deployed")
                     {
                         rdsSmallCount++;
                     }
                 }
                 else
                 {
-                    if (Model.DeployTypes[i].AzureDeployName == "rdsmedsolution")
+                    if (Model.DeployTypes[i].AzureDeployName.Contains("rdsmedsolution"))
                     {
                         if (Model.DeployTypes[i].DeployName == "RDSMedium (VNET)")
                         {
                             rdsMedCount++;
                         }
-                        if (Model.DeployTypes[i].DeployName == "RDSMedium (IDM)")
+                        if (Model.DeployTypes[i].DeployName == "RDSMedium (IDM)" || Model.DeployTypes[i].DeployName == "RDSMedium (IDMTYPE)")
                         {
                             rdsMedCount++;
                         }
-                        if (Model.DeployTypes[i].DeployName == "RDSMedium (RDSM)")
+                        if (Model.DeployTypes[i].DeployName == "RDSMedium (RDSM)" || Model.DeployTypes[i].DeployName == "RDSMedium (RDSMTYPE)")
                         {
                             rdsMedCount++;
                         }
@@ -62,15 +62,15 @@
             }
             if (rdsSmallCount == 3)
             {
-                 <a asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</a>
+                <a id="navbtn" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</a>
             }
             if (rdsMedCount == 3)
             {
-                <a asp-action="DeployToAzureRDSMed" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Medium</a>
+                <a id="navbtn" asp-action="DeployToAzureRDSMed" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Medium</a>
             }
-            if (deployCount > 1)
+            if (deployCount > 0)
             {
-                <a asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
+                <a id="navbtn" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
 
             }
 
@@ -79,26 +79,33 @@
 
      }
 </p>
-<table class="table">
+@using (Html.BeginForm())
+{
+    <p style="margin-top:10px;">
+        <label class="col-lg-1 center">Search: </label> @Html.TextBox("SearchString", null, new { @class = "form-control col-lg-8", id = "search" })
+        <input id="submit navbtn" onkeyup="checkSearchChanged()" class="btn btn-default clickable" style="margin-left:10px;" type="submit" value="Search" />
+    </p>
+}
+<table class="table tablesorter-bootstrap">
     <thead>
         <tr>
                 <th>
-                    Deploy Name
+                    Name
                 </th>
             <th>
-                Tenant ID
+                ID
             </th>
             <th>
-                Tennant Name
+                Tennant
             </th>
             <th>
                 Saved
             </th>
             <th>
-                Deployment State
+                State
             </th>
             <th>
-                Deployment Result
+                Result
             </th>
             <th></th>
             <th></th>
@@ -115,7 +122,7 @@
 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TennantID)
+                @Html.DisplayFor(modelItem => item.DeployTypeID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tennants.TennantName)
@@ -187,14 +194,13 @@
                 }
             </td>
             <td>
-                <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-floppy-save"></span> Save to Azure</a>
-                <a asp-action="Edit" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.DeployTypeID"class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.DeployTypeID"class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                    <a id="navbtn" asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+                    <a id="navbtn" asp-action="Edit" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+                    <a id="navbtn" asp-action="Details" asp-route-id="@item.DeployTypeID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a>
+                    <a id="navbtn" asp-action="Delete" asp-route-id="@item.DeployTypeID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-
 

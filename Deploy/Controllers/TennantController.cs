@@ -26,8 +26,11 @@ namespace Deploy.Controllers
         //    return View(await _context.Tennants.ToListAsync());
         //}
 
-        public async Task<IActionResult> IndexCount()
+        public async Task<IActionResult> IndexCount(string sortOrder, string searchString)
         {
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "TenantName_desc" : "";
+            ViewBag.DeployCountSortParm = sortOrder == "DeployCount_desc" ? "DeployCount" : "DeployCount_desc";
+
             var tennants = await _context.Tennants.Include(x => x.DeployTypes).ToListAsync();
 
             var viewModel = new List<Deploy.ViewModel.TenantDeploys>();
@@ -45,6 +48,34 @@ namespace Deploy.Controllers
                     AzureSubscriptionID = tennant.AzureSubscriptionID
                 });
             }
+
+            //Search box
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToString();
+                searchString = searchString.ToUpper();
+                viewModel = viewModel.Where(t => t.TennantName.ToUpper().Contains(searchString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "TenantName_desc":
+                    viewModel = viewModel.OrderByDescending(t => t.TennantName).ToList();
+                    break;
+                case "TenantName":
+                    viewModel = viewModel.OrderBy(t => t.TennantName).ToList();
+                    break;
+                case "DeployCount_desc":
+                    viewModel = viewModel.OrderByDescending(t => t.DeployCount).ToList();
+                    break;
+                case "DeployCount":
+                    viewModel = viewModel.OrderBy(t => t.DeployCount).ToList();
+                    break;
+                default:
+                    viewModel = viewModel.OrderBy(t => t.TennantName).ToList();
+                    break;
+            }
+
             return View(viewModel);
         }
 

@@ -14,6 +14,10 @@ namespace Deploy.DAL
         public string DeployState { get; set; }
         public string DeployResult { get; set; }
         public string AzureDeployName { get; set; }
+        public string ResourceGroupName { get; set; }
+        public string DeployFile { get; set; }
+        public string ParamsFile { get; set; }
+        public string DeployCode { get; set; }
         public virtual IList<TennantParam> TennantParams { get; set; }
         public virtual Tennant Tennants { get; set; }
     }

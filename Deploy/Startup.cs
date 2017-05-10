@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
-using Deploy.Models;
 using Deploy.DAL;
 
 namespace Deploy
@@ -86,7 +81,12 @@ namespace Deploy
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}");
-            });
+
+                routes.MapRoute(
+                    name: "DeployExists",
+                    template: "{controller=TennantParams}/{action=IndexSelected}/{id}/{force}");
+                    
+              });
         }
     }
 }

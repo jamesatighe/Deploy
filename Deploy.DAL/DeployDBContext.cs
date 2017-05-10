@@ -19,6 +19,7 @@ namespace Deploy.DAL
         public DbSet<TennantParam> TennantParams { get; set; }
         public DbSet<DeployParam> DeployParms { get; set; }
 
+        public DbSet<DeployChoices> DeployChoices { get; set; }
 
     }
 }

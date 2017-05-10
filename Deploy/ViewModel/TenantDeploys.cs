@@ -54,6 +54,9 @@ namespace Deploy.ViewModel
         public List<SelectListItem> DeployNames { get; private set; }
         public TenantDeploys()
         {
+            var Networking = new SelectListGroup { Name = "Networking" };
+            var ActiveDirectory = new SelectListGroup { Name = "Active Directory" };
+            var VirtualMachines = new SelectListGroup { Name = "Virtual Machines" };
             var StandAloneDeploy = new SelectListGroup { Name = "Standalone Deployment" };
             var SolutionDeploy = new SelectListGroup { Name = "Solutions" };
             var SolutionExisting = new SelectListGroup { Name = "Solutions Existing Domain" };
@@ -62,21 +65,69 @@ namespace Deploy.ViewModel
             {
                 new SelectListItem
                 {
+                    Value = "VPN",
+                    Text = "Virtual Private Network",
+                    Group = Networking
+                },
+                new SelectListItem
+                {
                     Value = "VNET",
                     Text = "Virtual Network",
+                    Group = Networking
+                },
+                new SelectListItem
+                {
+                    Value = "Virtual Machine (Domain, Data Disk)",
+                    Text = "Virtual Machine (Domain, Data Disk)",
+                    Group = VirtualMachines
+                },
+                new SelectListItem
+                {
+                    Value = "Virtual Machine (No Domain, Data Disk)",
+                    Text = "Virtual Machine (Domain, No Data Disk)",
+                    Group = VirtualMachines
+                },
+                new SelectListItem
+                {
+                    Value = "Virtual Machine (No Domain, Data Disk)",
+                    Text = "Virtual Machine (No Domain, Data Disk)",
+                    Group = VirtualMachines
+                },
+                new SelectListItem
+                {
+                    Value = "Virtual Machine (No Domain, No Data Disk)",
+                    Text = "Virtual Machine (No Domain, No Data Disk)",
+                    Group = VirtualMachines
+                },
+                new SelectListItem
+                {
+                    Value = "File Server (2 node)",
+                    Text = "File Server (2 node)",
                     Group = StandAloneDeploy
                 },
                 new SelectListItem
                 {
                     Value = "Identity Small",
                     Text = "Identity Small",
-                    Group = StandAloneDeploy
+                    Group = ActiveDirectory
                 },
                 new SelectListItem
                 {
                     Value = "Identity Medium",
                     Text = "Identity Medium",
-                    Group = StandAloneDeploy
+                    Group = ActiveDirectory
+                },
+                new SelectListItem
+                {
+                    Value = "Identity Small Extended",
+                    Text = "Identity Small Extended",
+                    Group = ActiveDirectory
+                },
+                new SelectListItem
+                {
+                    Value = "Identity Medium Extended",
+                    Text = "Identity Medium Extended",
+                    Group = ActiveDirectory
                 },
                 new SelectListItem
                 {
@@ -118,15 +169,6 @@ namespace Deploy.ViewModel
             };
         
         }
-
-
-
-
-
-
-
-
-
 
         public virtual List<DeployType> DeployTypes { get; set; }
         public virtual List<Tennant> Tennants { get; set; }

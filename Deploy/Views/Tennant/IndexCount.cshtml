@@ -14,18 +14,26 @@
     </p>
 </div>
 
-<a asp-action="Create" class="btn btn-success btn-lg">Create New</a>
-<table class="table">
+<a id="navbtn" asp-action="Create" class="btn btn-success btn-lg">Create New</a>
+@using (Html.BeginForm())
+{
+    <p style="margin-top:10px;">
+        <label class="col-lg-1 center">Search: </label> @Html.TextBox("SearchString", null, new { @class = "form-control col-lg-8", id="search" })
+        <input id="submit navbtn" onkeyup="checkSearchChanged()" class="btn btn-default clickable" style="margin-left:10px;" type="submit" value="Search" />
+    </p>
+}
+
+<table class="table tablesorter-bootstrap">
     <thead>
         <tr>
                 <th>
-                    Tennant Name
+                    @Html.ActionLink("Tennant Name", "IndexCount", new { sortOrder = ViewBag.NameSortParm })
                 </th>
                 <th>
                     Tennant ID
                 </th>
                 <th>
-                    Number of Deployments
+                    @Html.ActionLink("Number of Deployments", "IndexCount", new { sortOrder = ViewBag.DeployCountSortParm })
                 </th>
             <th></th>
         </tr>
@@ -36,7 +44,7 @@
             <td>
                 @if (!string.IsNullOrEmpty(item.TennantName))
                 {
-                    @Html.ActionLink(item.TennantName, "Deploy", new { Id = item.TennantID })
+                    @Html.ActionLink(item.TennantName, "Deploy", new { Id = item.TennantID, @class="clickable"})
                 }
             </td>
             <td>
@@ -46,9 +54,9 @@
                 @Html.DisplayFor(modelItem => item.DeployCount)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.TennantID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
-                <a asp-action="Details" asp-route-id="@item.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a>
-                <a asp-action="Delete" asp-route-id="@item.TennantID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                <a id="navbtn" asp-action="Edit" asp-route-id="@item.TennantID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+                <a id="navbtn" asp-action="Details" asp-route-id="@item.TennantID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a>
+                <a id="navbtn" asp-action="Delete" asp-route-id="@item.TennantID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
             </td>
         </tr>
 }
