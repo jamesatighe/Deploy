@@ -1,11 +1,21 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+using System.IO;
+using Microsoft.Extensions.Options;
 
 namespace Deploy.DAL
 {
     public class RESTApi
     {
+
+        private AzureStorageConfig _storageConfig;
+        public RESTApi(AzureStorageConfig config)
+        {
+            _storageConfig = config;
+        }
         public class AccessToken
         {
             public string token_type { get; set; }
@@ -101,7 +111,7 @@ namespace Deploy.DAL
             var response = await httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
-                result = "true";
+                result = "DeployExists";
             }
             else
             {
@@ -110,7 +120,50 @@ namespace Deploy.DAL
             return result;
         }
 
+        public static async Task<string[]> ValidateTemplate(string subscriptionID, string resourcegroup, string azuredeploy, string accesstoken, string JObj)
+        {
+            string uri = "https://management.azure.com/subscriptions/" + subscriptionID + "/resourcegroups/" + resourcegroup + "/providers/Microsoft.Resources/deployments/" + azuredeploy + "/validate?api-version=2017-05-10";
+            var httpClient = new HttpClient();
+            string []results = new string[2];
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
 
+            var content1 = new StringContent(JObj, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(uri, content1);
+
+            if (response.IsSuccessStatusCode)
+            {
+                results[0] = "TemplateValid";
+                results[1] = "";
+                return results;
+            }
+            else
+            {
+                results[0] = "TemplateInvalid";
+                results[1] = await response.Content.ReadAsStringAsync();
+                return results;
+            }
+        }
+
+        public async Task<string[]> EncryptionKeys()
+        {
+               
+            string[] Keys = new string[3];
+            CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("ansible/Keys");
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference("keys.txt");
+
+            string tempkeys;
+            using (var memoryStream = new MemoryStream())
+            {
+                await blockBlob.DownloadToStreamAsync(memoryStream);
+                tempkeys = Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
+            Keys[0] = tempkeys.Split(',')[0];
+            Keys[1] = tempkeys.Split(',')[1];
+            Keys[2] = tempkeys.Split(',')[2];
+            return Keys;
+        }
 
 
     }

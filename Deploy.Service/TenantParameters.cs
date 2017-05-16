@@ -12,6 +12,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
 using System.Text;
+using Deploy.Service;
 
 namespace Deploy.Service
 {
@@ -65,7 +66,12 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
+
                         });
                     }
 
@@ -94,7 +100,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -123,7 +133,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -152,7 +166,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -181,7 +199,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -210,7 +232,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -239,7 +265,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -268,7 +298,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -298,7 +332,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -328,7 +366,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -357,7 +399,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -386,7 +432,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -416,7 +466,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -445,7 +499,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -474,7 +532,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -503,7 +565,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -533,7 +599,11 @@ namespace Deploy.Service
                     {
                         viewModel.TennantParams.Add(new TennantParam()
                         {
-                            ParamValue = tennant.ParamValue
+                            ParamValue = tennant.ParamValue,
+                            ParamType = tennant.ParamType,
+                            ParamName = tennant.ParamName,
+                            ParamToolTip = tennant.ParamToolTip,
+                            TennantParamID = tennant.TennantParamID
                         });
                     }
 
@@ -577,437 +647,18 @@ namespace Deploy.Service
                 });
             }
 
-                //if (viewModel.DeployName.Contains("(IDS)") || viewModel.DeployName == "Identity Small")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADS").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(IDM)") || viewModel.DeployName == "Identity Medium")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADM").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(IDMTYPE)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADMTYPE").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName == "Identity Small Extended")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADSEXT").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName == "Identity Medium Extended")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADMEXT").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(RDSS)") || viewModel.DeployName == "RDS Small")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSS").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(RDSSTYPE)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSSTYPE").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(RDSMTYPE)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSMTYPE").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName == "RDS Small (No FS)")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSSNOFS").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("(RDSM)") || viewModel.DeployName == "RDS Medium")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSM").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName == "FS Medium (TypeTec)")
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "FSMTYPE").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VNET"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VNET").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VPN"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VPN").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("File Server (2 node)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "FILESRVMED").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VM (Domain, Data Disk)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMDOMDISK").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VM (Domain, No Data Disk)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMDOMNODISK").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VM (No Domain, Data Disk)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMNODOMDISK").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-                //if (viewModel.DeployName.Contains("VM (No Domain, No Data Disk)"))
-                //{
-                //    var parameters = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMNODOMNODISK").ToListAsync();
-                //    viewModel.DeployParams = new List<DeployParam>();
-                //    viewModel.TennantName = deploy.Tennants.TennantName;
-                //    viewModel.TennantID = deploy.Tennants.TennantID;
-                //    //viewModel.DeployParamID = new List<int>();
-
-                //    foreach (var param in parameters)
-                //    {
-                //        //viewModel.DeployParamID.Add(param.DeployParamID);
-
-                //        viewModel.DeployParams.Add(new DeployParam()
-                //        {
-                //            DeployParamID = param.DeployParamID,
-                //            ParameterName = param.ParameterName,
-                //            ParameterType = param.ParameterType,
-                //            ParameterDeployType = param.ParameterDeployType,
-                //            ParamToolTip = param.ParamToolTip
-                //        });
-                //    }
-                //}
-
-
-                return viewModel;
+            return viewModel;
         }
 
 //#########################################
 //##        DeployToAzure                ##
 //#########################################
 
-        public async Task<string> DeployToAzure(int Id, bool Force)
+        public async Task<string[]> DeployToAzure(int Id, bool Force)
         {
+
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
-            
+            string[] resultsarr = new string[3];
             //Declare variables for use
             string tennantID = deployTypes.Tennants.AzureTennantID;
             string clientID = deployTypes.Tennants.AzureClientID;
@@ -1045,140 +696,49 @@ namespace Deploy.Service
             jsonDeploy = jsonDeploy.Replace("{parameters}", DepParams);
             azuredeploy = deployTypes.AzureDeployName;
 
-
-            //if (deployTypes.DeployName == "VNET")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Network/VNet1SubnetsGW.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "VNET-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "VPN")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Network/vpn.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "VPN-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "File Server (2 node)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "FileServer/FileServer.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "fileservermed-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "VM (Domain, Data Disk)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "VirtualMachine/VMDomainDisk.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "vmdomaindisk-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "VM (Domain, No Data Disk)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "VirtualMachine/VMDomainNoDisk.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "vmdomainnodisk-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "VM (No Domain, Data Disk)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "VirtualMachine/VMNoDomainDisk.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "vmnodomaindisk-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "VM (No Domain, No Data Disk)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "VirtualMachine/VMNoDomainNoDisk.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "vmnodomainnodisk-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-
-            //if (deployTypes.DeployName == "Identity Small")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Identity/identitysmall.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "identitysmall-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-            //if (deployTypes.DeployName == "Identity Small Extended")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Identity/identitysmallext.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "identitysmall-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-
-            //};
-            //if (deployTypes.DeployName == "RDS Small")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "RDS/RDSSmallfull.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "rdssmall-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-            //if (deployTypes.DeployName == "RDS Small (No FS)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "RDS/RDSSmallfullMDNoFS.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "rdssmall-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-            //if (deployTypes.DeployName == "Identity Medium")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Identity/identity.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "identity-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-            //if (deployTypes.DeployName == "Identity Medium Extended")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "Identity/identityext.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "identity-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-            //if (deployTypes.DeployName == "RDS Medium")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "RDS/RDSMediumfull.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "rdsmedium-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-            //if (deployTypes.DeployName == "FS Med (TypeTec)")
-            //{
-            //    jsonDeploy = jsonDeploy.Replace("{template}", "FileServer/FileServerType.json");
-            //    jsonDeploy = jsonDeploy.Replace("{parameters}", "filesermed-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json");
-            //    azuredeploy = deployTypes.AzureDeployName;
-            //};
-
-            //end of deployment logic.
-
-            //Create resource group.
-
+           
             var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonResourceGroup, true);
 
             //PUT request for deployment.
             var ValidateContent = RESTApi.Validate(subscriptionID, resourcegroupname, azuredeploy, accesstoken).Result;
-            if (ValidateContent == "true" && Force == false)
+            if (ValidateContent == "DeployExists" && Force == false)
             {
-                return ValidateContent;
+                resultsarr[0] = "DeployExists";
+                resultsarr[1] = "";
+                resultsarr[2] = "";
+                return resultsarr;
             }
             else
             {
-                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
-                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+                var ValidateTemplate = RESTApi.ValidateTemplate(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy).Result;
+                if (ValidateTemplate[0] == "TemplateValid")
+                {
 
-                //Update Deployment Type to show deployed
-                deployTypes.DeployState = "Deployed";
-                deployTypes.DeployResult = await putcontent;
-                _context.Update(deployTypes);
-                await _context.SaveChangesAsync();
-                ValidateContent = "False";
-                return ValidateContent;
+                    var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
+                    JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                    //Update Deployment Type to show deployed
+                    deployTypes.DeployState = "Deployed";
+                    deployTypes.DeployResult = await putcontent;
+                    _context.Update(deployTypes);
+                    await _context.SaveChangesAsync();
+                    ValidateContent = "False";
+                    resultsarr[0] = "DeployNotExists";
+                    resultsarr[1] = "TemplateValid";
+                    resultsarr[2] = "";
+                    return resultsarr;
+                }
+                else
+                {
+                    resultsarr[0] = "DeployNotExists";
+                    resultsarr[1] = ValidateTemplate[0];
+                    resultsarr[2] = ValidateTemplate[1];
+                    return resultsarr;
+                }
             }
         }
+
+
 
 //#########################################
 //##        DeployRDSSmall               ##
@@ -1486,7 +1046,11 @@ namespace Deploy.Service
         {
             var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            var sasToken = AzureHelper.GetSASToken(_storageConfig);
 
+            var encrypt = new RESTApi(_storageConfig);
+            string[] Keys = await encrypt.EncryptionKeys();
+            var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 
             string filename = deployTypes.ParamsFile;
             filename = filename.Replace("{tennant}", deployTypes.Tennants.TennantName);
@@ -1495,9 +1059,6 @@ namespace Deploy.Service
 
             //string filename = "{deploytype}-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json";
             string solutionfilename = "{deploytype}-" + deployTypes.Tennants.TennantName + "-param.json";
-
-            
-
 
             /*Solution logic */
             if (deployTypes.DeployName.Contains("(VNET)"))
@@ -1533,56 +1094,6 @@ namespace Deploy.Service
                 filename = solutionfilename.Replace("{deploytype}", "rdssmall");
             };
 
-            /*Standalone logic */
-            //if (deployTypes.DeployName == "VNET")
-            //{
-            //    filename = filename.Replace("{deploytype}", "VNET");
-            //};
-            //if (deployTypes.DeployName == "VPN")
-            //{
-            //    filename = filename.Replace("{deploytype}", "VPN");
-            //};
-            //if (deployTypes.DeployName == "Identity Small" || deployTypes.DeployName == "Identity Small Extended")
-            //{
-            //    filename = filename.Replace("{deploytype}", "identitysmall");
-            //};
-
-            //if (deployTypes.DeployName == "Identity Medium" || deployTypes.DeployName == "Identity Medium Extended")
-            //{
-            //    filename = filename.Replace("{deploytype}", "identity");
-            //};
-            //if (deployTypes.DeployName == "RDS Small" || deployTypes.DeployName == "RDS Small (No FS)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "rdssmall");
-            //};
-
-            //if (deployTypes.DeployName == "RDS Medium")
-            //{
-            //    filename = filename.Replace("{deploytype}", "rdsmedium");
-            //};
-
-            //if (deployTypes.DeployName == "File Server (2 node)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "fileservermed");
-            //}
-            //if (deployTypes.DeployName == "VM (Domain, Data Disk)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "vmdomaindisk");
-            //}
-            //if (deployTypes.DeployName == "VM (Domain, No Data Disk)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "vmdomainnodisk");
-            //}
-            //if (deployTypes.DeployName == "VM (No Domain, Data Disk)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "vmnodomaindisk");
-            //}
-            //if (deployTypes.DeployName == "VM (No Domain, No Data Disk)")
-            //{
-            //    filename = filename.Replace("{deploytype}", "vmnodomainnodisk");
-            //}
-
-
             var JsonHeader = new Dictionary<string, string>();
             JsonHeader.Add("$schema", "https:\\schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#");
             JsonHeader.Add("contentVersion", "1.0.0.0");
@@ -1609,6 +1120,11 @@ namespace Deploy.Service
                     tempjson.AppendLine("\t\t\t\t" + tennantParams[i].ParamValue.ToString());
                     tempjson.AppendLine("\t\t\t]");
                 }
+                else if (tennantParams[i].ParamType == "password")
+                {
+                    var decrypted = encryption.DecryptString(tennantParams[i].ParamValue);
+                    tempjson.AppendLine("\t\t\t\"value\": " + "\"" + decrypted + "\"");
+                }
                 else
                 {
                     tempjson.AppendLine("\t\t\t\"value\": " + "\"" + tennantParams[i].ParamValue.ToString() + "\"");
@@ -1633,11 +1149,11 @@ namespace Deploy.Service
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("ansible/");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(filename);
+            CloudBlockBlob blockBlob1 = container.GetBlockBlobReference(filename);
 
             using (Stream s = GenerateStreamFromString(jsonfull))
             {
-                await blockBlob.UploadFromStreamAsync(s);
+                await blockBlob1.UploadFromStreamAsync(s);
             }
 
             deployTypes.DeploySaved = "Yes";

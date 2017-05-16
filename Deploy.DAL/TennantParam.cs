@@ -11,6 +11,7 @@ namespace Deploy.DAL
         public int TennantParamID { get; set; }
         public int DeployTypeID { get; set; }
         public int DeployParamID { get; set; }
+        [Required(ErrorMessage = "All fields must be have values!")]
         public string ParamValue { get; set; }
         public string ParamName { get; set; }
         public string ParamType { get; set; }

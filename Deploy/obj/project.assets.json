@@ -2160,6 +2160,19 @@
           "lib/netstandard1.6/RestSharp.NetCore.dll": {}
         }
       },
+      "Rijndael256/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.App": "1.1.0",
+          "System.Security.Cryptography.Algorithms": "4.3.0"
+        },
+        "compile": {
+          "lib/netcoreapp1.0/Rijndael256.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/Rijndael256.dll": {}
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -4565,7 +4578,8 @@
           "Microsoft.AspNetCore": "1.1.0",
           "Microsoft.AspNetCore.Mvc": "1.1.1",
           "Microsoft.NETCore.App": "1.0.4",
-          "Newtonsoft.Json": "10.0.2"
+          "Newtonsoft.Json": "10.0.2",
+          "rijndael256": "3.2.0"
         }
       }
     }
@@ -6512,6 +6526,17 @@
         "lib/netstandard1.6/RestSharp.NetCore.dll",
         "restsharp.netcore.105.2.3.nupkg.sha512",
         "restsharp.netcore.nuspec"
+      ]
+    },
+    "Rijndael256/3.2.0": {
+      "sha512": "XyDtuxk2lUhRHNFcJDIw+fxH3uVfMQbrIa/3X/rwRYpatHZkYfQ3oP0Zd89BsNsRSR2/Lo2c61U/2KIeH11DBw==",
+      "type": "package",
+      "path": "rijndael256/3.2.0",
+      "files": [
+        "lib/net452/Rijndael256.dll",
+        "lib/netcoreapp1.0/Rijndael256.dll",
+        "rijndael256.3.2.0.nupkg.sha512",
+        "rijndael256.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {

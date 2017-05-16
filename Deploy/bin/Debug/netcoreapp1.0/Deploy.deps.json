@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "bfb59054a87f4e4113a8d1242297a1241bedfbb5"
+    "signature": "1ad46f4a210d65951c8c9056889c65fb78c797a2"
   },
   "compilationOptions": {
     "defines": [
@@ -1840,6 +1840,18 @@
         },
         "compile": {
           "lib/netstandard1.6/RestSharp.NetCore.dll": {}
+        }
+      },
+      "rijndael256/3.2.0": {
+        "dependencies": {
+          "Microsoft.NETCore.App": "1.0.4",
+          "System.Security.Cryptography.Algorithms": "4.3.0"
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/Rijndael256.dll": {}
+        },
+        "compile": {
+          "lib/netcoreapp1.0/Rijndael256.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0": {
@@ -3748,7 +3760,8 @@
           "Microsoft.AspNetCore": "1.1.0",
           "Microsoft.AspNetCore.Mvc": "1.1.1",
           "Microsoft.NETCore.App": "1.0.4",
-          "Newtonsoft.Json": "10.0.2"
+          "Newtonsoft.Json": "10.0.2",
+          "Rijndael256": "3.2.0"
         },
         "runtime": {
           "Deploy.Service.dll": {}
@@ -4958,6 +4971,13 @@
       "sha512": "sha512-XAutnXRVeS6Nhqjzg1l0OUOEWWLUDl4ZUvopMTRea0N3qiX+lD1U1Z5HrdyNwLX3eUUHI1w6h1DfEWEIe8JUSA==",
       "path": "restsharp.netcore/105.2.3",
       "hashPath": "restsharp.netcore.105.2.3.nupkg.sha512"
+    },
+    "rijndael256/3.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XyDtuxk2lUhRHNFcJDIw+fxH3uVfMQbrIa/3X/rwRYpatHZkYfQ3oP0Zd89BsNsRSR2/Lo2c61U/2KIeH11DBw==",
+      "path": "rijndael256/3.2.0",
+      "hashPath": "rijndael256.3.2.0.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0": {
       "type": "package",

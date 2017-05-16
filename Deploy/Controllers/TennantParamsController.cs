@@ -38,12 +38,15 @@ namespace Deploy.Controllers
 
 
         // GET: TennantParams
-        public async Task<IActionResult> IndexSelected(int Id, string sortOrder, string searchString, bool DeployExists )
+        public async Task<IActionResult> IndexSelected(int Id, string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
         {
 
             var TennantParams = _context.TennantParams.Where(t => t.DeployTypeID == Id).FirstOrDefault();
             var DeployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             ViewBag.DeployExists = DeployExists;
+            ViewBag.TemplateInvalid = TemplateInvalid;
+            ViewBag.TemplateError = TemplateError;
+
             if (TennantParams != null)
             {
                 var service = new TenantParameters(_context, _storageConfig);
@@ -67,16 +70,28 @@ namespace Deploy.Controllers
                     {
                         DeployParamID = Param.DeployParamID,
                         ParameterName = Param.ParameterName,
-                        ParameterDeployType = Param.ParameterDeployType
+                        ParameterDeployType = Param.ParameterDeployType,
                     });
                 }
                 viewModel.TennantParams = new List<TennantParam>();
                 foreach (var tennant in tennantParams)
                 {
-                    viewModel.TennantParams.Add(new TennantParam()
+                    if (tennant.ParamType == "password")
                     {
-                        ParamValue = tennant.ParamValue
-                    });
+                        viewModel.TennantParams.Add(new TennantParam()
+                        {
+
+                            ParamValue = "*****"
+                        });
+                    }
+                    else
+                    {
+                        viewModel.TennantParams.Add(new TennantParam()
+                        {
+
+                            ParamValue = tennant.ParamValue
+                        });
+                    }
                 }
 
             return View(viewModel);
@@ -151,14 +166,26 @@ namespace Deploy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TennantDeployParams tennantDeployParams)
         {
-            
+
+            var encrypt = new RESTApi(_storageConfig);
+            string []Keys = await encrypt.EncryptionKeys();
+            var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
+
             if (ModelState.IsValid)
             {
                 for (var i = 0; i < tennantDeployParams.DeployParamID.Count(); i++)
                 {
                     var tennantparam = new TennantParam();
+                    if (tennantDeployParams.ParamType[i] == "password")
+                    {
+                        var encrypted = encryption.EncryptString(tennantDeployParams.ParamValue[i]);
+                        tennantparam.ParamValue = encrypted;
+                    }
+                    else
+                    {
+                        tennantparam.ParamValue = tennantDeployParams.ParamValue[i];
+                    }
                     tennantparam.DeployParamID = tennantDeployParams.DeployParamID[i];
-                    tennantparam.ParamValue = tennantDeployParams.ParamValue[i];
                     tennantparam.ParamName = tennantDeployParams.ParamName[i];
                     tennantparam.ParamType = tennantDeployParams.ParamType[i];
                     tennantparam.DeployTypeID = tennantDeployParams.DeployTypeID;
@@ -179,15 +206,25 @@ namespace Deploy.Controllers
         // GET: TennantParams/Edit/5
         public async Task<IActionResult> Edit(int Id)
         {
+            var encrypt = new RESTApi(_storageConfig);
+            string[] Keys = await encrypt.EncryptionKeys();
+            var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
+
             var deploy = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
-            var parameters = await _context.TennantParams.Include(t => t.DeployParams).Where(t => t.DeployTypeID == Id).ToListAsync();
             var viewModel = new TennantDeployParams();
 
             viewModel.DeployTypeID = Id;
             viewModel.DeployName = deploy.DeployName;
-            viewModel.TennantID = deploy.TennantID;
-            viewModel.TennantName = deploy.Tennants.TennantName;
+            viewModel.DeploySaved = deploy.DeploySaved;
 
+            var TenantParams = await _service.GetTenantParams(Id);
+            var parameters = TenantParams.TennantParams.ToList();
+            viewModel.DeployName = TenantParams.DeployName;
+            viewModel.DeployParams = new List<DeployParam>();
+            viewModel.TennantName = deploy.Tennants.TennantName;
+            viewModel.TennantID = deploy.Tennants.TennantID;
+
+            viewModel.DeployParamID = new List<int>();
             viewModel.ParamName = new List<string>();
             viewModel.ParamValue = new List<string>();
             viewModel.ParamType = new List<string>();
@@ -200,12 +237,23 @@ namespace Deploy.Controllers
                 viewModel.TennantParamID.Add(param.TennantParamID);
                 viewModel.DeployParamID.Add(param.DeployParamID);
                 viewModel.ParamName.Add(param.ParamName);
-                viewModel.ParamValue.Add(param.ParamValue);
+                if (param.ParamType == "password")
+                {
+                    var decrypted = encryption.DecryptString(param.ParamValue);
+                    viewModel.ParamValue.Add(param.ParamValue = decrypted);
+                }
+                else
+                {
+                    viewModel.ParamValue.Add(param.ParamValue);
+                }
                 viewModel.ParamType.Add(param.ParamType);
                 viewModel.ParamToolTip.Add(param.ParamToolTip);
             }
             return View(viewModel);
+
         }
+
+    
 
         // POST: TennantParams/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -214,19 +262,32 @@ namespace Deploy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TennantDeployParams tennantDeployParams)
         {
+            var encrypt = new RESTApi(_storageConfig);
+            string[] Keys = await encrypt.EncryptionKeys();
+            var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 
             if (ModelState.IsValid)
             {
                 for (var i = 0; i < tennantDeployParams.ParamName.Count(); i++)
                 {
+
                     var tennantparam = new TennantParam();
                     tennantparam.TennantParamID = tennantDeployParams.TennantParamID[i];
                     tennantparam.ParamName = tennantDeployParams.ParamName[i];
-                    tennantparam.ParamValue = tennantDeployParams.ParamValue[i];
+                    if (tennantDeployParams.ParamType[i] == "password")
+                    {
+                        var encrypted = encryption.EncryptString(tennantDeployParams.ParamValue[i]);
+                        tennantparam.ParamValue = encrypted;
+                    }
+                    else
+                    {
+                        tennantparam.ParamValue = tennantDeployParams.ParamValue[i];
+                    }
                     tennantparam.ParamToolTip = tennantDeployParams.ParamToolTip[i];
                     tennantparam.DeployTypeID = tennantDeployParams.DeployTypeID;
                     tennantparam.ParamType = tennantDeployParams.ParamType[i];
                     tennantparam.DeployParamID = tennantDeployParams.DeployParamID[i];
+                    
 
                     var deployTypes = _context.DeployTypes.Where(d => d.DeployTypeID == tennantDeployParams.DeployTypeID).FirstOrDefault();
                     deployTypes.DeploySaved = "No";
@@ -290,11 +351,17 @@ namespace Deploy.Controllers
         {
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             //var service = new TenantParameters(_context, _storageConfig);
-            var result = await _service.DeployToAzure(Id, Force);
-            if (result == "true")
+            string[]results = await _service.DeployToAzure(Id, Force);
+            if (results[0] == "DeployExists")
             {
                 ViewBag.DeployExists = true;
                 return RedirectToAction("IndexSelected", "TennantParams", new { id = deployTypes.DeployTypeID, DeployExists = true });
+            }
+            else if (results[1] == "TemplateInvalid")
+            {
+                ViewBag.TemplateInvalid = results[1];
+                ViewBag.TemplateError = results[2];
+                return RedirectToAction("IndexSelected", "TennantParams", new { id = deployTypes.DeployTypeID, TemplateInvalid = true, TemplateError = results[2] });
             }
             else
             {
