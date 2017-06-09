@@ -4,10 +4,36 @@
     ViewData["Title"] = "IndexSelected";
 }
 
+<div id="deploywarningrdsmed" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-content">
+        <div style="font-size:18px;">
+            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+            <p style="margin-top:15px">Please ensure you wish to deploy before proceeding.</p>
+            <p>Incorrect deployment can lead to lost of configurations and resources.</p>
+            <button id="DeployCloserdsmed" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+            <a id="rdsMed" asp-action="DeployToAzureRDSMed" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Deploy">Deploy</a>
+        </div>
+    </div>
+</div>
+
+<div id="deploywarningerdssmall" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-content">
+        <div style="font-size:18px;">
+            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+            <p style="margin-top:15px">Please ensure you wish to deploy before proceeding.</p>
+            <p>Incorrect deployment can lead to lost of configurations and resources.</p>
+            <button id="DeployClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+            <a id="rdsSmall" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg"> data-dismiss="modal" aria-label="Deploy">Deploy</a>
+        </div>
+    </div>
+</div>
+
 <h2>Deployment List</h2>
 <p>
     You are currently working in company: <span style="font-weight:bold;font-size:20px;" >@Html.DisplayFor(Model => Model.TennantName)</span>
 </p>
+
+
 
 <p>
     <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
@@ -62,15 +88,15 @@
             }
             if (rdsSmallCount == 3)
             {
-                <a id="navbtn" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</a>
+                <button id="rdsSmallbtn" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</button>
             }
             if (rdsMedCount == 3)
             {
-                <a id="navbtn" asp-action="DeployToAzureRDSMed" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Medium</a>
+                <button id="rdsMedbtn" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Medium</button>
             }
             if (deployCount > 0)
             {
-                <a id="navbtn" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
+                <a id="GetDeploy" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
 
             }
 
@@ -204,3 +230,30 @@
     </tbody>
 </table>
 
+@section Scripts {
+    <script language='javascript' type='text/javascript'>
+    $(document).ready(function () {
+        var ua = navigator.userAgent.toLowerCase();
+        var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+
+        $('#rdsMedbtn').bind(ios_devices, function () {
+            $('#deploywarningrdsmed').fadeIn();
+        });
+        $('#rdsSmallbtn').bind(ios_devices, function () {
+            $('#deploywarningrdssmall').fadeIn();
+        });
+
+        $('#DeployCloserdsmed').bind(ios_devices, function () {
+            $('#deploywarningrdsmed').fadeOut();
+        });
+        $('#DeployCloserdssmall').bind(ios_devices, function () {
+            $('#deploywarningrdssmall').fadeOut();
+        });
+
+        $('#Deploy').bind(ios_devices, function () {
+            $('#deploywarning').fadeOut();
+        })
+
+    });
+    </script>
+}

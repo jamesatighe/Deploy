@@ -371,18 +371,36 @@ namespace Deploy.Controllers
 
         public async Task<IActionResult> DeployToAzureRDSSmall(int Id)
         {
-            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmallsolution")).ToListAsync();
-            await _service.DeployRDSSmall(Id);
-
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
+            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmall")).ToListAsync();
+            string[]results = await _service.DeployRDSSmall(Id);
+            if (results[1] == "TemplateInvalid")
+            {
+                ViewBag.TemplateInvalid = results[1];
+                ViewBag.TemplateError = results[2];
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID, TemplateInvalid = true, TemplateError = results[2] });
+            }
+            else
+            {
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
+            }
+  
         }
 
         public async Task<IActionResult> DeployToAzureRDSMed(int Id)
         {
             var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdsmedsolution")).ToListAsync();
-            await _service.DeployRDSMed(Id);
+            string[]results = await _service.DeployRDSMed(Id);
+            if (results[1] == "TemplateInvalid")
+            {
+                ViewBag.TemplateInvalid = results[1];
+                ViewBag.TemplateError = results[2];
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID, TemplateInvalid = true, TemplateError = results[2] });
+            }
+            else
+            {
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
+            }
 
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
         }
 
         public async Task<IActionResult> GetDeploy(int Id)

@@ -740,22 +740,38 @@ namespace Deploy.Service
 
 
 
-//#########################################
-//##        DeployRDSSmall               ##
-//#########################################
-
-        public async Task DeployRDSSmall(int Id)
+/*
+ _____           _           _____    ____________  _____ _____                 _ _ 
+|  _  \         | |          |_ _|    | ___ \  _  \/  ___/  ___|               | | |
+| | | |___ _ __ | | ___  _   _| | ___ | |_/ / | | |\ `--.\ `--. _ __ ___   __ _| | |
+| | | / _ \ '_ \| |/ _ \| | | | |/ _ \|    /| | | | `--. \`--. \ '_ ` _ \ / _` | | |
+| |/ /  __/ |_) | | (_) | |_| | | (_) | |\ \| |/ / /\__/ /\__/ / | | | | | (_| | | |
+|___/ \___| .__/|_|\___/ \__, \_/\___/\_| \_|___/  \____/\____/|_| |_| |_|\__,_|_|_|
+          | |             __/ |                                                     
+          |_|            |___/                                                      
+*/
+        public async Task<String[]> DeployRDSSmall(int Id)
         { 
-            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmallsolution")).ToListAsync();
+            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmall") && d.DeployState != "Deployed").ToListAsync();
 
             //Declare variables for use
+            string[] resultsarr = new string[3];
             string tennantID = deployTypes.FirstOrDefault().Tennants.AzureTennantID;
             string clientID = deployTypes[0].Tennants.AzureClientID;
             string secret = deployTypes.FirstOrDefault().Tennants.AzureClientSecret;
             string subscriptionID = deployTypes.FirstOrDefault().Tennants.AzureSubscriptionID;
-            string resourcegroupname = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
-            string resourcegroup = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
+            string resourcegroup = deployTypes.FirstOrDefault().ResourceGroupName;
             string azuredeploy = string.Empty;
+
+
+            var VNETSmallID = deployTypes.Where(d => d.DeployName.Contains("(VNET)")).FirstOrDefault().DeployTypeID;
+            var VNETSmallDep = deployTypes.Where(d => d.DeployName.Contains("(VNET)")).FirstOrDefault().AzureDeployName;
+
+            var IdentitySmallID = deployTypes.Where(d => d.DeployName.Contains("(IDS)")).FirstOrDefault().DeployTypeID;
+            var IdentitySmallDep = deployTypes.Where(d => d.DeployName.Contains("(IDS)")).FirstOrDefault().AzureDeployName;
+
+            var RDSSmallID = deployTypes.Where(d => d.DeployName.Contains("(RDSS)")).FirstOrDefault().DeployTypeID;
+            var RDSSmallDep = deployTypes.Where(d => d.DeployName.Contains("(RDSS)")).FirstOrDefault().AzureDeployName;
 
             var results = RESTApi.PostAction(tennantID, clientID, secret);
             RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
@@ -769,10 +785,13 @@ namespace Deploy.Service
             string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\" } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
 
+
             //Set Deploy Template dependent on Deployment Type
             jsonDeploy = jsonDeploy.Replace("{template}", "Linked/rdssmallsolution-temp.json");
             jsonDeploy = jsonDeploy.Replace("{parameters}", "identitysmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json");
-            azuredeploy = "rdssmallsolution";
+
+            Guid guid = Guid.NewGuid();
+            azuredeploy = "rdssmallsolution" + guid;
 
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
@@ -786,12 +805,17 @@ namespace Deploy.Service
                 linkedTemplate = Encoding.UTF8.GetString(memoryStream.ToArray());
             }
 
+            linkedTemplate = linkedTemplate.Replace("{VNETDep}", VNETSmallDep);
             linkedTemplate = linkedTemplate.Replace("{templatelinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Network/VNet1SubnetsGW.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/VNET-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identitysmall.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/identitysmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSSmallfull.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + VNETSmallID + "-param.json" + sasToken);
+
+            linkedTemplate = linkedTemplate.Replace("{IDDep}", IdentitySmallDep);
+            linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identitysmallMD.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + IdentitySmallID + "-param.json" + sasToken);
+
+            linkedTemplate = linkedTemplate.Replace("{RDSDep}", RDSSmallDep);
+            linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSSmallfullMD.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + RDSSmallID + "-param.json" + sasToken);
 
             CloudBlockBlob blockBlob2 = container.GetBlockBlobReference("rdssmallsolution-temp.json");
             using (Stream s = GenerateStreamFromString(linkedTemplate))
@@ -801,32 +825,51 @@ namespace Deploy.Service
 
             var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonResourceGroup, true);
 
-
-            var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
-            JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
-
-            //Update Deployment Type to show deployed
-            foreach (var deploy in deployTypes)
+            var ValidateTemplate = RESTApi.ValidateTemplate(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy).Result;
+            if (ValidateTemplate[0] == "TemplateValid")
             {
-                deploy.DeployState = "Deployed";
-                deploy.DeployResult = await putcontent;
-                _context.Update(deploy);
-                await _context.SaveChangesAsync();
+                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy, false);
+                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                //Update Deployment Type to show deployed
+                foreach (var deploy in deployTypes)
+                {
+                    deploy.DeployState = "Deployed";
+                    deploy.DeployResult = await putcontent;
+                    _context.Update(deploy);
+                    await _context.SaveChangesAsync();
+                }
+                resultsarr[0] = "DeployNotExists";
+                resultsarr[1] = "TemplateValid";
+                resultsarr[2] = "";
+                return resultsarr;
             }
-
-
-
+            else
+            {
+                resultsarr[0] = "DeployNotExists";
+                resultsarr[1] = ValidateTemplate[0];
+                resultsarr[2] = ValidateTemplate[1];
+                return resultsarr;
+            }
         }
 
-//#########################################
-//##        DeployRDSMed                 ##
-//#########################################
+/*
+______           _           _____   ____________  ________   ___         _ 
+|  _  \         | |          |_ _|   | ___ \  _  \/  ___ |  \/  |        | |
+| | | |___ _ __ | | ___ _    _| | ___ | |_/ / | | |\ `--.| .  . | ___ __ | |
+| | | / _ \ '_ \| |/ _ \| | | | |/ _ \|    /| | | | `--. \ |\/| |/ _ \/ _` |
+| |/ /  __/ |_) | | (_) | |_| | | (_) | |\ \| |/ / /\__/ / |  | |  __/ (_| |
+|___/ \___| .__/|_|\___/ \__, \_/\___/\_| \_|___/  \____/\_|  |_/\___|\__,_|
+          | |             __/ |                                             
+          |_|            |___/                                              
+*/
 
-        public async Task DeployRDSMed(int Id)
+        public async Task<String[]> DeployRDSMed(int Id)
         {
-            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdsmedsolution")).ToListAsync();
+            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdsmed") && d.DeployState != "Deployed").ToListAsync();
 
             //Declare variables for use
+            string[] resultsarr = new string[3];
             string tennantID = deployTypes.FirstOrDefault().Tennants.AzureTennantID;
             string clientID = deployTypes.FirstOrDefault().Tennants.AzureClientID;
             string secret = deployTypes.FirstOrDefault().Tennants.AzureClientSecret;
@@ -835,6 +878,16 @@ namespace Deploy.Service
             string resourcegroup = deployTypes.FirstOrDefault().Tennants.ResourceGroupName;
             string resourcegrouplocation = deployTypes.FirstOrDefault().Tennants.ResourceGroupLocation;
             string azuredeploy = string.Empty;
+
+            var VNETMedID = deployTypes.Where(d => d.DeployName.Contains("(VNET)")).FirstOrDefault().DeployTypeID;
+            var VNETMedDep = deployTypes.Where(d => d.DeployName.Contains("(VNET)")).FirstOrDefault().AzureDeployName;
+
+            var IdentityMedID = deployTypes.Where(d => d.DeployName.Contains("(IDM)")).FirstOrDefault().DeployTypeID;
+            var IdentityMedDep = deployTypes.Where(d => d.DeployName.Contains("(IDM)")).FirstOrDefault().AzureDeployName;
+
+            var RDSMedID = deployTypes.Where(d => d.DeployName.Contains("(RDSM)")).FirstOrDefault().DeployTypeID;
+            var RDSMedDep = deployTypes.Where(d => d.DeployName.Contains("(RDSM)")).FirstOrDefault().AzureDeployName;
+
 
             var results = RESTApi.PostAction(tennantID, clientID, secret);
             RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
@@ -872,20 +925,20 @@ namespace Deploy.Service
 
 
             linkedTemplate = linkedTemplate.Replace("{templatelinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Network/VNet1SubnetsGW.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/VNET-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + VNETMedID + "-param.json" + sasToken);
             if (deployTypes.FirstOrDefault().Tennants.TennantName.Contains("TypeTec"))
             {
                 linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identityMDType.json" + sasToken);
-                linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/identity-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + IdentityMedID + "-param.json" + sasToken);
                 linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSMediumfullType.json" + sasToken);
-                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmedium-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + RDSMedID "-param.json" + sasToken);
             }
             else
             {
                 linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identityMD.json" + sasToken);
-                linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/identity-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + IdentityMedID + "-param.json" + sasToken);
                 linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSMediumfull.json" + sasToken);
-                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmedium-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + RDSMedID + "-param.json" + sasToken);
             }
             
             CloudBlockBlob blockBlob2 = container.GetBlockBlobReference("rdsmedsolution-temp.json");
@@ -896,17 +949,31 @@ namespace Deploy.Service
 
             var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonResourceGroup, true);
 
-
-            var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
-            JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
-
-            //Update Deployment Type to show deployed
-            foreach (var deploy in deployTypes)
+            var ValidateTemplate = RESTApi.ValidateTemplate(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy).Result;
+            if (ValidateTemplate[0] == "TemplateValid")
             {
-                deploy.DeployState = "Deployed";
-                deploy.DeployResult = await putcontent;
-                _context.Update(deploy);
-                await _context.SaveChangesAsync();
+                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy, false);
+                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                //Update Deployment Type to show deployed
+                foreach (var deploy in deployTypes)
+                {
+                    deploy.DeployState = "Deployed";
+                    deploy.DeployResult = await putcontent;
+                    _context.Update(deploy);
+                    await _context.SaveChangesAsync();
+                }
+                resultsarr[0] = "DeployNotExists";
+                resultsarr[1] = "TemplateValid";
+                resultsarr[2] = "";
+                return resultsarr;
+            }
+            else
+            {
+                resultsarr[0] = "DeployNotExists";
+                resultsarr[1] = ValidateTemplate[0];
+                resultsarr[2] = ValidateTemplate[1];
+                return resultsarr;
             }
         }
 
@@ -1056,44 +1123,6 @@ namespace Deploy.Service
             filename = filename.Replace("{tennant}", deployTypes.Tennants.TennantName);
             filename = filename.Replace("{id}", deployTypes.DeployTypeID.ToString());
 
-
-            //string filename = "{deploytype}-" + deployTypes.Tennants.TennantName + "-" + deployTypes.DeployTypeID + "-param.json";
-            string solutionfilename = "{deploytype}-" + deployTypes.Tennants.TennantName + "-param.json";
-
-            /*Solution logic */
-            if (deployTypes.DeployName.Contains("(VNET)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "VNET");
-            }
-            if (deployTypes.DeployName.Contains("(IDS)")) 
-            {
-                filename = solutionfilename.Replace("{deploytype}", "identitysmall");
-            };
-            if (deployTypes.DeployName.Contains("(IDM)")) 
-            {
-                filename = solutionfilename.Replace("{deploytype}", "identity");
-            };
-            if (deployTypes.DeployName.Contains("(IDMTYPE)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "identity");
-            };
-            if (deployTypes.DeployName.Contains("(RDSS)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "rdssmall");
-            };
-            if (deployTypes.DeployName.Contains("(RDSM)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "rdsmedium");
-            };
-            if (deployTypes.DeployName.Contains("RDSMTYPE)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "rdsmedium");
-            };
-            if (deployTypes.DeployName.Contains("(RDSSTYPE)"))
-            {
-                filename = solutionfilename.Replace("{deploytype}", "rdssmall");
-            };
-
             var JsonHeader = new Dictionary<string, string>();
             JsonHeader.Add("$schema", "https:\\schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#");
             JsonHeader.Add("contentVersion", "1.0.0.0");
@@ -1157,6 +1186,9 @@ namespace Deploy.Service
             }
 
             deployTypes.DeploySaved = "Yes";
+            deployTypes.DeployResult = null;
+            deployTypes.DeployState = null;
+            deployTypes.ParamsFile = filename;
             _context.Update(deployTypes);
             await _context.SaveChangesAsync();
         }

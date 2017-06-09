@@ -16,14 +16,26 @@
     </div>
 </div>
 
-<div id="deploywarningerdssmall" class="modal" tabindex="1" style="display:none;">
+<div id="deploywarningrdssmall" class="modal" tabindex="1" style="display:none;">
     <div class="modal-content">
         <div style="font-size:18px;">
             <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
             <p style="margin-top:15px">Please ensure you wish to deploy before proceeding.</p>
             <p>Incorrect deployment can lead to lost of configurations and resources.</p>
-            <button id="DeployClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
-            <a id="rdsSmall" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg"> data-dismiss="modal" aria-label="Deploy">Deploy</a>
+            <button id="DeployCloserdssmall" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+            <a id="rdsSmall" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Deploy">Deploy</a>
+        </div>
+    </div>
+</div>
+
+<div id="templateinvalid" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-content">
+        <div style="font-size:18px;">
+            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+            <p style="margin-top:15px">Template Invalid Error.</p>
+            <p>The template validation has failed. There error returned is below.</p>
+            <p>@ViewBag.TemplateError</p>
+            <button id="TemplateInvalidClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
         </div>
     </div>
 </div>
@@ -39,25 +51,25 @@
     <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
     <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @{
-        var rdsSmallCount = 0;
-        var rdsMedCount = 0;
-        var deployCount = 0;
+            var rdsSmallCount = 0;
+            var rdsMedCount = 0;
+            var deployCount = 0;
 
-        for (var i = 0; i < Model.DeployTypes.Count(); i++)
-        {
-            if (Model.DeployTypes[i].DeploySaved == "Yes")
+            for (var i = 0; i < Model.DeployTypes.Count(); i++)
             {
-                if (Model.DeployTypes[i].AzureDeployName.Contains("rdssmallsolution"))
+                if (Model.DeployTypes[i].DeploySaved == "Yes")
+            {
+                if (Model.DeployTypes[i].AzureDeployName.Contains("rdssmall"))
                 {
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (VNET)" && Model.DeployTypes[i].DeployState != "Deployed")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (VNET)" && Model.DeployTypes[i].DeployResult == null)
                     {
                         rdsSmallCount++;
                     }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (IDS)" && Model.DeployTypes[i].DeployState != "Deployed")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (IDS)" && Model.DeployTypes[i].DeployResult == null)
                     {
                         rdsSmallCount++;
                     }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (RDSS)" && Model.DeployTypes[i].DeployState != "Deployed")
+                    if (Model.DeployTypes[i].DeployName == "RDSSmall (RDSS)" && Model.DeployTypes[i].DeployResult == null)
                     {
                         rdsSmallCount++;
                     }
@@ -85,7 +97,7 @@
             {
                 deployCount++;
             }
-            }
+        }
             if (rdsSmallCount == 3)
             {
                 <button id="rdsSmallbtn" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</button>
@@ -232,9 +244,9 @@
 
 @section Scripts {
     <script language='javascript' type='text/javascript'>
-    $(document).ready(function () {
-        var ua = navigator.userAgent.toLowerCase();
-        var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+        $(document).ready(function () {
+            var ua = navigator.userAgent.toLowerCase();
+            var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
 
         $('#rdsMedbtn').bind(ios_devices, function () {
             $('#deploywarningrdsmed').fadeIn();
@@ -252,8 +264,21 @@
 
         $('#Deploy').bind(ios_devices, function () {
             $('#deploywarning').fadeOut();
-        })
+        });
+
+        var TemplateInvalid = @ViewBag.TemplateInvalid.ToString().ToLower();
+        if (TemplateInvalid)
+            $('#templateinvalid').fadeIn();
+
+        $('#TemplateInvalidClose').bind(ios_devices, function () {
+            $('#templateinvalid').fadeOut();
+
+        });
+
+
 
     });
     </script>
 }
+
+

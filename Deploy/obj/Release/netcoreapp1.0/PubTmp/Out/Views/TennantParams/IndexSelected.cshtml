@@ -16,6 +16,18 @@
     </div>
 </div>
 
+<div id="templateinvalid" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-content">
+        <div style="font-size:18px;">
+            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+            <p style="margin-top:15px">Template Invalid Error.</p>
+            <p>The template validation has failed. There error returned is below.</p>
+            <p>@ViewBag.TemplateError</p>
+            <button id="TemplateInvalidClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+    </div>
+</div>
+
 <h2>Deployment Parameters</h2>
 <p>
     You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
@@ -66,10 +78,19 @@
         if (dataexists)
             $('#deployexists').fadeIn();
 
+        var TemplateInvalid = @ViewBag.TemplateInvalid.ToString().ToLower();
+        if (TemplateInvalid)
+            $('#templateinvalid').fadeIn();
+
         var ua = navigator.userAgent.toLowerCase();
         var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
         $('#DeployExistsClose').bind(ios_devices, function () {
             $('#deployexists').fadeOut();
+        });
+
+        $('#TemplateInvalidClose').bind(ios_devices, function () {
+            $('#templateinvalid').fadeOut();
+
         });
 
         $('#ReDeploy').bind(ios_devices, function () {

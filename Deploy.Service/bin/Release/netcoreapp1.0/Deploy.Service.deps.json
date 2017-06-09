@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "6b3b626601252651e1031904604957760ef90c00"
+    "signature": "5b851c8f5ca0c031bd8fd2dfb104a03e5ce58d03"
   },
   "compilationOptions": {},
   "targets": {
@@ -11,7 +11,8 @@
           "Deploy.DAL": "1.0.0",
           "Microsoft.AspNetCore": "1.1.0",
           "Microsoft.AspNetCore.Mvc": "1.1.1",
-          "Newtonsoft.Json": "10.0.2"
+          "Newtonsoft.Json": "10.0.2",
+          "Rijndael256": "3.2.0"
         },
         "runtime": {
           "Deploy.Service.dll": {}
@@ -1055,6 +1056,14 @@
         },
         "runtime": {
           "lib/netstandard1.0/Remotion.Linq.dll": {}
+        }
+      },
+      "rijndael256/3.2.0": {
+        "dependencies": {
+          "System.Security.Cryptography.Algorithms": "4.3.0"
+        },
+        "runtime": {
+          "lib/netcoreapp1.0/Rijndael256.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0": {
@@ -3191,6 +3200,13 @@
       "sha512": "sha512-IJn0BqkvwEDpP+2qjvci7n4/a9f7DhKESLWb2/uG4xQh3rTkGTBUz69bI4IivCoKkTFAqjXxYDZw2K/npohjsw==",
       "path": "remotion.linq/2.1.1",
       "hashPath": "remotion.linq.2.1.1.nupkg.sha512"
+    },
+    "rijndael256/3.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XyDtuxk2lUhRHNFcJDIw+fxH3uVfMQbrIa/3X/rwRYpatHZkYfQ3oP0Zd89BsNsRSR2/Lo2c61U/2KIeH11DBw==",
+      "path": "rijndael256/3.2.0",
+      "hashPath": "rijndael256.3.2.0.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.0": {
       "type": "package",

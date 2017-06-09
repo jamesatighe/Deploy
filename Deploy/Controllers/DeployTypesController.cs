@@ -27,11 +27,13 @@ namespace Deploy.Controllers
         }
 
    
-       public async Task<IActionResult> IndexSelected(int Id,string sortOrder, string searchString, bool DeployExists)
+       public async Task<IActionResult> IndexSelected(int Id,string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
         {
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "DeployName_desc" : "";
 
             ViewBag.DeployExists = DeployExists;
+            ViewBag.TemplateInvalid = TemplateInvalid;
+            ViewBag.TemplateError = TemplateError;
 
 
             var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
@@ -207,7 +209,7 @@ namespace Deploy.Controllers
                     newdeploy.ParamsFile = DeployChoices.ParamsFile;
                     newdeploy.DeployCode = "VNET";
                     newdeploy.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy.AzureDeployName = "rdssmallsolution" + guid;
+                    newdeploy.AzureDeployName = "rdssmallVNET" + guid;
                     _context.Add(newdeploy);
                     await _context.SaveChangesAsync();
 
@@ -218,9 +220,9 @@ namespace Deploy.Controllers
                     newdeploy1.TennantID = DeployChoices.TennantID;
                     newdeploy1.DeployFile = DeployChoices.DeployFile;
                     newdeploy1.ParamsFile = DeployChoices.ParamsFile;
-                    newdeploy1.DeployCode = "IDS";
+                    newdeploy1.DeployCode = "ADS";
                     newdeploy1.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy1.AzureDeployName = "rdssmallsolution" + guid1;
+                    newdeploy1.AzureDeployName = "rdssmallID" + guid1;
                     _context.Add(newdeploy1);
                     await _context.SaveChangesAsync();
 
@@ -233,7 +235,7 @@ namespace Deploy.Controllers
                     newdeploy2.ParamsFile = DeployChoices.ParamsFile;
                     newdeploy2.DeployCode = "RDSS";
                     newdeploy2.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy2.AzureDeployName = "rdssmallsolution" + guid2;
+                    newdeploy2.AzureDeployName = "rdssmallRDS" + guid2;
                     _context.Add(newdeploy2);
                     await _context.SaveChangesAsync();
                 }
@@ -248,7 +250,7 @@ namespace Deploy.Controllers
                     newdeploy.ParamsFile = DeployChoices.ParamsFile;
                     newdeploy.DeployCode = "VNET";
                     newdeploy.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy.AzureDeployName = "rdsmedsolution" + guid;
+                    newdeploy.AzureDeployName = "rdsmedVNET" + guid;
                     _context.Add(newdeploy);
                     await _context.SaveChangesAsync();
 
@@ -261,7 +263,7 @@ namespace Deploy.Controllers
                     newdeploy1.ParamsFile = DeployChoices.ParamsFile;
                     newdeploy1.DeployCode = "ADM";
                     newdeploy1.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy1.AzureDeployName = "rdsmedsolution" + guid1;
+                    newdeploy1.AzureDeployName = "rdsmedID" + guid1;
                     _context.Add(newdeploy1);
                     await _context.SaveChangesAsync();
 
@@ -274,7 +276,7 @@ namespace Deploy.Controllers
                     newdeploy2.ParamsFile = DeployChoices.ParamsFile;
                     newdeploy2.DeployCode = "RDSM";
                     newdeploy2.ResourceGroupName = DeployChoices.ResourceGroupName;
-                    newdeploy2.AzureDeployName = "rdsmedsolution" + guid2;
+                    newdeploy2.AzureDeployName = "rdsmedRDS" + guid2;
                     _context.Add(newdeploy2);
                     await _context.SaveChangesAsync();
                 }
@@ -390,251 +392,251 @@ namespace Deploy.Controllers
         // POST: DeployTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DeployType deployType)
-        {
-            if (ModelState.IsValid)
-            {
-                //Logic to generate valid viewmodel with AzureDeployName parameter.
-                if (deployType.DeployName == "RDS Small Solution")
-                {
-                    Guid guid = Guid.NewGuid();
-                    var newdeploy = new DeployType();
-                    newdeploy.DeployName = "RDSSmall (VNET)";
-                    newdeploy.DeploySaved = "No";
-                    newdeploy.TennantID = deployType.TennantID;
-                    newdeploy.AzureDeployName = "rdssmallsolution" + guid;
-                    _context.Add(newdeploy);
-                    await _context.SaveChangesAsync();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(DeployType deployType)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        //Logic to generate valid viewmodel with AzureDeployName parameter.
+        //        if (deployType.DeployName == "RDS Small Solution")
+        //        {
+        //            Guid guid = Guid.NewGuid();
+        //            var newdeploy = new DeployType();
+        //            newdeploy.DeployName = "RDSSmall (VNET)";
+        //            newdeploy.DeploySaved = "No";
+        //            newdeploy.TennantID = deployType.TennantID;
+        //            newdeploy.AzureDeployName = "rdssmallVNET" + guid;
+        //            _context.Add(newdeploy);
+        //            await _context.SaveChangesAsync();
 
-                    Guid guid1 = Guid.NewGuid();
-                    var newdeploy1 = new DeployType();
-                    newdeploy1.DeployName = "RDSSmall (IDS)";
-                    newdeploy1.DeploySaved = "No";
-                    newdeploy1.TennantID = deployType.TennantID;
-                    newdeploy1.AzureDeployName = "rdssmallsolution" + guid1;
-                    _context.Add(newdeploy1);
-                    await _context.SaveChangesAsync();
+        //            Guid guid1 = Guid.NewGuid();
+        //            var newdeploy1 = new DeployType();
+        //            newdeploy1.DeployName = "RDSSmall (IDS)";
+        //            newdeploy1.DeploySaved = "No";
+        //            newdeploy1.TennantID = deployType.TennantID;
+        //            newdeploy1.AzureDeployName = "rdssmallID" + guid1;
+        //            _context.Add(newdeploy1);
+        //            await _context.SaveChangesAsync();
 
-                    Guid guid2 = Guid.NewGuid();
-                    var newdeploy2 = new DeployType();
-                    newdeploy2.DeployName = "RDSSmall (RDSS)";
-                    newdeploy2.DeploySaved = "No";
-                    newdeploy2.TennantID = deployType.TennantID;
-                    newdeploy2.AzureDeployName = "rdssmallsolution" + guid2;
-                    _context.Add(newdeploy2);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    if (deployType.DeployName == "RDS Medium Solution")
-                    {
-                        Guid guid = Guid.NewGuid();
-                        var newdeploy = new DeployType();
-                        newdeploy.DeployName = "RDSMedium (VNET)";
-                        newdeploy.DeploySaved = "No";
-                        newdeploy.TennantID = deployType.TennantID;
-                        newdeploy.AzureDeployName = "rdsmedsolution" + guid;
-                        _context.Add(newdeploy);
-                        await _context.SaveChangesAsync();
+        //            Guid guid2 = Guid.NewGuid();
+        //            var newdeploy2 = new DeployType();
+        //            newdeploy2.DeployName = "RDSSmall (RDSS)";
+        //            newdeploy2.DeploySaved = "No";
+        //            newdeploy2.TennantID = deployType.TennantID;
+        //            newdeploy2.AzureDeployName = "rdssmallRDS" + guid2;
+        //            _context.Add(newdeploy2);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        else
+        //        {
+        //            if (deployType.DeployName == "RDS Medium Solution")
+        //            {
+        //                Guid guid = Guid.NewGuid();
+        //                var newdeploy = new DeployType();
+        //                newdeploy.DeployName = "RDSMedium (VNET)";
+        //                newdeploy.DeploySaved = "No";
+        //                newdeploy.TennantID = deployType.TennantID;
+        //                newdeploy.AzureDeployName = "rdsmedVNET" + guid;
+        //                _context.Add(newdeploy);
+        //                await _context.SaveChangesAsync();
 
-                        Guid guid1 = Guid.NewGuid();
-                        var newdeploy1 = new DeployType();
-                        newdeploy1.DeployName = "RDSMedium (IDM)";
-                        newdeploy1.DeploySaved = "No";
-                        newdeploy1.TennantID = deployType.TennantID;
-                        newdeploy1.AzureDeployName = "rdsmedsolution" + guid1;
-                        _context.Add(newdeploy1);
-                        await _context.SaveChangesAsync();
+        //                Guid guid1 = Guid.NewGuid();
+        //                var newdeploy1 = new DeployType();
+        //                newdeploy1.DeployName = "RDSMedium (IDM)";
+        //                newdeploy1.DeploySaved = "No";
+        //                newdeploy1.TennantID = deployType.TennantID;
+        //                newdeploy1.AzureDeployName = "rdsmedID" + guid1;
+        //                _context.Add(newdeploy1);
+        //                await _context.SaveChangesAsync();
 
-                        Guid guid2 = Guid.NewGuid();
-                        var newdeploy2 = new DeployType();
-                        newdeploy2.DeployName = "RDSMedium (RDSM)";
-                        newdeploy2.DeploySaved = "No";
-                        newdeploy2.TennantID = deployType.TennantID;
-                        newdeploy2.AzureDeployName = "rdsmedsolution" + guid2;
-                        _context.Add(newdeploy2);
-                        await _context.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        if (deployType.DeployName == "RDS Small")
-                        {
-                            Guid guid = Guid.NewGuid();
-                            var newdeploy = new DeployType();
-                            newdeploy.DeployName = "RDS Small";
-                            newdeploy.DeploySaved = "No";
-                            newdeploy.TennantID = deployType.TennantID;
-                            newdeploy.AzureDeployName = "rdssmall" + guid;
-                            _context.Add(newdeploy);
-                            await _context.SaveChangesAsync();
+        //                Guid guid2 = Guid.NewGuid();
+        //                var newdeploy2 = new DeployType();
+        //                newdeploy2.DeployName = "RDSMedium (RDSM)";
+        //                newdeploy2.DeploySaved = "No";
+        //                newdeploy2.TennantID = deployType.TennantID;
+        //                newdeploy2.AzureDeployName = "rdsmedRDS" + guid2;
+        //                _context.Add(newdeploy2);
+        //                await _context.SaveChangesAsync();
+        //            }
+        //            else
+        //            {
+        //                if (deployType.DeployName == "RDS Small")
+        //                {
+        //                    Guid guid = Guid.NewGuid();
+        //                    var newdeploy = new DeployType();
+        //                    newdeploy.DeployName = "RDS Small";
+        //                    newdeploy.DeploySaved = "No";
+        //                    newdeploy.TennantID = deployType.TennantID;
+        //                    newdeploy.AzureDeployName = "rdssmall" + guid;
+        //                    _context.Add(newdeploy);
+        //                    await _context.SaveChangesAsync();
 
-                        }
-                        else
-                        {
-                            if (deployType.DeployName == "Identity Small")
-                            {
-                                Guid guid = Guid.NewGuid();
-                                var newdeploy = new DeployType();
-                                newdeploy.DeployName = "Identity Small";
-                                newdeploy.DeploySaved = "No";
-                                newdeploy.TennantID = deployType.TennantID;
-                                newdeploy.AzureDeployName = "identitysmall" + guid;
-                                _context.Add(newdeploy);
-                                await _context.SaveChangesAsync();
-                            }
-                            else
-                            {
-                                if (deployType.DeployName == "Identity Medium")
-                                {
-                                    Guid guid = Guid.NewGuid();
-                                    var newdeploy = new DeployType();
-                                    newdeploy.DeployName = "Identity Medium";
-                                    newdeploy.DeploySaved = "No";
-                                    newdeploy.TennantID = deployType.TennantID;
-                                    newdeploy.AzureDeployName = "identitymedium" + guid;
-                                    _context.Add(newdeploy);
-                                    await _context.SaveChangesAsync();
+        //                }
+        //                else
+        //                {
+        //                    if (deployType.DeployName == "Identity Small")
+        //                    {
+        //                        Guid guid = Guid.NewGuid();
+        //                        var newdeploy = new DeployType();
+        //                        newdeploy.DeployName = "Identity Small";
+        //                        newdeploy.DeploySaved = "No";
+        //                        newdeploy.TennantID = deployType.TennantID;
+        //                        newdeploy.AzureDeployName = "identitysmall" + guid;
+        //                        _context.Add(newdeploy);
+        //                        await _context.SaveChangesAsync();
+        //                    }
+        //                    else
+        //                    {
+        //                        if (deployType.DeployName == "Identity Medium")
+        //                        {
+        //                            Guid guid = Guid.NewGuid();
+        //                            var newdeploy = new DeployType();
+        //                            newdeploy.DeployName = "Identity Medium";
+        //                            newdeploy.DeploySaved = "No";
+        //                            newdeploy.TennantID = deployType.TennantID;
+        //                            newdeploy.AzureDeployName = "identitymedium" + guid;
+        //                            _context.Add(newdeploy);
+        //                            await _context.SaveChangesAsync();
 
-                                }
-                                else
-                                {
-                                    if (deployType.DeployName == "RDS Medium")
-                                    {
-                                        Guid guid = Guid.NewGuid();
-                                        var newdeploy = new DeployType();
-                                        newdeploy.DeployName = "RDS Medium";
-                                        newdeploy.DeploySaved = "No";
-                                        newdeploy.TennantID = deployType.TennantID;
-                                        newdeploy.AzureDeployName = "rdsmedium" + guid;
-                                        _context.Add(newdeploy);
-                                        await _context.SaveChangesAsync();
+        //                        }
+        //                        else
+        //                        {
+        //                            if (deployType.DeployName == "RDS Medium")
+        //                            {
+        //                                Guid guid = Guid.NewGuid();
+        //                                var newdeploy = new DeployType();
+        //                                newdeploy.DeployName = "RDS Medium";
+        //                                newdeploy.DeploySaved = "No";
+        //                                newdeploy.TennantID = deployType.TennantID;
+        //                                newdeploy.AzureDeployName = "rdsmedium" + guid;
+        //                                _context.Add(newdeploy);
+        //                                await _context.SaveChangesAsync();
 
-                                    }
-                                    else
-                                    {
-                                        if (deployType.DeployName == "VNET")
-                                        {
-                                            Guid guid = Guid.NewGuid();
-                                            var newdeploy = new DeployType();
-                                            newdeploy.DeployName = "VNET";
-                                            newdeploy.DeploySaved = "No";
-                                            newdeploy.TennantID = deployType.TennantID;
-                                            newdeploy.AzureDeployName = "VNET" + guid;
-                                            _context.Add(newdeploy);
-                                            await _context.SaveChangesAsync();
-                                        }
-                                        else
-                                        {
-                                            if (deployType.DeployName == "File Server (2 node)")
-                                            {
-                                                Guid guid = Guid.NewGuid();
-                                                var newdeploy = new DeployType();
-                                                newdeploy.DeployName = "File Server (2 node)";
-                                                newdeploy.DeploySaved = "No";
-                                                newdeploy.TennantID = deployType.TennantID;
-                                                newdeploy.AzureDeployName = "FileServerMed" + guid;
-                                                _context.Add(newdeploy);
-                                                await _context.SaveChangesAsync();
+        //                            }
+        //                            else
+        //                            {
+        //                                if (deployType.DeployName == "VNET")
+        //                                {
+        //                                    Guid guid = Guid.NewGuid();
+        //                                    var newdeploy = new DeployType();
+        //                                    newdeploy.DeployName = "VNET";
+        //                                    newdeploy.DeploySaved = "No";
+        //                                    newdeploy.TennantID = deployType.TennantID;
+        //                                    newdeploy.AzureDeployName = "VNET" + guid;
+        //                                    _context.Add(newdeploy);
+        //                                    await _context.SaveChangesAsync();
+        //                                }
+        //                                else
+        //                                {
+        //                                    if (deployType.DeployName == "File Server (2 node)")
+        //                                    {
+        //                                        Guid guid = Guid.NewGuid();
+        //                                        var newdeploy = new DeployType();
+        //                                        newdeploy.DeployName = "File Server (2 node)";
+        //                                        newdeploy.DeploySaved = "No";
+        //                                        newdeploy.TennantID = deployType.TennantID;
+        //                                        newdeploy.AzureDeployName = "FileServerMed" + guid;
+        //                                        _context.Add(newdeploy);
+        //                                        await _context.SaveChangesAsync();
 
-                                            }
-                                            else
-                                            {
-                                                if (deployType.DeployName == "Virtual Machine (Domain, Data Disk)")
-                                                {
-                                                    Guid guid = Guid.NewGuid();
-                                                    var newdeploy = new DeployType();
-                                                    newdeploy.DeployName = "VM (Domain, Data Disk)";
-                                                    newdeploy.DeploySaved = "No";
-                                                    newdeploy.TennantID = deployType.TennantID;
-                                                    newdeploy.AzureDeployName = "VMDomainDisk" + guid;
-                                                    _context.Add(newdeploy);
-                                                    await _context.SaveChangesAsync();
-                                                }
-                                                else
-                                                {
-                                                    if (deployType.DeployName == "Virtual Machine (No Domain, Data Disk)")
-                                                    {
-                                                        Guid guid = Guid.NewGuid();
-                                                        var newdeploy = new DeployType();
-                                                        newdeploy.DeployName = "VM (No Domain, Data Disk)";
-                                                        newdeploy.DeploySaved = "No";
-                                                        newdeploy.TennantID = deployType.TennantID;
-                                                        newdeploy.AzureDeployName = "VMNoDomainDisk" + guid;
-                                                        _context.Add(newdeploy);
-                                                        await _context.SaveChangesAsync();
-                                                    }
-                                                    else
-                                                    {
-                                                        if (deployType.DeployName == "Virtual Machine (No Domain, No Data Disk)")
-                                                        {
-                                                            Guid guid = Guid.NewGuid();
-                                                            var newdeploy = new DeployType();
-                                                            newdeploy.DeployName = "VM (No Domain, No Data Disk)";
-                                                            newdeploy.DeploySaved = "No";
-                                                            newdeploy.TennantID = deployType.TennantID;
-                                                            newdeploy.AzureDeployName = "VMNoDomainNoDisk" + guid;
-                                                            _context.Add(newdeploy);
-                                                            await _context.SaveChangesAsync();
-                                                        }
-                                                        else
-                                                        {
-                                                            if (deployType.DeployName == "VPN")
-                                                            {
-                                                                Guid guid = Guid.NewGuid();
-                                                                var newdeploy = new DeployType();
-                                                                newdeploy.DeployName = "VPN";
-                                                                newdeploy.DeploySaved = "No";
-                                                                newdeploy.TennantID = deployType.TennantID;
-                                                                newdeploy.AzureDeployName = "VPN" + guid;
-                                                                _context.Add(newdeploy);
-                                                                await _context.SaveChangesAsync();
-                                                            }
-                                                            else
-                                                            {
-                                                                if (deployType.DeployName == "Identity Small Extended")
-                                                                {
-                                                                    Guid guid = Guid.NewGuid();
-                                                                    var newdeploy = new DeployType();
-                                                                    newdeploy.DeployName = "Identity Small Extended";
-                                                                    newdeploy.DeploySaved = "No";
-                                                                    newdeploy.TennantID = deployType.TennantID;
-                                                                    newdeploy.AzureDeployName = "IdentitySmallExtended" + guid;
-                                                                    _context.Add(newdeploy);
-                                                                    await _context.SaveChangesAsync();
-                                                                }
-                                                                else
-                                                                {
-                                                                    if (deployType.DeployName == "Identity Medium Extended")
-                                                                    {
-                                                                        Guid guid = Guid.NewGuid();
-                                                                        var newdeploy = new DeployType();
-                                                                        newdeploy.DeployName = "Identity Medium Extended";
-                                                                        newdeploy.DeploySaved = "No";
-                                                                        newdeploy.TennantID = deployType.TennantID;
-                                                                        newdeploy.AzureDeployName = "IdentityMediumExtended" + guid;
-                                                                        _context.Add(newdeploy);
-                                                                        await _context.SaveChangesAsync();
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                    return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
-            }
-            ViewData["TennantID"] = new SelectList(_context.Tennants, "TennantID", "TennantID", deployType.TennantID);
-            return View(deployType);
-        }
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        if (deployType.DeployName == "Virtual Machine (Domain, Data Disk)")
+        //                                        {
+        //                                            Guid guid = Guid.NewGuid();
+        //                                            var newdeploy = new DeployType();
+        //                                            newdeploy.DeployName = "VM (Domain, Data Disk)";
+        //                                            newdeploy.DeploySaved = "No";
+        //                                            newdeploy.TennantID = deployType.TennantID;
+        //                                            newdeploy.AzureDeployName = "VMDomainDisk" + guid;
+        //                                            _context.Add(newdeploy);
+        //                                            await _context.SaveChangesAsync();
+        //                                        }
+        //                                        else
+        //                                        {
+        //                                            if (deployType.DeployName == "Virtual Machine (No Domain, Data Disk)")
+        //                                            {
+        //                                                Guid guid = Guid.NewGuid();
+        //                                                var newdeploy = new DeployType();
+        //                                                newdeploy.DeployName = "VM (No Domain, Data Disk)";
+        //                                                newdeploy.DeploySaved = "No";
+        //                                                newdeploy.TennantID = deployType.TennantID;
+        //                                                newdeploy.AzureDeployName = "VMNoDomainDisk" + guid;
+        //                                                _context.Add(newdeploy);
+        //                                                await _context.SaveChangesAsync();
+        //                                            }
+        //                                            else
+        //                                            {
+        //                                                if (deployType.DeployName == "Virtual Machine (No Domain, No Data Disk)")
+        //                                                {
+        //                                                    Guid guid = Guid.NewGuid();
+        //                                                    var newdeploy = new DeployType();
+        //                                                    newdeploy.DeployName = "VM (No Domain, No Data Disk)";
+        //                                                    newdeploy.DeploySaved = "No";
+        //                                                    newdeploy.TennantID = deployType.TennantID;
+        //                                                    newdeploy.AzureDeployName = "VMNoDomainNoDisk" + guid;
+        //                                                    _context.Add(newdeploy);
+        //                                                    await _context.SaveChangesAsync();
+        //                                                }
+        //                                                else
+        //                                                {
+        //                                                    if (deployType.DeployName == "VPN")
+        //                                                    {
+        //                                                        Guid guid = Guid.NewGuid();
+        //                                                        var newdeploy = new DeployType();
+        //                                                        newdeploy.DeployName = "VPN";
+        //                                                        newdeploy.DeploySaved = "No";
+        //                                                        newdeploy.TennantID = deployType.TennantID;
+        //                                                        newdeploy.AzureDeployName = "VPN" + guid;
+        //                                                        _context.Add(newdeploy);
+        //                                                        await _context.SaveChangesAsync();
+        //                                                    }
+        //                                                    else
+        //                                                    {
+        //                                                        if (deployType.DeployName == "Identity Small Extended")
+        //                                                        {
+        //                                                            Guid guid = Guid.NewGuid();
+        //                                                            var newdeploy = new DeployType();
+        //                                                            newdeploy.DeployName = "Identity Small Extended";
+        //                                                            newdeploy.DeploySaved = "No";
+        //                                                            newdeploy.TennantID = deployType.TennantID;
+        //                                                            newdeploy.AzureDeployName = "IdentitySmallExtended" + guid;
+        //                                                            _context.Add(newdeploy);
+        //                                                            await _context.SaveChangesAsync();
+        //                                                        }
+        //                                                        else
+        //                                                        {
+        //                                                            if (deployType.DeployName == "Identity Medium Extended")
+        //                                                            {
+        //                                                                Guid guid = Guid.NewGuid();
+        //                                                                var newdeploy = new DeployType();
+        //                                                                newdeploy.DeployName = "Identity Medium Extended";
+        //                                                                newdeploy.DeploySaved = "No";
+        //                                                                newdeploy.TennantID = deployType.TennantID;
+        //                                                                newdeploy.AzureDeployName = "IdentityMediumExtended" + guid;
+        //                                                                _context.Add(newdeploy);
+        //                                                                await _context.SaveChangesAsync();
+        //                                                            }
+        //                                                        }
+        //                                                    }
+        //                                                }
+        //                                            }
+        //                                        }
+        //                                    }
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //            return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
+        //    }
+        //    ViewData["TennantID"] = new SelectList(_context.Tennants, "TennantID", "TennantID", deployType.TennantID);
+        //    return View(deployType);
+        //}
 
         //// GET: DeployTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
