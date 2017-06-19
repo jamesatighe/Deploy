@@ -1,6 +1,9 @@
 ﻿$(document).ready(function () {
 
-    $('.table').tablesorter();
+    $('.table').tablesorter({
+        sortList: [[1, 0]]
+    });
+
 
 
     var ua = navigator.userAgent.toLowerCase();

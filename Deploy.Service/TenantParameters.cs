@@ -931,7 +931,7 @@ ______           _           _____   ____________  ________   ___         _
                 linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identityMDType.json" + sasToken);
                 linkedTemplate = linkedTemplate.Replace("{parameterlinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + IdentityMedID + "-param.json" + sasToken);
                 linkedTemplate = linkedTemplate.Replace("{templatelinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/RDS/RDSMediumfullType.json" + sasToken);
-                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + RDSMedID "-param.json" + sasToken);
+                linkedTemplate = linkedTemplate.Replace("{parameterlinkrds}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdsmed-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + RDSMedID + "-param.json" + sasToken);
             }
             else
             {
