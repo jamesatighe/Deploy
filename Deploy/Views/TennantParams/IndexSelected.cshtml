@@ -11,7 +11,7 @@
             <p style="margin-top:15px">Please ensure you wish to re-deploy before proceeding.</p>
             <p>All components will be returned to their originally provisioned state. This can lead to lost of configurations and resources.</p>
             <button id="DeployExistsClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
-            <a id="ReDeploy" asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" asp-route-force="True" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Redeploy">Redeploy</a>
+            <a id="ReDeploy" asp-action="QueueDeployment" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" asp-route-force="True" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Redeploy">Redeploy</a>
         </div>
     </div>
 </div>
@@ -38,7 +38,7 @@
     <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @if (Model.DeploySaved == "Yes")
     {
-        <a id="DeployToAzure" asp-action="DeployToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+        <a id="DeployToAzure" asp-action="QueueDeployment" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
         <a id="GetDeploy" asp-action="GetDeploy" asp-route-id="@Model.DeployTypeID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
 
     }

@@ -650,9 +650,148 @@ namespace Deploy.Service
             return viewModel;
         }
 
-//#########################################
-//##        DeployToAzure                ##
-//#########################################
+        //##########################################
+        //##            QueueDeployment           ##
+        //##########################################
+
+        public async Task<string[]> QueueDeployment(int Id, bool Force)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+
+            string[] resultsarr = new string[3];
+            //Declare variables for use
+            string tennantID = deployTypes.Tennants.AzureTennantID;
+            string clientID = deployTypes.Tennants.AzureClientID;
+            string secret = deployTypes.Tennants.AzureClientSecret;
+            string subscriptionID = deployTypes.Tennants.AzureSubscriptionID;
+            string resourcegroupname = deployTypes.ResourceGroupName;
+            if (string.IsNullOrEmpty(resourcegroupname) == true)
+            {
+                resourcegroupname = deployTypes.Tennants.ResourceGroupName;
+            }
+            string resourcegrouplocation = deployTypes.Tennants.ResourceGroupLocation;
+            string azuredeploy = string.Empty;
+
+
+            string jsonResourceGroup = "{ \"location\": \"{resourcegrouplocation}\" }";
+            jsonResourceGroup = jsonResourceGroup.Replace("{resourcegrouplocation}", resourcegrouplocation);
+
+            //Get Access Token from HTTP POST to Azure
+            var results = RESTApi.PostAction(tennantID, clientID, secret);
+            RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
+            string accesstoken = AccessToken.access_token;
+            var sasToken = AzureHelper.GetSASToken(_storageConfig);
+
+            //Create json for deployment to be amended.
+            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+            jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
+
+            //Set Deploy Template dependent on Deployment Type
+            //Add new Deployment Type logic here!
+
+            jsonDeploy = jsonDeploy.Replace("{template}", deployTypes.DeployFile);
+            var DepParams = deployTypes.ParamsFile;
+            DepParams = DepParams.Replace("{tennant}", deployTypes.Tennants.TennantName);
+            DepParams = DepParams.Replace("{id}", deployTypes.DeployTypeID.ToString());
+            jsonDeploy = jsonDeploy.Replace("{parameters}", DepParams);
+            azuredeploy = deployTypes.AzureDeployName;
+
+
+            var putResourceGroup = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonResourceGroup, true);
+
+            //PUT request for deployment.
+            var ValidateContent = RESTApi.Validate(subscriptionID, resourcegroupname, azuredeploy, accesstoken).Result;
+            if (ValidateContent == "DeployExists" && Force == false)
+            {
+                resultsarr[0] = "DeployExists";
+                resultsarr[1] = "";
+                resultsarr[2] = "";
+                return resultsarr;
+            }
+            else
+            {
+                var ValidateTemplate = RESTApi.ValidateTemplate(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy).Result;
+                if (ValidateTemplate[0] == "TemplateValid")
+                {
+
+                    //var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroupname, azuredeploy, accesstoken, jsonDeploy, false);
+                    //JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                    //Update Deployment Type to show deployed
+                    deployTypes.DeployState = "Queued";
+                    _context.Update(deployTypes);
+                    await _context.SaveChangesAsync();
+                    ValidateContent = "False";
+                    resultsarr[0] = "DeployNotExists";
+                    resultsarr[1] = "TemplateValid";
+                    resultsarr[2] = "";
+
+                    var queue = new Queue();
+                    queue.DeployTypeID = Id;
+                    queue.Order = queue.QueueID;
+                    queue.DeployName = deployTypes.DeployName;
+                    queue.TennantName = deployTypes.Tennants.TennantName;
+                    queue.TennantID = deployTypes.TennantID;
+                    queue.accesstoken = accesstoken;
+                    queue.azuredeploy = azuredeploy;
+                    queue.subscriptionID = subscriptionID;
+                    queue.resourcegroup = resourcegroupname;
+                    queue.jsondeploy = jsonDeploy;
+                    queue.resource = false;
+
+                    _context.Add(queue);
+                    await _context.SaveChangesAsync();
+
+                   
+                    return resultsarr;
+                }
+                else
+                {
+                    resultsarr[0] = "DeployNotExists";
+                    resultsarr[1] = ValidateTemplate[0];
+                    resultsarr[2] = ValidateTemplate[1];
+                    return resultsarr;
+                }
+            }
+        }
+
+
+        //##########################################
+        //##            DeployfromQueue           ##
+        //##########################################
+
+        public async void DeployfromQueue(int Id, bool Force)
+        {
+
+            var QueueList = await _context.Queue.Where(q => q.TennantID == Id).ToListAsync();
+            for (var i = 0; i < QueueList.Count(); i++)
+            {
+                string resourcegroup = QueueList[i].resourcegroup;
+                string subscriptionID = QueueList[i].subscriptionID;
+                string azuredeploy = QueueList[i].azuredeploy;
+                string accesstoken = QueueList[i].accesstoken;
+                string jsondeploy = QueueList[i].jsondeploy;
+
+                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsondeploy, false);
+                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+                //Update Deployment Type to show deployed
+                QueueList[i].status = "Running";
+                _context.Update(QueueList[i]);
+                await _context.SaveChangesAsync();
+
+            }
+
+
+        }
+
+
+
+
+
+        //#########################################
+        //##        DeployToAzure                ##
+        //#########################################
 
         public async Task<string[]> DeployToAzure(int Id, bool Force)
         {

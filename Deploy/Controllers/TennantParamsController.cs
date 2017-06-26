@@ -369,6 +369,31 @@ namespace Deploy.Controllers
             }
         }
 
+        public async Task<IActionResult> QueueDeployment(int Id, bool Force)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            //var service = new TenantParameters(_context, _storageConfig);
+            string[] results = await _service.QueueDeployment(Id, Force);
+            if (results[0] == "DeployExists")
+            {
+                ViewBag.DeployExists = true;
+                return RedirectToAction("IndexSelected", "TennantParams", new { id = deployTypes.DeployTypeID, DeployExists = true });
+            }
+            else if (results[1] == "TemplateInvalid")
+            {
+                ViewBag.TemplateInvalid = results[1];
+                ViewBag.TemplateError = results[2];
+                return RedirectToAction("IndexSelected", "TennantParams", new { id = deployTypes.DeployTypeID, TemplateInvalid = true, TemplateError = results[2] });
+            }
+            else
+            {
+                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+            }
+        }
+
+
+
+
         public async Task<IActionResult> DeployToAzureRDSSmall(int Id)
         {
             var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmall")).ToListAsync();

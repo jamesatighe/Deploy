@@ -49,7 +49,9 @@
 
 <p>
     <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
+    <a asp-action="Edit" asp-controller="Queue" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg">View Queue</a>
     <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
     @{
             var rdsSmallCount = 0;
             var rdsMedCount = 0;
@@ -111,6 +113,7 @@
                 <a id="GetDeploy" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
 
             }
+            
 
 
 

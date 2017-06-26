@@ -1,0 +1,58 @@
+@model Deploy.ViewModel.QueueViewModel
+
+@{
+    ViewData["Title"] = "Deployment Queue";
+}
+
+<h2>Deployment Queue</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+<p>
+    <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+    <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+    <a asp-action="Edit" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-list"></span> Update List</a>
+</p>
+
+<table class="table" id="queue">
+    <thead>
+        <tr>
+            <th>
+                Deployment Name
+            </th>
+            <th>
+                Tenant Name
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Order
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Queues)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeployName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TennantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.status)
+                </td>
+                <td class="priority">
+                    @Html.DisplayFor(modelItem => item.Order)
+                </td>
+                <td>
+                    <a id="navbtn" asp-action="Delete" asp-route-id="@item.QueueID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
