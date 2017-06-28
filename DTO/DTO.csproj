@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.6.14" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.1" />
   </ItemGroup>
 

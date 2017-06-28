@@ -13,6 +13,13 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
 using System.Text;
 using Deploy.Service;
+using Hangfire;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Hangfire.Storage;
+using Hangfire.Storage.Monitoring;
+using System.Threading;
+using System.Linq.Expressions;
 
 namespace Deploy.Service
 {
@@ -21,10 +28,10 @@ namespace Deploy.Service
         private readonly DeployDBContext _context;
         private readonly AzureStorageConfig _storageConfig;
 
-        public TenantParameters(DeployDBContext context, AzureStorageConfig config)
+        public TenantParameters(DeployDBContext context, IOptions<AzureStorageConfig> config)
         {
             _context = context;
-            _storageConfig = config;
+            _storageConfig = config.Value;
         }
 
 //#########################################
@@ -760,27 +767,70 @@ namespace Deploy.Service
         //##            DeployfromQueue           ##
         //##########################################
 
-        public async void DeployfromQueue(int Id, bool Force)
+        [DisableConcurrentExecution(3600)]
+        public async Task<string> DeployfromQueue(int Id, bool Force)
         {
 
-            var QueueList = await _context.Queue.Where(q => q.TennantID == Id).ToListAsync();
-            for (var i = 0; i < QueueList.Count(); i++)
+            var results = string.Empty;
+            var QueueItem = _context.Queue.Where(q => q.DeployTypeID == Id).FirstOrDefault();
+
+            string resourcegroup = QueueItem.resourcegroup;
+            string subscriptionID = QueueItem.subscriptionID;
+            string azuredeploy = QueueItem.azuredeploy;
+            string accesstoken = QueueItem.accesstoken;
+            string jsondeploy = QueueItem.jsondeploy;
+            
+
+            var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsondeploy, false);
+            JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+            //Update Deployment Type to show deployed
+
+
+            var check = CheckQueue(Id);
+            while (!check.Result.Contains("Succeeded"))
             {
-                string resourcegroup = QueueList[i].resourcegroup;
-                string subscriptionID = QueueList[i].subscriptionID;
-                string azuredeploy = QueueList[i].azuredeploy;
-                string accesstoken = QueueList[i].accesstoken;
-                string jsondeploy = QueueList[i].jsondeploy;
-
-                var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsondeploy, false);
-                JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
-
-                //Update Deployment Type to show deployed
-                QueueList[i].status = "Running";
-                _context.Update(QueueList[i]);
-                await _context.SaveChangesAsync();
-
+                Thread.Sleep(30000);
+                check = CheckQueue(Id);
             }
+
+            results = "Succeeded";
+            QueueItem.status = "Running";
+            _context.Update(QueueItem);
+
+            await _context.SaveChangesAsync();
+            return results;
+
+        }
+
+        //##########################################
+        //##            CheckQueue                ##
+        //##########################################
+
+        public async Task<string> CheckQueue(int Id)
+        {
+            var QueueList = _context.Queue.Where(q => q.DeployTypeID == Id).FirstOrDefault();
+            var TenantDetails = _context.Tennants.Where(t => t.TennantID == QueueList.TennantID).FirstOrDefault();
+
+            string tennantID = TenantDetails.AzureTennantID;
+            string clientID = TenantDetails.AzureClientID;
+            string secret = TenantDetails.AzureClientSecret;
+            string subscriptionID = TenantDetails.AzureSubscriptionID;
+            string resourcegroup = QueueList.resourcegroup;
+            if (string.IsNullOrEmpty(resourcegroup) == true)
+            {
+                resourcegroup = TenantDetails.ResourceGroupName;
+            }
+            string azuredeploy = QueueList.azuredeploy;
+
+            var results = RESTApi.PostAction(tennantID, clientID, secret);
+            RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
+            string accesstoken = AccessToken.access_token;
+
+            var getcontent = RESTApi.GetAsync(subscriptionID, resourcegroup, accesstoken, azuredeploy);
+
+            var content = await getcontent;
+            return content;
 
 
         }

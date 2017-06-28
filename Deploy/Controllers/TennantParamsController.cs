@@ -33,7 +33,7 @@ namespace Deploy.Controllers
         {
             _context = context;
             _storageConfig = config.Value;
-            _service = new TenantParameters(_context, _storageConfig);
+            _service = new TenantParameters(_context, config);
         }
 
 
@@ -49,7 +49,7 @@ namespace Deploy.Controllers
 
             if (TennantParams != null)
             {
-                var service = new TenantParameters(_context, _storageConfig);
+                //var service = new TenantParameters(_context, _storageConfig);
                 var TenantParams = await _service.GetTenantParams(Id);
                
                 var viewModel = new TennantDeployParams();

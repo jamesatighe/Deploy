@@ -59,7 +59,8 @@ namespace Deploy.Controllers
                         TennantParams = deployType.TennantParams,
                         DeployState = deployType.DeployState,
                         DeployResult = deployType.DeployResult,
-                        AzureDeployName = deployType.AzureDeployName
+                        AzureDeployName = deployType.AzureDeployName,
+                        ResourceGroupName = deployType.ResourceGroupName
                     });
                 }
 

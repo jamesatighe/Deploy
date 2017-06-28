@@ -12,6 +12,7 @@ using Deploy.ViewModel;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Hangfire;
 
 namespace Deploy.Controllers
 {
@@ -26,7 +27,7 @@ namespace Deploy.Controllers
         {
             _context = context;
             _storageConfig = config.Value;
-            _service = new TenantParameters(_context, _storageConfig);
+            _service = new TenantParameters(_context, config);
         }
 
         public async Task<IActionResult> IndexSelected(int Id)
@@ -64,34 +65,51 @@ namespace Deploy.Controllers
             }
 
             var queues = await _context.Queue.Where(d => d.TennantID == Id).ToListAsync();
-
-            var viewModel = new Deploy.ViewModel.QueueViewModel();
-            viewModel.Queues = new List<Queue>();
-            foreach (var queue in queues)
+            var Tenant = _context.Tennants.Where(t => t.TennantID == Id).FirstOrDefault();
+            if (queues.Count() < 1)
             {
+                var viewModel = new Deploy.ViewModel.QueueViewModel();
+                viewModel.Queues = new List<Queue>();
                 viewModel.Queues.Add(new Queue()
                 {
-                    QueueID = queue.QueueID,
-                    DeployTypeID = queue.DeployTypeID,
-                    DeployName = queue.DeployName,
-                    TennantID = queue.TennantID,
-                    TennantName = queue.TennantName,
-                    status = queue.status,
-                    Order = queue.Order
+                    TennantName = Tenant.TennantName,
+                    TennantID = Tenant.TennantID,
+                    DeployTypeID = 0,
                 });
+                Console.WriteLine("Test");
+                return View(viewModel);
             }
-
-            switch (sortOrder)
+            else
             {
-                case "Order":
-                    viewModel.Queues = viewModel.Queues.OrderBy(o => o.Order).ToList();
-                    break;
-                default:
-                    viewModel.Queues = viewModel.Queues.OrderBy(o => o.Order).ToList();
-                    break;
-            }
+                var viewModel = new Deploy.ViewModel.QueueViewModel();
+                viewModel.Queues = new List<Queue>();
+                foreach (var queue in queues)
+                {
+                    viewModel.Queues.Add(new Queue()
+                    {
+                        QueueID = queue.QueueID,
+                        DeployTypeID = queue.DeployTypeID,
+                        DeployName = queue.DeployName,
+                        TennantID = queue.TennantID,
+                        TennantName = queue.TennantName,
+                        status = queue.status,
+                        Order = queue.Order
+                    });
+                }
 
-            return View(viewModel);
+                switch (sortOrder)
+                {
+                    case "Order":
+                        viewModel.Queues = viewModel.Queues.OrderBy(o => o.Order).ToList();
+                        break;
+                    default:
+                        viewModel.Queues = viewModel.Queues.OrderBy(o => o.Order).ToList();
+                        break;
+                }
+                return View(viewModel);
+            }
+        
+
         }
 
         [HttpPost]
@@ -121,46 +139,34 @@ namespace Deploy.Controllers
 
         // POST: Deploy/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id)
+        public HttpStatusCode Delete(int id)
         {
             var queue = _context.Queue.FirstOrDefault(m => m.QueueID == id);
             if (queue == null)
             {
-                return NotFound();
+                return HttpStatusCode.NotFound;
             }
 
             _context.Queue.Remove(queue);
-            _context.SaveChangesAsync();
-            return RedirectToAction("Edit", new { id = queue.TennantID });
+            _context.SaveChanges();
+            return HttpStatusCode.OK;
         }
 
-        public async Task<IActionResult> DeployToAzure(int id, bool Force)
+
+        public async Task<IActionResult> DeployfromQueue(int id, bool Force)
         {
-            var QueueList = await _context.Queue.Where(q => q.TennantID == id).ToListAsync();
+            var QueueList = await _context.Queue.Where(q => q.TennantID == id).OrderBy(q => q.Order).ToListAsync();
             for (var i = 0; i < QueueList.Count(); i ++)
             {
                 var Id = QueueList[i].DeployTypeID;
                 //var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
-                string[] results = await _service.QueueDeployment(Id, Force);
-                if (results[0] == "DeployExists")
-                {
-                    QueueList[i].status = "Deploy Exists";
-                    _context.Update(QueueList[i]);
-                    await _context.SaveChangesAsync();
-                }
-                else if (results[1] == "TemplateInvalid")
-                {
-                    QueueList[i].status = "Template Invalid";
-                    _context.Update(QueueList[i]);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    QueueList[i].status = "OK to Deploy";
-                    _context.Update(QueueList[i]);
-                    await _context.SaveChangesAsync();
-                }
 
+
+                BackgroundJob.Enqueue(() => _service.DeployfromQueue(Id, Force));
+                QueueList[i].status = "Running";
+                _context.Update(QueueList[i]);
+                await _context.SaveChangesAsync();
+             
             }
             return RedirectToAction("Edit", "Queue", new { id = QueueList.FirstOrDefault().TennantID });
         }
