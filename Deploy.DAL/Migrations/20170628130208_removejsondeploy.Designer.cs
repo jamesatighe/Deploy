@@ -8,9 +8,10 @@ using Deploy.DAL;
 namespace Deploy.DAL.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    partial class DeployDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170628130208_removejsondeploy")]
+    partial class removejsondeploy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

@@ -92,6 +92,7 @@ namespace Deploy.Controllers
                         DeployName = queue.DeployName,
                         TennantID = queue.TennantID,
                         TennantName = queue.TennantName,
+                        resourcegroup = queue.resourcegroup,
                         status = queue.status,
                         Order = queue.Order
                     });
@@ -159,14 +160,9 @@ namespace Deploy.Controllers
             for (var i = 0; i < QueueList.Count(); i ++)
             {
                 var Id = QueueList[i].DeployTypeID;
-                //var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
-
 
                 BackgroundJob.Enqueue(() => _service.DeployfromQueue(Id, Force));
-                QueueList[i].status = "Running";
-                _context.Update(QueueList[i]);
-                await _context.SaveChangesAsync();
-             
+            
             }
             return RedirectToAction("Edit", "Queue", new { id = QueueList.FirstOrDefault().TennantID });
         }

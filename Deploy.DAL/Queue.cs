@@ -15,9 +15,7 @@ namespace Deploy.DAL
         public string subscriptionID { get; set; }
         public string resourcegroup { get; set; }
         public string azuredeploy { get; set; }
-        public string accesstoken { get; set; }
         public int Order { get; set; }
-        public string jsondeploy { get; set; }
         public bool resource { get; set; }
         public virtual DeployType DeployTypes { get; set; }
     }

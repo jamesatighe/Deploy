@@ -22,7 +22,19 @@
 <p>
     You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.Queues.FirstOrDefault().TennantName)</span>
 </p>
-@if (Model.Queues.FirstOrDefault().TennantID != 0)
+
+@{
+    var QueueRunning = 0;
+
+    for (var i = 0; i < Model.Queues.Count(); i++)
+    {
+        if (Model.Queues[i].status == "Running" || Model.Queues[i].status == "Complete" || Model.Queues[i].status == "Failed")
+        {
+            QueueRunning++;
+        }
+    }
+}
+@if (Model.Queues.FirstOrDefault().DeployTypeID != 0 && QueueRunning == 0) 
 {
 <a asp-action="DeployfromQueue" class="btn btn-success btn-lg" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" asp-route-force="True"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
 }
@@ -40,6 +52,9 @@
                     </th>
                     <th>
                         Tenant Name
+                    </th>
+                    <th>
+                        Resource Group
                     </th>
                     <th>
                         Status
@@ -65,6 +80,9 @@
                                 @Html.EditorFor(modelItem => Model.Queues[i].TennantName, new { name = "Queues[" + i + "].TennantName", htmlAttributes = new { @readonly = "readonly" } })
                             </td>
                             <td>
+                                @Html.EditorFor(modelItem => Model.Queues[i].resourcegroup, new { name = "Queues[" + i + "].resourcegroup", htmlAttributes = new { @readonly = "readonly" } })
+                            </td>
+                            <td>
                                 @Html.EditorFor(modelItem => Model.Queues[i].status, new { name = "Queues[" + i + "].status", htmlAttributes = new { @readonly = "readonly" } })
                             </td>
                             <td class="order" hidden="hidden">
@@ -73,14 +91,12 @@
                             <td>
                                 <a id="deleteItem" class="deleteItem btn btn-danger btn-default" data-id="@Model.Queues[i].QueueID">Delete</a>
                             </td>
-                            <td hidden="hidden">@Html.HiddenFor(modelItem => Model.Queues[i].accesstoken, new { name = "Queues[" + i + "].accesstoken" })
+                            <td hidden="hidden">
                             @Html.HiddenFor(modelItem => Model.Queues[i].azuredeploy, new { name = "Queues[" + i + "].azuredeploy" })
                             @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypeID, new { name = "Queues[" + i + "].DeployTypeID" }))
                             @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypes, new { name = "Queues[" + i + "].DeployTypes" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].jsondeploy, new { name = "Queues[" + i + "].jsondeploy" }))
                             @Html.HiddenFor(modelItem => Model.Queues[i].QueueID, new { name = "Queues[" + i + "].QueueID" }))
                             @Html.HiddenFor(modelItem => Model.Queues[i].resource, new { name = "Queues[" + i + "].resource" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].resourcegroup, new { name = "Queues[" + i + "].resourcegroup" }))
                             @Html.HiddenFor(modelItem => Model.Queues[i].subscriptionID, new { name = "Queues[" + i + "].subscriptionID" }))
                             @Html.HiddenFor(modelItem => Model.Queues[i].TennantID, new { name = "Queues[" + i + "].TennantID" }))
                             </td>

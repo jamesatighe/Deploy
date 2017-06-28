@@ -8,9 +8,10 @@ using Deploy.DAL;
 namespace Deploy.DAL.Migrations
 {
     [DbContext(typeof(DeployDBContext))]
-    partial class DeployDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170628074512_removeaccestoken")]
+    partial class removeaccestoken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -114,6 +115,8 @@ namespace Deploy.DAL.Migrations
                     b.Property<string>("TennantName");
 
                     b.Property<string>("azuredeploy");
+
+                    b.Property<string>("jsondeploy");
 
                     b.Property<bool>("resource");
 
