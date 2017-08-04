@@ -28,15 +28,12 @@
             <div class="form-group">
                 <label asp-for="DeployName" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <select id="deploynames" asp-for="DeployName" asp-items="Model.DeployNames" class="form-control"></select>
+                    <select id="deploynames" asp-for="DeployName" asp-items="Model.DeployListItem" class="form-control"></select>
                 </div>
             </div>
-            <div id="options" class="form-group" style="display:none">
+
+            <div id="options" class="form-group">
                 <label class="col-md-2 control-label">Options</label>
-                    <span id="test" class="button-checkbox" style="margin-left:15px; display:none;">
-                        <button type="button" class="btn-lg" data-color="primary">Solution</button>
-                        <input type="checkbox" asp-for="@Model.Solution" class="hidden" checked />
-                    </span>
                     <span id="domain" class="button-checkbox" style="margin-left:15px">
                         <button type="button" class="btn-lg" data-color="primary">Domain</button>
                         <input  type="checkbox" asp-for="@Model.Domain" class="hidden" checked />
@@ -71,8 +68,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="CreateNew" class="btn btn-default btn-success" />
-                <a asp-action="CreateRedirect" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+                <input type="submit" value="CreateNew" class="btn btn-default btn-success navbtn" />
+                <a asp-action="CreateRedirect" class="btn btn-primary btn-default navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
 
 
             </div>

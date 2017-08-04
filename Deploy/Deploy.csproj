@@ -28,9 +28,9 @@
     <Content Include="Views\Shared\code.jpg">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Include="wwwroot\css\theme.bootstrap_3.css" />
+    <!--<Content Include="wwwroot\css\theme.bootstrap_3.css" />
     <Content Include="wwwroot\images\ajax-loader.gif" />
-    <Content Include="wwwroot\js\jquery.tablesorter.js" />
+    <Content Include="wwwroot\js\jquery.tablesorter.js" />-->
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
@@ -43,6 +43,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager" Version="1.5.0-preview" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="0.0.7-preview" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0-msbuild3-final" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.0.1" />
@@ -64,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DAL\" />
+    <Folder Include="wwwroot\csv\" />
   </ItemGroup>
 
 </Project>

@@ -12,22 +12,17 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
 using System.Text;
-using Deploy.Service;
+using Microsoft.AspNetCore.Authorization;
 using Hangfire;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Hangfire.Storage;
-using Hangfire.Storage.Monitoring;
-using System.Threading;
-using System.Linq.Expressions;
 
 namespace Deploy.Service
 {
+    [Authorize(Policy = "Admins")]
     public class TenantParameters
     {
         private readonly DeployDBContext _context;
         private readonly AzureStorageConfig _storageConfig;
-        private string test = "james";
 
         public TenantParameters(DeployDBContext context, IOptions<AzureStorageConfig> config)
         {
@@ -51,572 +46,37 @@ namespace Deploy.Service
                 viewModel.DeployName = DeployTypes.DeployName;
                 viewModel.DeploySaved = DeployTypes.DeploySaved;
 
-                if (viewModel.DeployName == "Identity Small" || viewModel.DeployName.Contains("(IDS)"))
+
+                viewModel.DeployTypeID = TennantParams.DeployTypeID;
+                viewModel.TennantName = DeployTypes.Tennants.TennantName;
+                viewModel.TennantID = DeployTypes.Tennants.TennantID;
+                viewModel.DeployCode = DeployTypes.DeployCode;
+
+                var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == viewModel.DeployCode).ToListAsync();
+                var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
+                viewModel.DeployParams = new List<DeployParam>();
+                foreach (var Param in Params)
                 {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADS").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
+                    viewModel.DeployParams.Add(new DeployParam()
                     {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-
-                        });
-                    }
-
+                        DeployParamID = Param.DeployParamID,
+                        ParameterName = Param.ParameterName,
+                        ParameterDeployType = Param.ParameterDeployType
+                    });
                 }
-
-                if (viewModel.DeployName == "Identity Medium" || viewModel.DeployName.Contains("(IDM)"))
+                viewModel.TennantParams = new List<TennantParam>();
+                foreach (var tennant in tennantParams)
                 {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADM").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
+                    viewModel.TennantParams.Add(new TennantParam()
                     {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
+                        ParamValue = tennant.ParamValue,
+                        ParamType = tennant.ParamType,
+                        ParamName = tennant.ParamName,
+                        ParamToolTip = tennant.ParamToolTip,
+                        TennantParamID = tennant.TennantParamID
 
+                    });
                 }
-
-                if (viewModel.DeployName.Contains("(IDMTYPE)"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADMTYPE").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "Identity Medium Extended")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADMEXT").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "Identity Small Extended")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "ADSEXT").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "RDS Small" || viewModel.DeployName.Contains("(RDSS)"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSS").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "RDS Small (No FS)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSSNOFS").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "RDS Medium" || viewModel.DeployName.Contains("(RDSM)"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSM").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-
-                if (viewModel.DeployName.Contains("(RDSMTYPE)"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "RDSMTYPE").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-
-                if (viewModel.DeployName == "FS Medium (TypeTec)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "FSMTYPE").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName.Contains("VNET"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VNET").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName.Contains("VPN"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VPN").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-
-                if (viewModel.DeployName.Contains("File Server (2 node)"))
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "FILESRVMED").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "VM (Domain, Data Disk)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMDOMDISK").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "VM (Domain, No Data Disk)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMDOMNODISK").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-                if (viewModel.DeployName == "VM (No Domain, Data Disk)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMNODOMDISK").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
-
-                if (viewModel.DeployName == "VM (No Domain, No Data Disk)")
-                {
-                    viewModel.DeployTypeID = TennantParams.DeployTypeID;
-                    viewModel.TennantName = DeployTypes.Tennants.TennantName;
-                    viewModel.TennantID = DeployTypes.Tennants.TennantID;
-
-                    var Params = await _context.DeployParms.Where(d => d.ParameterDeployType == "VMNODOMNODISK").ToListAsync();
-                    var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
-                    viewModel.DeployParams = new List<DeployParam>();
-                    foreach (var Param in Params)
-                    {
-                        viewModel.DeployParams.Add(new DeployParam()
-                        {
-                            DeployParamID = Param.DeployParamID,
-                            ParameterName = Param.ParameterName,
-                            ParameterDeployType = Param.ParameterDeployType
-                        });
-                    }
-                    viewModel.TennantParams = new List<TennantParam>();
-                    foreach (var tennant in tennantParams)
-                    {
-                        viewModel.TennantParams.Add(new TennantParam()
-                        {
-                            ParamValue = tennant.ParamValue,
-                            ParamType = tennant.ParamType,
-                            ParamName = tennant.ParamName,
-                            ParamToolTip = tennant.ParamToolTip,
-                            TennantParamID = tennant.TennantParamID
-                        });
-                    }
-
-                }
-
 
                 return viewModel;
 
@@ -726,7 +186,7 @@ namespace Deploy.Service
                     //JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
 
                     //Update Deployment Type to show deployed
-                    deployTypes.DeployState = "Queued";
+                    deployTypes.DeployResult = "Queued";
                     _context.Update(deployTypes);
                     await _context.SaveChangesAsync();
                     ValidateContent = "False";
@@ -766,7 +226,7 @@ namespace Deploy.Service
         //##            DeployfromQueue           ##
         //##########################################
 
-        [DisableConcurrentExecution(3600)]
+        [DisableConcurrentExecution(7200)]
         public async Task<string> DeployfromQueue(int Id, bool Force)
         {
 
@@ -879,10 +339,6 @@ namespace Deploy.Service
 
 
         }
-
-
-
-
 
         //#########################################
         //##        DeployToAzure                ##
@@ -1409,6 +865,8 @@ ______           _           _____   ____________  ________   ___         _
 
             var jsonfull = tempjson.ToString();
 
+
+            
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("ansible/");
@@ -1439,6 +897,23 @@ ______           _           _____   ____________  ________   ___         _
             writer.Flush();
             stream.Position = 0;
             return stream;
+        }
+
+        public string GetDeployJson(int Id, string type, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            string subscriptionID = deployTypes.Tennants.AzureSubscriptionID;
+            string clientID = deployTypes.Tennants.AzureClientID;
+            string secret = deployTypes.Tennants.AzureClientSecret;
+            string tennantID = deployTypes.Tennants.AzureTennantID;
+            string location = deployTypes.Tennants.ResourceGroupLocation;
+            
+            var results = RESTApi.PostAction(tennantID, clientID, secret);
+            RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
+            string accesstoken = AccessToken.access_token;
+
+            var getcontent = RESTApi.GetDeployJson(subscriptionID, accesstoken, type, location, publisher, offering, resourceGroup, VNET, IP);
+            return getcontent.Result;
         }
 
     }

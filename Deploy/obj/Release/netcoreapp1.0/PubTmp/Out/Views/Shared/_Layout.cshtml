@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/theme.bootstrap_3.css" />
+        <link rel="stylesheet" href="~/css/jquery-ui.min.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -17,6 +18,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/theme.bootstrap_3.css" />
+        <link rel="stylesheet" href="~/css/jquery-ui.min.css" />
     </environment>
     <script src="https://use.fontawesome.com/633d97b9fc.js"></script>
     @Html.Raw(JavaScriptSnippet.FullScript)
@@ -24,8 +26,8 @@
 <body>
     <div id="responsive" class="modal" tabindex="1" style="display:none;">
         <div class="modal-content">
-            <div style="font-family:Calibri;font-weight:bold;font-size:18px;">Waiting. . .</div> 
-             <i class="fa fa-cog fa-spin fa-5x" aria-hidden="true"></i>
+            <div style="font-family:Calibri;font-weight:bold;font-size:18px;">Waiting. . .</div>
+            <i class="fa fa-cog fa-spin fa-5x" aria-hidden="true"></i>
         </div>
     </div>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -37,13 +39,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Tennant" asp-action="IndexCount" class="navbar-brand"><img src="~/images/logosmall.png" alt="Cobweb"></a>
+                <a asp-area="" asp-controller="Tennant" asp-action="IndexCount" class="navbar-brand class="navbtn""><img src="~/images/logosmall.png" alt="Cobweb"></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index" class="navbtn">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About" class="navbtn">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="navbtn">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -61,6 +63,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-ui.min.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -69,6 +72,8 @@
                 crossorigin="anonymous"
                 integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
         </script>
+        <script src="~/js/jquery-ui.min.js"></script>
+
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"

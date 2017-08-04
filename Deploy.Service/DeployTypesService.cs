@@ -26,7 +26,7 @@ namespace Deploy.Service
 
         public DeployChoiceViewModel CreateDeployTypes (DeployChoiceViewModel choices)
         {
-            var DeployChoices = _context.DeployChoices.Where(d => d.BaseOption == choices.DeployName && d.Domain == choices.Domain && d.Datadisk == choices.Datadisk && d.Solution == choices.Solution && d.Size == choices.Size).FirstOrDefault();
+            var DeployChoices = _context.DeployChoices.Where(d => d.BaseOption == choices.DeployName && d.Domain == choices.Domain && d.Datadisk == choices.Datadisk && d.Size == choices.Size).FirstOrDefault();
 
             choices.DeployFile = DeployChoices.DeployFile;
             choices.ParamsFile = DeployChoices.ParamsFile;

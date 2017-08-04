@@ -4,38 +4,16 @@
     ViewData["Title"] = "IndexSelected";
 }
 
-<div id="deploywarningrdsmed" class="modal" tabindex="1" style="display:none;">
-    <div class="modal-content">
-        <div style="font-size:18px;">
-            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
-            <p style="margin-top:15px">Please ensure you wish to deploy before proceeding.</p>
-            <p>Incorrect deployment can lead to lost of configurations and resources.</p>
-            <button id="DeployCloserdsmed" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
-            <a id="rdsMed" asp-action="DeployToAzureRDSMed" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Deploy">Deploy</a>
-        </div>
-    </div>
-</div>
-
-<div id="deploywarningrdssmall" class="modal" tabindex="1" style="display:none;">
-    <div class="modal-content">
-        <div style="font-size:18px;">
-            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
-            <p style="margin-top:15px">Please ensure you wish to deploy before proceeding.</p>
-            <p>Incorrect deployment can lead to lost of configurations and resources.</p>
-            <button id="DeployCloserdssmall" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
-            <a id="rdsSmall" asp-action="DeployToAzureRDSSmall" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Deploy">Deploy</a>
-        </div>
-    </div>
-</div>
-
-<div id="templateinvalid" class="modal" tabindex="1" style="display:none;">
-    <div class="modal-content">
-        <div style="font-size:18px;">
-            <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
-            <p style="margin-top:15px">Template Invalid Error.</p>
-            <p>The template validation has failed. There error returned is below.</p>
-            <p>@ViewBag.TemplateError</p>
-            <button id="TemplateInvalidClose" class="btn btn-danger btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+<div id="DeleteWarning" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="font-size:18px;">
+                <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+                <p style="margin-top:15px">Are you sure you wish to delete this Deployment?</p>
+                <p>Please confirm you choice, or cancel to return.</p>
+                <button id="DeleteWarningClose" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+                <button id="DeleteWarningOK" class="btn btn-danger btn-lg">Delete</button>
+            </div>
         </div>
     </div>
 </div>
@@ -48,73 +26,24 @@
 
 
 <p>
-    <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg">Create New</a>
-    <a asp-action="CreateRedirect" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
-    @{
-            var rdsSmallCount = 0;
-            var rdsMedCount = 0;
-            var deployCount = 0;
+    <a asp-action="CreateNew" asp-route-id ="@Model.TennantID" class="btn btn-success btn-lg navbtn">Create New</a>
+    <a asp-action="Edit" asp-controller="Queue" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg navbtn">View Queue</a>
+    <a asp-action="CreateRedirect" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
 
-            for (var i = 0; i < Model.DeployTypes.Count(); i++)
-            {
-                if (Model.DeployTypes[i].DeploySaved == "Yes")
-            {
-                if (Model.DeployTypes[i].AzureDeployName.Contains("rdssmall"))
-                {
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (VNET)" && Model.DeployTypes[i].DeployResult == null)
-                    {
-                        rdsSmallCount++;
-                    }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (IDS)" && Model.DeployTypes[i].DeployResult == null)
-                    {
-                        rdsSmallCount++;
-                    }
-                    if (Model.DeployTypes[i].DeployName == "RDSSmall (RDSS)" && Model.DeployTypes[i].DeployResult == null)
-                    {
-                        rdsSmallCount++;
-                    }
-                }
-                else
-                {
-                    if (Model.DeployTypes[i].AzureDeployName.Contains("rdsmedsolution"))
-                    {
-                        if (Model.DeployTypes[i].DeployName == "RDSMedium (VNET)")
-                        {
-                            rdsMedCount++;
-                        }
-                        if (Model.DeployTypes[i].DeployName == "RDSMedium (IDM)" || Model.DeployTypes[i].DeployName == "RDSMedium (IDMTYPE)")
-                        {
-                            rdsMedCount++;
-                        }
-                        if (Model.DeployTypes[i].DeployName == "RDSMedium (RDSM)" || Model.DeployTypes[i].DeployName == "RDSMedium (RDSMTYPE)")
-                        {
-                            rdsMedCount++;
-                        }
-                    }
-                }
-            }
+    @{
+        var deployCount = 0;
+
+        for (var i = 0; i < Model.DeployTypes.Count(); i++)
+        {
             if (Model.DeployTypes[i].DeployState != null)
             {
                 deployCount++;
             }
         }
-            if (rdsSmallCount == 3)
-            {
-                <button id="rdsSmallbtn" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Small</button>
-            }
-            if (rdsMedCount == 3)
-            {
-                <button id="rdsMedbtn" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy RDS Medium</button>
-            }
-            if (deployCount > 0)
-            {
-                <a id="GetDeploy" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-check"></span> Check</a>
-
-            }
-
-
-
-
+        if (deployCount > 0)
+        {
+            <a id="GetDeploy" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg navbtn"><span class="glyphicon glyphicon-check"></span> Check</a>
+        }
      }
 </p>
 @using (Html.BeginForm())
@@ -134,7 +63,7 @@
                 ID
             </th>
             <th>
-                Tennant
+                Resource Group
             </th>
             <th>
                 Saved
@@ -163,7 +92,7 @@
                 @Html.DisplayFor(modelItem => item.DeployTypeID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tennants.TennantName)
+                @Html.DisplayFor(modelItem => item.ResourceGroupName)
             </td>
             <td>
                 @if (item.DeploySaved == "Yes")
@@ -182,43 +111,24 @@
                     {
                         <span class="glyphicon glyphicon-ok"><span style="font-family:'Segoe UI'; color:green"> Deployed</span></span>   
                     }
-                    else
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Running"))
                     {
-                        if (item.DeployResult.Contains("\"provisioningState\":\"Running"))
-                        {
-                            <span class="glyphicon glyphicon-refresh"><span style="font-family:'Segoe UI'; color:orange"> Running</span></span>
-                        }
-                        else
-                        {
-                            if (item.DeployResult.Contains("\"provisioningState\":\"Accepted"))
-                            {
-                                <span class="glyphicon glyphicon-thumbs-up"><span style="font-family:'Segoe UI'; color:darkgreen"> Accepted</span></span>
-                            }
-                            else
-                            {
-                                if (item.DeployResult.Contains("\"provisioningState\":\"Failed"))
-                                {
-                                    <span class="glyphicon glyphicon-warning-sign"><span style="font-family:'Segoe UI'; font-weight:bold; color:red"> Failed</span></span>
-                                }
-
-
-
-                                else
-                                {
-                                    if (item.DeployResult.Contains("DeploymentNotFound"))
-                                    {
-                                                    <span class="glyphicon glyphicon-warning-sign"><span style = "font-family:'Segoe UI'; color:orange" > Queued</span ></span >
-                                        }
-
-                                    }
-                                }
-                            }
-
-                        }
+                        <span class="glyphicon glyphicon-refresh"><span style="font-family:'Segoe UI'; color:orange"> Running</span></span>
                     }
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Accepted"))
+                    {
+                        <span class="glyphicon glyphicon-thumbs-up"><span style="font-family:'Segoe UI'; color:darkgreen"> Accepted</span></span>
+                    }
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Failed"))
+                    {
+                        <span class="glyphicon glyphicon-warning-sign"><span style="font-family:'Segoe UI'; font-weight:bold; color:red"> Failed</span></span>
+                    }
+                    if (item.DeployResult.Contains("Queued"))
+                    {
+                        <span class="glyphicon glyphicon-tasks"><span style="font-family:'Segoe UI'; color:orange"> Queued</span></span>
 
-
-
+                    }
+                }
                 else
                 {
                     @Html.DisplayFor(modelItem => item.DeployState)
@@ -232,10 +142,9 @@
                 }
             </td>
             <td>
-                    <a id="navbtn" asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
-                    <a id="navbtn" asp-action="Edit" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-warning btn-default"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
-                    <a id="navbtn" asp-action="Details" asp-route-id="@item.DeployTypeID" class="btn btn-primary btn-default"><span class="glyphicon glyphicon-list"></span> Details</a>
-                    <a id="navbtn" asp-action="Delete" asp-route-id="@item.DeployTypeID" class="btn btn-danger btn-default"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                    <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+                    <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@item.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</a>    
+                    @*<a asp-action="Delete" asp-route-id="@item.DeployTypeID" class="btn btn-danger btn-default navbtn"><span class="glyphicon glyphicon-remove"></span> Delete</a>*@
             </td>
         </tr>
 }
@@ -247,37 +156,32 @@
         $(document).ready(function () {
             var ua = navigator.userAgent.toLowerCase();
             var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+           
+            var item_to_delete;
+            $(".deleteItem").bind(ios_devices, function () {
+                $('#DeleteWarning').fadeIn();
+                item_to_delete = $(this).data('id');
+                $('#DeleteWarning').fadeIn();
+            });
+            $('#DeleteWarningOK').bind(ios_devices, function () {
 
-        $('#rdsMedbtn').bind(ios_devices, function () {
-            $('#deploywarningrdsmed').fadeIn();
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/Delete?id=" + item_to_delete,
+                    contentType: "application/text",
+                    success: function (result) {
+                        $('#DeleteWarning').fadeOut();
+                        var url = window.location.href;
+                        window.location.href = url;
+                    }
+                });
+
+            });
+            $('#DeleteWarningClose').bind(ios_devices, function () {
+                $('#responsive').fadeOut();
+                $('#DeleteWarning').fadeOut();
+            });
         });
-        $('#rdsSmallbtn').bind(ios_devices, function () {
-            $('#deploywarningrdssmall').fadeIn();
-        });
-
-        $('#DeployCloserdsmed').bind(ios_devices, function () {
-            $('#deploywarningrdsmed').fadeOut();
-        });
-        $('#DeployCloserdssmall').bind(ios_devices, function () {
-            $('#deploywarningrdssmall').fadeOut();
-        });
-
-        $('#Deploy').bind(ios_devices, function () {
-            $('#deploywarning').fadeOut();
-        });
-
-        var TemplateInvalid = @ViewBag.TemplateInvalid.ToString().ToLower();
-        if (TemplateInvalid)
-            $('#templateinvalid').fadeIn();
-
-        $('#TemplateInvalidClose').bind(ios_devices, function () {
-            $('#templateinvalid').fadeOut();
-
-        });
-
-
-
-    });
     </script>
 }
 

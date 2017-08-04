@@ -44,6 +44,22 @@ namespace Deploy.DAL.Migrations
                     b.ToTable("DeployChoices");
                 });
 
+            modelBuilder.Entity("Deploy.DAL.DeployList", b =>
+                {
+                    b.Property<int>("DeployListID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DeployName");
+
+                    b.Property<string>("DeployType");
+
+                    b.Property<string>("DeployValue");
+
+                    b.HasKey("DeployListID");
+
+                    b.ToTable("DeployList");
+                });
+
             modelBuilder.Entity("Deploy.DAL.DeployParam", b =>
                 {
                     b.Property<int>("DeployParamID")
@@ -85,6 +101,8 @@ namespace Deploy.DAL.Migrations
 
                     b.Property<string>("DeployState");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("ParamsFile");
 
                     b.Property<string>("ResourceGroupName");
@@ -106,6 +124,8 @@ namespace Deploy.DAL.Migrations
                     b.Property<string>("DeployName");
 
                     b.Property<int>("DeployTypeID");
+
+                    b.Property<string>("Description");
 
                     b.Property<int>("Order");
 
@@ -214,7 +234,7 @@ namespace Deploy.DAL.Migrations
 
             modelBuilder.Entity("Deploy.DAL.TennantParam", b =>
                 {
-                    b.HasOne("Deploy.DAL.DeployType")
+                    b.HasOne("Deploy.DAL.DeployType", "DeployTypes")
                         .WithMany("TennantParams")
                         .HasForeignKey("DeployTypeID")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Deploy.Controllers
 {
-    //[Authorize(Policy = "Admins")]
+    [Authorize(Policy = "Admins")]
     public class TennantController : Controller
     {
         private readonly DeployDBContext _context;
@@ -19,12 +20,6 @@ namespace Deploy.Controllers
         {
             _context = context;    
         }
-
-        // GET: Deploy
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Tennants.ToListAsync());
-        //}
 
         public async Task<IActionResult> IndexCount(string sortOrder, string searchString)
         {
@@ -218,14 +213,18 @@ namespace Deploy.Controllers
         }
 
         // POST: Deploy/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public HttpStatusCode Delete(int id)
         {
-            var tennant = await _context.Tennants.SingleOrDefaultAsync(m => m.TennantID == id);
-            _context.Tennants.Remove(tennant);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("IndexCount");
+            var Tenant = _context.Tennants.FirstOrDefault(m => m.TennantID == id);
+            if (Tenant == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
+
+            _context.Tennants.Remove(Tenant);
+            _context.SaveChanges();
+            return HttpStatusCode.OK;
         }
 
         private bool TennantExists(int id)

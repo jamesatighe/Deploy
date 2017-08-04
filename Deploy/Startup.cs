@@ -91,7 +91,10 @@ namespace Deploy
               });
 
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/jobs", new DashboardOptions
+            {
+                Authorization = new[] { new MyAuthorizationFilter() }
+            });
         }
     }
 }

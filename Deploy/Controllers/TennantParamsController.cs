@@ -1,27 +1,21 @@
 using Deploy.DAL;
 using Deploy.Service;
-using Deploy.Models;
 using Deploy.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace Deploy.Controllers
 {
 
 
-    //[Authorize(Policy = "Admins")]
+    [Authorize(Policy = "Admins")]
     public class TennantParamsController : Controller
     {
 
@@ -318,22 +312,20 @@ namespace Deploy.Controllers
             }
             return RedirectToAction("IndexSelected", "DeployTypes", new { id = tennantDeployParams.TennantID });
         }
-        // GET: TennantParams/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        // POST: Deploy/Delete/5
+        [HttpPost]
+        public HttpStatusCode Delete(int id)
         {
-            if (id == null)
+            var deployType = _context.DeployTypes.FirstOrDefault(m => m.DeployTypeID == id);
+            if (deployType == null)
             {
-                return NotFound();
+                return HttpStatusCode.NotFound;
             }
 
-            var tennantParam = await _context.TennantParams
-                .SingleOrDefaultAsync(m => m.TennantParamID == id);
-            if (tennantParam == null)
-            {
-                return NotFound();
-            }
-
-            return View(tennantParam);
+            _context.DeployTypes.Remove(deployType);
+            _context.SaveChanges();
+            return HttpStatusCode.OK;
         }
 
         // POST: TennantParams/Delete/5

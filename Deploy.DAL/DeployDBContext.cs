@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Deploy.DAL
         public DbSet<DeployParam> DeployParms { get; set; }
 
         public DbSet<DeployChoices> DeployChoices { get; set; }
+        public DbSet<DeployList> DeployList { get; set; }
 
         public DbSet<Queue> Queue { get; set; }
 

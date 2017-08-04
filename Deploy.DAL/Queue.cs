@@ -12,6 +12,7 @@ namespace Deploy.DAL
         public string TennantName { get; set; }
         public int DeployTypeID { get; set; }
         public string DeployName { get; set; }
+        public string Description { get; set; }
         public string subscriptionID { get; set; }
         public string resourcegroup { get; set; }
         public string azuredeploy { get; set; }

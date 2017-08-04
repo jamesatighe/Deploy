@@ -36,9 +36,9 @@
 }
 @if (Model.Queues.FirstOrDefault().DeployTypeID != 0 && QueueRunning == 0) 
 {
-<a asp-action="DeployfromQueue" class="btn btn-success btn-lg" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" asp-route-force="True"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+<a asp-action="DeployfromQueue" class="btn btn-success btn-lg navbtn" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" asp-route-force="True"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
 }
-<a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+<a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
 <form asp-action="Edit">
     <div class="form-horizontal">
         <h4>Edit Deployment Queue</h4>
@@ -48,7 +48,10 @@
             <thead>
                 <tr id="header">
                     <th>
-                        Deployment Name
+                        Name
+                    </th>
+                    <th>
+                        Deploy Type
                     </th>
                     <th>
                         Tenant Name
@@ -74,6 +77,9 @@
                     {
                         <tr id=@i>
                             <td>
+                                @Html.EditorFor(modelItem => Model.Queues[i].DeployTypes.Description, new { name = "Queues[" + i + "].Description", htmlAttributes = new { @readonly = "readonly" } })
+                            </td>
+                            <td>
                                 @Html.EditorFor(modelItem => Model.Queues[i].DeployName, new { name = "Queues[" + i + "].DeployName", htmlAttributes = new { @readonly = "readonly" } })
                             </td>
                             <td>
@@ -89,7 +95,7 @@
                                 @Html.EditorFor(modelItem => Model.Queues[i].Order, new { name = "Queues[" + i + "].Order", htmlAttributes = new { @readonly = "readonly" } })
                             </td>
                             <td>
-                                <a id="deleteItem" class="deleteItem btn btn-danger btn-default" data-id="@Model.Queues[i].QueueID">Delete</a>
+                                <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@Model.Queues[i].QueueID">Delete</a>
                             </td>
                             <td hidden="hidden">
                             @Html.HiddenFor(modelItem => Model.Queues[i].azuredeploy, new { name = "Queues[" + i + "].azuredeploy" })
@@ -172,7 +178,6 @@
                     url: "/Queue/Delete?id=" + item_to_delete,
                     contentType: "application/text",
                     success: function(result) {
-                        $('#responsive').fadeOut();
                         $('#DeleteWarning').fadeOut();
                         var url = window.location.href;
                         window.location.href = url;

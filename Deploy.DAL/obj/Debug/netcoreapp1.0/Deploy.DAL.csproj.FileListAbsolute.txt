@@ -4,4 +4,5 @@ C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.DAL\obj
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.DAL\bin\Debug\netcoreapp1.0\Deploy.DAL.pdb
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.dll
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.csproj.CoreCompileInputs.cache
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.csprojResolveAssemblyReference.cache

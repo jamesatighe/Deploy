@@ -13,7 +13,7 @@
             <div class="carousel-caption" role="option">
                 <p>
                     Deploy customer solutions to Azure.
-                    <a asp-action="IndexCount" asp-controller="Tennant"class="btn btn-default">
+                    <a asp-action="IndexCount" asp-controller="Tennant"class="btn btn-default navbtn">
                         Continue
                     </a>
                 </p>
@@ -24,7 +24,7 @@
             <div class="carousel-caption" role="option">
                 <p>
                     Azure Automation for customers.
-                    <a class="btn btn-default" href="#">
+                    <a class="btn btn-default navbtn" href="#">
                         Continue
                     </a>
                 </p>
@@ -41,7 +41,12 @@
     </div>
 </div>  
 
-
+<div class="row">
+    <div class="col-md-12">
+        <h2>Deployment Tools</h2>
+        <a asp-action="Index" asp-controller="TempManagement" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-cog"></span> Template Management</a>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-6">
         <h2>Company Resources</h2>
@@ -49,8 +54,8 @@
             Learn about Cobweb and Vuzion.
         </p>
         <ul>
-            <li><a href="https://www.cobweb.com">Cobweb Website</a></li>
-            <li><a href="https://www.vuzion.com">Vuzion Website</a></li>
+            <li class="navbtn"><a href="https://www.cobweb.com">Cobweb Website</a></li>
+            <li class="navbtn"><a href="https://www.vuzion.com">Vuzion Website</a></li>
         </ul>
     </div>
     <div class="col-md-6">
@@ -59,9 +64,9 @@
             Find help and support for Azure Deployment scenarios.
         </p>
         <ul>
-            <li><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/virtual-machines-windows-sizes">Azure Virtual Machine Sizes</a></li>
-            <li><a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates">Authoring Azure Resource Manager templates.</a></li>
-            <li><a href="/Home/PowerShell">How to create Azure App Registration for deployment (Required).</a></li>
+            <li class="navbtn"><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/virtual-machines-windows-sizes">Azure Virtual Machine Sizes</a></li>
+            <li class="navbtn"><a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates">Authoring Azure Resource Manager templates.</a></li>
+            <li class="navbtn"><a href="/Home/PowerShell">How to create Azure App Registration for deployment (Required).</a></li>
         </ul>
     </div>
 </div>

@@ -11,4 +11,5 @@ C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Deb
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.AssemblyInfo.cs
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.dll
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.pdb
+C:\Users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\Deploy.csproj.CoreCompileInputs.cache
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs

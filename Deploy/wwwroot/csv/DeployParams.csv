@@ -1,0 +1,4 @@
+ParameterDeployType,ParameterName,ParameterType,ParameterToolTip
+UBUNTU16,adminUserName,string,Admin Username for VM
+UBUNTU16,adminUserPassword,string,Admin User Password for VM
+UBUNTU16,dns,array,DNS Server list as JSON array

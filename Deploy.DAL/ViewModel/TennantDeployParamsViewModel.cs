@@ -14,6 +14,7 @@ namespace Deploy.ViewModel
         public string DeployName { get; set; }
         public int DeployTypeID { get; set; }
         public string DeploySaved { get; set; }
+        public string DeployCode { get; set; }
         public List<string> ParamValue { get; set; }
         public List<string> ParamName { get; set; }
         public List<string> ParamType { get; set; }

@@ -129,4 +129,6 @@ textarea {
     cursor: pointer;
 }
 
-
+input[readonly="readonly"] {
+    border: 0px;
+}

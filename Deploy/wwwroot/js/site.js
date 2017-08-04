@@ -9,7 +9,7 @@
     var ua = navigator.userAgent.toLowerCase();
     var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
 
-    $('#navbtn, a').bind(ios_devices, function () {
+    $('.navbtn').bind(ios_devices, function () {
         $('#responsive').fadeIn();
     });
     var num = $('#search').val();
@@ -37,7 +37,7 @@
     $('#deploynames').change(function () {
         var selected = $('#deploynames :selected');
         var group = selected.parent().attr('label');
-        if (group == "Virtual Machines")
+        if (group == "Virtual Machines" || group == "Special")
         {
             $('#options').slideDown(1000);
         }
@@ -48,7 +48,7 @@
         }
 
         if (selected.val() == "RDS" || selected.val() == "RDSTypeTec") {
-            $('#test, #datadisk').removeClass('disabled').fadeIn(1000);
+            $('#datadisk').removeClass('disabled').fadeIn(1000).css({ 'margin-left': '15px' });
             $('#domain').addClass('disabled').fadeOut(1000);
         }
         else if (selected.val() == "Identity") {
@@ -56,10 +56,9 @@
              $('#domain').removeClass('disabled').fadeIn(1000).css({ 'margin-left': '15px' });
         }
         else if (selected.val() == "FileSrvTypeTec") {
-            $('#test, #datadisk, #domain').addClass('disabled').fadeOut(1000);
+            $('#datadisk, #domain').addClass('disabled').fadeOut(1000);
         }
         else {
-             $('#test').addClass('disabled').fadeOut(1000);
              $('#domain, #datadisk').removeClass('disabled').fadeIn(1000);
              $('#domain').css({ 'margin-left': '15px' });
         }

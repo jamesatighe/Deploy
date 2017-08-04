@@ -18,6 +18,7 @@ namespace Deploy.DAL
         public string ParamToolTip { get; set; }
 
         public List<DeployParam> DeployParams { get; set; }
+        public virtual DeployType DeployTypes { get; set; }
 
     }
 }

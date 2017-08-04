@@ -9,6 +9,7 @@ namespace Deploy.DAL
     {
         public int DeployTypeID { get; set; }
         public int TennantID { get; set; }
+        public string Description { get; set; }
         public string DeployName { get; set; }
         public string DeploySaved { get; set; }
         public string DeployState { get; set; }
