@@ -77,7 +77,7 @@
                     {
                         <tr id=@i>
                             <td>
-                                @Html.EditorFor(modelItem => Model.Queues[i].DeployTypes.Description, new { name = "Queues[" + i + "].Description", htmlAttributes = new { @readonly = "readonly" } })
+                                @Html.EditorFor(modelItem => Model.Queues[i].Description, new { name = "Queues[" + i + "].Description", htmlAttributes = new { @readonly = "readonly" } })
                             </td>
                             <td>
                                 @Html.EditorFor(modelItem => Model.Queues[i].DeployName, new { name = "Queues[" + i + "].DeployName", htmlAttributes = new { @readonly = "readonly" } })

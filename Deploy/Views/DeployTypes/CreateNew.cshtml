@@ -39,35 +39,35 @@
                 </div>
             </div>
 
-            <div id="options" class="form-group" >
+            <div id="Type" class="form-group" >
+                <label class="col-md-2 control-label">Type</label>
+                <span id="virtualmachines" class="button-checkbox" style="margin-left:15px">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select VM Templates" data-color="primary">VMs</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="networking" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">Networking</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="paas" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">PaaS</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                
+            </div>
+            <div id="options" class="form-group" hidden="hidden">
                 <label class="col-md-2 control-label">Options</label>
-                    <span id="domain" class="button-checkbox" style="margin-left:15px">
-                        <button type="button" title="Is VM on existing domain?" class="btn-lg" data-color="primary">Domain</button>
-                        <input type="checkbox" class="hidden" />
-                    </span>
-                    <span id="datadisk"class="button-checkbox">
-                        <button type="button" class="btn-lg" data-color="primary">Datadisk</button>
-                        <input type="checkbox" class="hidden" />
-                    </span>
-                    <span id="networking" class="button-checkbox">
-                        <button type="button" class="btn-lg" data-color="primary">Networking</button>
-                        <input type="checkbox" class="hidden" />
-                    </span>
+                <span id="domain" class="button-checkbox" style="margin-left:15px">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Is VM on existing domain?" data-color="primary">Domain</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="datadisk" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Is a data disk required?" data-color="primary">Datadisk</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
             </div>
             
         }
-
-           <div class="form-group">
-            <label asp-for="Size" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Size" class="form-control">
-                    <option value="N/A">N/A</option>
-                    <option value="Small">Small (Non HA)</option>
-                    <option value="Medium">Medium (HA)</option>
-                    <option value="Large">Large (HA Bespoke)</option>
-                </select>
-            </div>
-        </div>
 
         <div class="form-group">
             <label asp-for="ResourceGroupName" class="col-md-2 control-label"></label>
@@ -98,50 +98,79 @@
     <script language='javascript' type='text/javascript'>
         var oldoptions = [];
         $(document).ready(function () {
-            $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            });
 
-                $(document).tooltip();
+            //Buttons for main selection
+
+            $('#virtualmachines button').on('click', function () {
+                if ($('#virtualmachines button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="Virtual Machines"]').wrap('<span/>');
+                    $('#options').slideDown();
+                    $('#networking button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="Virtual Machines"]').unwrap();
+                    $('#options').slideUp();
+                    $('#networking button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                }
+
+            });
+
+            $('#networking button').on('click', function () {
+                if ($('#networking button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="Networking"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="Networking"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                }
+
+            });
+            
+            $('#paas button').on('click', function () {
+                if ($('#paas button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="PaaS"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#networking button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="PaaS"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#networking button').attr("disabled", false);
+                }
 
             });
 
 
-
+            // VM options
             $('#domain button').on('click', function () {
-                if ( $('#domain button').hasClass("active"))
-                {
+                if ($('#domain button').hasClass("active")) {
                     $('#deploynames optgroup option').not('[value*="DOM"]').wrap('<span/>');
                 }
-                else
-                {
+                else {
                     $('#deploynames optgroup option').not('[value*="DOM"]').unwrap();
 
                 }
             });
 
             $('#datadisk button').on('click', function () {
-                if ($('#datadisk button').hasClass("active"))
-                {
+                if ($('#datadisk button').hasClass("active")) {
                     $('#deploynames optgroup option').not('[value*="DISK"]').wrap('<span/>');
                 }
-                else
-                {
+                else {
                     $('#deploynames optgroup option').not('[value*="DISK"]').unwrap();
                 }
             });
 
-            $('#networking button').on('click', function () {
-                if ($('#networking button').hasClass("active"))
-                {
-                    $('#deploynames optgroup').not('[label*="Networking"]').wrap('<span/>');
-                }
-                else
-                {
-                    $('#deploynames optgroup').not('[label*="Networking"]').unwrap();
+        });
 
-                }
 
-            })
-
-    });
     </script>
 }

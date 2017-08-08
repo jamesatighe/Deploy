@@ -32,37 +32,7 @@
             setTimeout(checkSearchChanged, 0.1);
         }
     }
-
-    
-    $('#deploynames').change(function () {
-        var selected = $('#deploynames :selected');
-        var group = selected.parent().attr('label');
-        if (group == "Virtual Machines" || group == "Special")
-        {
-            $('#options').slideDown(1000);
-        }
-        else
-        {
-            $('#options').slideUp(1000);
-
-        }
-
-        if (selected.val() == "RDS" || selected.val() == "RDSTypeTec") {
-            $('#datadisk').removeClass('disabled').fadeIn(1000).css({ 'margin-left': '15px' });
-            $('#domain').addClass('disabled').fadeOut(1000);
-        }
-        else if (selected.val() == "Identity") {
-             $('#test, #datadisk').addClass('disabled').fadeOut(1000);
-             $('#domain').removeClass('disabled').fadeIn(1000).css({ 'margin-left': '15px' });
-        }
-        else if (selected.val() == "FileSrvTypeTec") {
-            $('#datadisk, #domain').addClass('disabled').fadeOut(1000);
-        }
-        else {
-             $('#domain, #datadisk').removeClass('disabled').fadeIn(1000);
-             $('#domain').css({ 'margin-left': '15px' });
-        }
-    });
+   
 
     $('.button-checkbox').each(function () {
 
@@ -127,16 +97,6 @@
         }
         init();
     });
-
-
-
-
-
-
-
-
-
-
 
  });
 

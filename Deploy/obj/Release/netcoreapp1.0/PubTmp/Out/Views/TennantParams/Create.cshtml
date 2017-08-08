@@ -82,12 +82,12 @@
                 </div>
 
             }
-            else if (Model.DeployParams[i].ParameterName.Contains("OSVersion"))
+            else if (Model.DeployParams[i].ParameterName.Contains("vmSKU") || Model.DeployParams[i].ParameterName.Contains("OSVersion"))
             {
                 <div class="form-group">
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
                     <div class="col-md-4">
-                        <select asp-for="@Model.ParamValue[i]" id="vmOSVersion" class="form-control"></select>
+                        <select asp-for="@Model.ParamValue[i]" id="vmSKU" class="form-control"></select>
                         <span asp-validation-for="@Model.ParamValue" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
@@ -114,6 +114,19 @@
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
                     <div class="col-md-4">
                         <select asp-for="@Model.ParamValue[i]" id="vmPublisherOffering" class="form-control"></select>
+                        <span asp-validation-for="@Model.ParamValue" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        @Model.DeployParams[i].ParamToolTip
+                    </div>
+                </div>
+            }
+            else if (Model.DeployParams[i].ParameterName == "vmImageVersion")
+            {
+                <div class="form-group">
+                    <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
+                    <div class="col-md-4">
+                        <select asp-for="@Model.ParamValue[i]" id="vmImageVersion" class="form-control"></select>
                         <span asp-validation-for="@Model.ParamValue" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
@@ -336,15 +349,15 @@
                 type: "POST",
                 url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=SKU" + "&publisher=" + publisher + "&offering=" + offering,
                 beforeSend: function () {
-                    var select = $('#vmOSVersion');
+                    var select = $('#vmSKU');
                     var option = $('<option>', {
                         value: "loading"
                     }).html("Loading . . .").appendTo(select);
                 },
                 contentType: "application/text",
                 success: function (data) {
-                    $('#vmOSVersion').empty();
-                    var select = $('#vmOSVersion');
+                    $('#vmSKU').empty();
+                    var select = $('#vmSKU');
                     select.children.value
                     $.each(data.value, function (i, item) {
                         var option = $('<option>', {
@@ -393,21 +406,21 @@
                 var offering = $("#vmPublisherOffering :selected").text();
 
 
-                $('#vmOSVersion').empty();
+                $('#vmSKU').empty();
 
                 $.ajax({
                     type: "POST",
                     url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=SKU" + "&publisher=" + publisher + "&offering=" + offering,
                     beforeSend: function () {
-                        var select = $('#vmOSVersion');
+                        var select = $('#vmSKU');
                         var option = $('<option>', {
                             value: "loading"
                         }).html("Loading . . .").appendTo(select);
                     },
                     contentType: "application/text",
                     success: function (data) {
-                        $('#vmOSVersion').empty();
-                        var select = $('#vmOSVersion');
+                        $('#vmSKU').empty();
+                        var select = $('#vmSKU');
                         select.children.value
                         $.each(data.value, function (i, item) {
                             var option = $('<option>', {
@@ -415,10 +428,42 @@
                             }).html(item.name).appendTo(select);
 
                         })
-                        getOSVersion();
+                        getSKU();
                     }
                 });
             });
+
+            $('#vmSKU').change(function () {
+                var publisher = $("#vmPublisher :selected").text();
+                var offering = $("#vmPublisherOffering :selected").text();
+                var sku = $("#vmSKU :selected").text();
+
+                $('#vmImageVersion').empty();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=image" + "&publisher=" + publisher + "&offering=" + offering + "&sku=" + sku,
+                    beforeSend: function () {
+                        var select = $('#vmImageVersion');
+                        var option = $('<option>', {
+                            value: "loading"
+                        }).html("Loading . . .").appendTo(select);
+                    },
+                    contentType: "application/text",
+                    success: function (data) {
+                        $('#vmImageVersion').empty();
+                        var select = $('#vmImageVersion');
+                        select.children.value
+                        $.each(data.value, function (i, item) {
+                            var option = $('<option>', {
+                                value: item.name
+                            }).html(item.name).appendTo(select);
+
+                        })
+                    }
+                });
+            });
+
 
             $('#existingVirtualNetworkResourceGroup').change(function () {
                 var resourceGroup = $('#existingVirtualNetworkResourceGroup :selected').text();
@@ -449,9 +494,10 @@
             });
 
         //Run change on elements to force dropdown update
-            $('vmPublisher').change(getOffering());
-            //$('vmPublisherOffering').change(getOSVersion());
-            $('#existingVirtualNetworkName').change(getSubnet());
+            //$('#vmPublisher').change(getOffering());
+           // $('#vmPublisherOffering').change(getSKU());
+            //$('#vmSKU').change(getImageVersion());
+            //$('#existingVirtualNetworkName').change(getSubnet());
             
 
             $('#vmPrivateIP1').change(function () {
@@ -579,32 +625,66 @@
                         }).html(item.name).appendTo(select);
 
                     })
-                    getOSVersion();
+                    getSKU();
                 }
             });
         };
 
 
-        var getOSVersion = function () {
+        var getSKU = function () {
             var publisher = $("#vmPublisher :selected").text();
             var offering = $("#vmPublisherOffering :selected").text();
 
 
-            $('#vmOSVersion').empty();
+            $('#vmSKU').empty();
 
             $.ajax({
                 type: "POST",
                 url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=SKU" + "&publisher=" + publisher + "&offering=" + offering,
                 beforeSend: function () {
-                    var select = $('#vmOSVersion');
+                    var select = $('#vmSKU');
                     var option = $('<option>', {
                         value: "loading"
                     }).html("Loading . . .").appendTo(select);
                 },
                 contentType: "application/text",
                 success: function (data) {
-                    $('#vmOSVersion').empty();
-                    var select = $('#vmOSVersion');
+                    $('#vmSKU').empty();
+                    var select = $('#vmSKU');
+                    select.children.value
+                    $.each(data.value, function (i, item) {
+                        var option = $('<option>', {
+                            value: item.name
+                        }).html(item.name).appendTo(select);
+
+                    })
+                    getImageVersion();
+                }
+            });
+        };
+
+
+        var getImageVersion = function () {
+            var publisher = $("#vmPublisher :selected").text();
+            var offering = $("#vmPublisherOffering :selected").text();
+            var sku = $("#vmSKU :selected").text();
+
+
+            $('#vmImageVersion').empty();
+
+            $.ajax({
+                type: "POST",
+                url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=image" + "&publisher=" + publisher + "&offering=" + offering + "&sku=" + sku,
+                beforeSend: function () {
+                    var select = $('#vmImageVersion');
+                    var option = $('<option>', {
+                        value: "loading"
+                    }).html("Loading . . .").appendTo(select);
+                },
+                contentType: "application/text",
+                success: function (data) {
+                    $('#vmImageVersion').empty();
+                    var select = $('#vmImageVersion');
                     select.children.value
                     $.each(data.value, function (i, item) {
                         var option = $('<option>', {
@@ -615,6 +695,7 @@
                 }
             });
         };
+
 
     </script>
 }
