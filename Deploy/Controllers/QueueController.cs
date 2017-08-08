@@ -90,6 +90,7 @@ namespace Deploy.Controllers
                         QueueID = queue.QueueID,
                         DeployTypeID = queue.DeployTypeID,
                         DeployName = queue.DeployName,
+                        Description = queue.Description,
                         TennantID = queue.TennantID,
                         TennantName = queue.TennantName,
                         resourcegroup = queue.resourcegroup,

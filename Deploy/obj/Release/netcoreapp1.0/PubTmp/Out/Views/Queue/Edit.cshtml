@@ -48,7 +48,10 @@
             <thead>
                 <tr id="header">
                     <th>
-                        Deployment Name
+                        Name
+                    </th>
+                    <th>
+                        Deploy Type
                     </th>
                     <th>
                         Tenant Name
@@ -73,6 +76,9 @@
                     @for (var i = 0; i < Model.Queues.Count(); i++)
                     {
                         <tr id=@i>
+                            <td>
+                                @Html.EditorFor(modelItem => Model.Queues[i].DeployTypes.Description, new { name = "Queues[" + i + "].Description", htmlAttributes = new { @readonly = "readonly" } })
+                            </td>
                             <td>
                                 @Html.EditorFor(modelItem => Model.Queues[i].DeployName, new { name = "Queues[" + i + "].DeployName", htmlAttributes = new { @readonly = "readonly" } })
                             </td>

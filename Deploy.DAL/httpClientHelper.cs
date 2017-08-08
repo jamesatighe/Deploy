@@ -196,7 +196,7 @@ namespace Deploy.DAL
         }
 
 
-        public static async Task<string> GetDeployJson(string subscriptionID, string accesstoken, string type, string location, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null)
+        public static async Task<string> GetDeployJson(string subscriptionID, string accesstoken, string type, string location, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null, string sku = null)
         {
             string uri = "";
             if (type == "VM")
@@ -237,6 +237,10 @@ namespace Deploy.DAL
             else if (type == "IPCheck")
             {
                 uri = "https://management.azure.com/subscriptions/" + subscriptionID + "/resourceGroups/" + resourceGroup + "/providers/Microsoft.Network/virtualnetworks/" + VNET + "/CheckIPAddressAvailability?IPaddress=" + IP + "&api-version=2017-06-01";
+            }
+            else if (type == "image")
+            {
+                uri = "https://management.azure.com/subscriptions/" + subscriptionID + "/providers/Microsoft.Compute/locations/" + location + "/publishers/" + publisher + "/artifacttypes/vmimage/offers/" + offering + "/skus/" + sku + "/versions?api-version=2017-03-30";
             }
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);

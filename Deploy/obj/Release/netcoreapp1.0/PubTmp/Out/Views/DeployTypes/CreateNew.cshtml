@@ -24,6 +24,13 @@
         @using (Html.BeginForm())
 
         {
+            <div class="form-group">
+                <label asp-for="Description" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Description" class="form-control" />
+                </div>
+            </div>
+
 
             <div class="form-group">
                 <label asp-for="DeployName" class="col-md-2 control-label"></label>

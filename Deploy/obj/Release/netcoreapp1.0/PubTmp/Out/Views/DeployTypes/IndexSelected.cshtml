@@ -56,9 +56,12 @@
 <table class="table tablesorter-bootstrap">
     <thead>
         <tr>
-                <th>
-                    Name
-                </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Deploy Type
+            </th>
             <th>
                 ID
             </th>
@@ -81,6 +84,9 @@
     <tbody>
 @foreach (var item in Model.DeployTypes) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
             <td>
                 @if (!string.IsNullOrEmpty(item.DeployName))
                 {

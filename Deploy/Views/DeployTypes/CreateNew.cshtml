@@ -39,17 +39,22 @@
                 </div>
             </div>
 
-            <div id="options" class="form-group">
+            <div id="options" class="form-group" >
                 <label class="col-md-2 control-label">Options</label>
                     <span id="domain" class="button-checkbox" style="margin-left:15px">
-                        <button type="button" class="btn-lg" data-color="primary">Domain</button>
-                        <input  type="checkbox" asp-for="@Model.Domain" class="hidden" checked />
+                        <button type="button" title="Is VM on existing domain?" class="btn-lg" data-color="primary">Domain</button>
+                        <input type="checkbox" class="hidden" />
                     </span>
                     <span id="datadisk"class="button-checkbox">
                         <button type="button" class="btn-lg" data-color="primary">Datadisk</button>
-                        <input type="checkbox" asp-for="@Model.Datadisk" class="hidden" checked />
+                        <input type="checkbox" class="hidden" />
                     </span>
-                </div>
+                    <span id="networking" class="button-checkbox">
+                        <button type="button" class="btn-lg" data-color="primary">Networking</button>
+                        <input type="checkbox" class="hidden" />
+                    </span>
+            </div>
+            
         }
 
            <div class="form-group">
@@ -90,4 +95,53 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script language='javascript' type='text/javascript'>
+        var oldoptions = [];
+        $(document).ready(function () {
+            $(function () {
+
+                $(document).tooltip();
+
+            });
+
+
+
+            $('#domain button').on('click', function () {
+                if ( $('#domain button').hasClass("active"))
+                {
+                    $('#deploynames optgroup option').not('[value*="DOM"]').wrap('<span/>');
+                }
+                else
+                {
+                    $('#deploynames optgroup option').not('[value*="DOM"]').unwrap();
+
+                }
+            });
+
+            $('#datadisk button').on('click', function () {
+                if ($('#datadisk button').hasClass("active"))
+                {
+                    $('#deploynames optgroup option').not('[value*="DISK"]').wrap('<span/>');
+                }
+                else
+                {
+                    $('#deploynames optgroup option').not('[value*="DISK"]').unwrap();
+                }
+            });
+
+            $('#networking button').on('click', function () {
+                if ($('#networking button').hasClass("active"))
+                {
+                    $('#deploynames optgroup').not('[label*="Networking"]').wrap('<span/>');
+                }
+                else
+                {
+                    $('#deploynames optgroup').not('[label*="Networking"]').unwrap();
+
+                }
+
+            })
+
+    });
+    </script>
 }

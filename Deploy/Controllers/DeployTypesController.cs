@@ -335,7 +335,7 @@ namespace Deploy.Controllers
         //#########################################
 
         [HttpPost]
-        public JsonResult GetDeployJson(int Id, string type, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null)
+        public JsonResult GetDeployJson(int Id, string type, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null, string sku = null)
         {
             if (type == "VM" || type == "resourceGroup")
             {
@@ -365,15 +365,22 @@ namespace Deploy.Controllers
 
                 return Json(json);
             }
+            if (type == "image")
+            {
+                var getContent = _tenantService.GetDeployJson(Id, type, publisher, offering, null, null, null, sku);
+                JArray array = JArray.Parse(getContent);
+                JObject json = new JObject();
+                json.Add("value", array);
+
+                return Json(json);
+            }
             else
             {
                 var getContent = _tenantService.GetDeployJson(Id, type, publisher, offering, null, VNET);
                 JArray array = JArray.Parse(getContent);
                 JObject json = new JObject();
                 json.Add("value", array);
-                
-                //new JProperty("value", array));
-               
+            
                 return Json(json);
             }
         }

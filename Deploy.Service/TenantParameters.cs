@@ -198,6 +198,7 @@ namespace Deploy.Service
                     queue.DeployTypeID = Id;
                     queue.Order = queue.QueueID;
                     queue.DeployName = deployTypes.DeployName;
+                    queue.Description = deployTypes.Description;
                     queue.TennantName = deployTypes.Tennants.TennantName;
                     queue.TennantID = deployTypes.TennantID;
                     queue.azuredeploy = azuredeploy;
@@ -899,7 +900,7 @@ ______           _           _____   ____________  ________   ___         _
             return stream;
         }
 
-        public string GetDeployJson(int Id, string type, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null)
+        public string GetDeployJson(int Id, string type, string publisher = null, string offering = null, string resourceGroup = null, string VNET = null, string IP = null, string sku = null)
         {
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             string subscriptionID = deployTypes.Tennants.AzureSubscriptionID;
@@ -912,7 +913,7 @@ ______           _           _____   ____________  ________   ___         _
             RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
             string accesstoken = AccessToken.access_token;
 
-            var getcontent = RESTApi.GetDeployJson(subscriptionID, accesstoken, type, location, publisher, offering, resourceGroup, VNET, IP);
+            var getcontent = RESTApi.GetDeployJson(subscriptionID, accesstoken, type, location, publisher, offering, resourceGroup, VNET, IP, sku);
             return getcontent.Result;
         }
 
