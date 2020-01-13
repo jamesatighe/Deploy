@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Deploy.DAL;
-using Hangfire;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace Deploy
 {
@@ -18,7 +18,9 @@ namespace Deploy
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("azurekeyvault.json", optional: false, reloadOnChange: true);
+                
 
             if (env.IsDevelopment())
             {
@@ -26,6 +28,15 @@ namespace Deploy
                 builder.AddUserSecrets<Startup>();
             }
             builder.AddEnvironmentVariables();
+
+            var config = builder.Build();
+
+            builder.AddAzureKeyVault(
+                $"https://{config["azureKeyVault:vault"]}.vault.azure.net/",
+                config["azureKeyVault:clientId"],
+                config["azureKeyVault:clientSecret"]
+
+                );
             Configuration = builder.Build();
         }
 
@@ -37,7 +48,8 @@ namespace Deploy
             // Add framework services.
             services.AddMvc();
 
-            services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            //services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["appSettings:connectionStrings:Deploy"]));
             services.AddOptions();
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
             services.AddAuthentication(

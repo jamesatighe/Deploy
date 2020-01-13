@@ -9,9 +9,9 @@ C:\Users\james\Source\Repos\Deploy\Deploy\bin\Debug\netcoreapp1.1\Deploy.DAL.pdb
 C:\Users\james\Source\Repos\Deploy\Deploy\bin\Debug\netcoreapp1.1\Deploy.Service.pdb
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.csprojAssemblyReference.cache
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.csproj.CoreCompileInputs.cache
-C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.AssemblyInfoInputs.cache
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.AssemblyInfo.cs
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.csproj.CopyComplete
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.dll
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\Deploy.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
