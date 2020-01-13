@@ -13,3 +13,20 @@ C:\Users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Rel
 C:\Users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.DAL.pdb
 C:\Users\james.tighe\documents\visual studio 2017\Projects\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.Service.pdb
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.csproj.CoreCompileInputs.cache
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.deps.json
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.runtimeconfig.json
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.runtimeconfig.dev.json
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.dll
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.Service.dll
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy\bin\Release\netcoreapp1.0\Deploy.Service.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.csprojAssemblyReference.cache
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.csproj.CoreCompileInputs.cache
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\UserSecretsAssemblyInfo.cs
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.AssemblyInfoInputs.cache
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.AssemblyInfo.cs
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.csproj.CopyComplete
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.dll
+C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp1.0\Deploy.pdb

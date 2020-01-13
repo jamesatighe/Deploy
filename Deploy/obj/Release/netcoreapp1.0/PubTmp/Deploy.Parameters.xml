@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="IIS Web Application Name" description="" value="Cobwebdeployment" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\james\.tighe\\Documents\\Visual\ Studio\ 2017\\Projects\\Deploy\\Deploy\\obj\\Release\\netcoreapp1\.0\\PubTmp\\Out\\$" />
+  <parameter name="IIS Web Application Name" description="" value="Tighe-AzDep" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\obj\\Release\\netcoreapp1\.0\\PubTmp\\Out\\$" />
   </parameter>
 </parameters>

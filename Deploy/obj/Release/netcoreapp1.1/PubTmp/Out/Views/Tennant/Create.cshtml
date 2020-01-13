@@ -1,0 +1,99 @@
+@model Deploy.ViewModel.TenantDeploys
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Tennant</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <h4>Main Details</h4>
+        <div class="form-group">
+            <label asp-for="TennantName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TennantName" class="form-control" />
+                <span asp-validation-for="TennantName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AzureTennantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AzureTennantID" class="form-control" />
+                <span asp-validation-for="AzureTennantID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AzureSubscriptionID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AzureSubscriptionID" class="form-control" />
+                <span asp-validation-for="AzureSubscriptionID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ResourceGroupName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ResourceGroupName" class="form-control" />
+                <span asp-validation-for="ResourceGroupName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ResourceGroupLocation" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ResourceGroupLocation" class="form-control" />
+                <span asp-validation-for="ResourceGroupLocation" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AzureClientID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AzureClientID" class="form-control" />
+                <span asp-validation-for="AzureClientID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="AzureClientSecret" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AzureClientSecret" class="form-control" />
+                <span asp-validation-for="AzureClientSecret" class="text-danger"></span>
+            </div>
+        </div>
+        <h4>Contact Details</h4>
+        <div class="form-group">
+            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmailAddress" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EmailAddress" class="form-control" />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default btn-success navbtn" />
+                <a asp-action="IndexCount" class="btn btn-primary btn-default navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,176 @@
+@model Deploy.ViewModel.DeployChoiceViewModel
+
+@{
+    ViewData["Title"] = "DeploymentCreate";
+}
+
+<h2>Deployment List</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+<form asp-action="CreateNew">
+    <div class="form-horizontal">
+        <h4>Create New Deployment</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group hidden">
+            <label asp-for="TennantID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TennantID" class="form-control" />
+                <span asp-validation-for="TennantID" class="text-danger"></span>
+            </div>
+        </div>
+
+        @using (Html.BeginForm())
+
+        {
+            <div class="form-group">
+                <label asp-for="Description" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Description" class="form-control" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="DeployName" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select id="deploynames" asp-for="DeployName" asp-items="Model.DeployListItem" class="form-control"></select>
+                </div>
+            </div>
+
+            <div id="Type" class="form-group" >
+                <label class="col-md-2 control-label">Type</label>
+                <span id="virtualmachines" class="button-checkbox" style="margin-left:15px">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select VM Templates" data-color="primary">VMs</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="networking" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">Networking</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="paas" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">PaaS</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                
+            </div>
+            <div id="options" class="form-group" hidden="hidden">
+                <label class="col-md-2 control-label">Options</label>
+                <span id="domain" class="button-checkbox" style="margin-left:15px">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Is VM on existing domain?" data-color="primary">Domain</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="datadisk" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Is a data disk required?" data-color="primary">Datadisk</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+            </div>
+            
+        }
+
+        <div class="form-group">
+            <label asp-for="ResourceGroupName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ResourceGroupName" class="form-control" />
+                <span asp-validation-for="ResourceGroupName" class="text-danger"></span>
+            </div>
+        </div>
+        
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="CreateNew" class="btn btn-default btn-success navbtn" />
+                <a asp-action="CreateRedirect" class="btn btn-primary btn-default navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="CreateRedirect" asp-route-id="@Model.TennantID">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script language='javascript' type='text/javascript'>
+        var oldoptions = [];
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            });
+
+            //Buttons for main selection
+
+            $('#virtualmachines button').on('click', function () {
+                if ($('#virtualmachines button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="Virtual Machines"]').wrap('<span/>');
+                    $('#options').slideDown();
+                    $('#networking button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="Virtual Machines"]').unwrap();
+                    $('#options').slideUp();
+                    $('#networking button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                }
+
+            });
+
+            $('#networking button').on('click', function () {
+                if ($('#networking button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="Networking"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="Networking"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                }
+
+            });
+            
+            $('#paas button').on('click', function () {
+                if ($('#paas button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="PaaS"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#networking button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="PaaS"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#networking button').attr("disabled", false);
+                }
+
+            });
+
+
+            // VM options
+            $('#domain button').on('click', function () {
+                if ($('#domain button').hasClass("active")) {
+                    $('#deploynames optgroup option').not('[value*="DOM"]').wrap('<span/>');
+                }
+                else {
+                    $('#deploynames optgroup option').not('[value*="DOM"]').unwrap();
+
+                }
+            });
+
+            $('#datadisk button').on('click', function () {
+                if ($('#datadisk button').hasClass("active")) {
+                    $('#deploynames optgroup option').not('[value*="DISK"]').wrap('<span/>');
+                }
+                else {
+                    $('#deploynames optgroup option').not('[value*="DISK"]').unwrap();
+                }
+            });
+
+        });
+
+
+    </script>
+}

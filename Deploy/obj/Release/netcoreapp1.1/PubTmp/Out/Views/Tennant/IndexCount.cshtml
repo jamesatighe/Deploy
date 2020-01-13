@@ -1,0 +1,113 @@
+@model IEnumerable<Deploy.ViewModel.TenantDeploys>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="DeleteWarning" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="font-size:18px;">
+                <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+                <p style="margin-top:15px">Are you sure you wish to delete this queue item?</p>
+                <p>Please confirm you choice, or cancel to return to the queue.</p>
+                <button id="DeleteWarningClose" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+                <button id="DeleteWarningOK" class="btn btn-danger btn-lg">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Tennant List</h2>
+<div>
+    <p>
+        Please select the tennant to manage.
+    </p>
+    <p>
+        If the tennant does not already exist please click the Create New button.
+    </p>
+</div>
+
+<a id="navbtn" asp-action="Create" class="btn btn-success btn-lg">Create New</a>
+@using (Html.BeginForm())
+{
+    <p style="margin-top:10px;">
+        <label class="col-lg-1 center">Search: </label> @Html.TextBox("SearchString", null, new { @class = "form-control col-lg-8", id="search" })
+        <input id="submit navbtn" onkeyup="checkSearchChanged()" class="btn btn-default clickable" style="margin-left:10px;" type="submit" value="Search" />
+    </p>
+}
+
+<table class="table tablesorter-bootstrap">
+    <thead>
+        <tr>
+                <th>
+                    @Html.ActionLink("Tennant Name", "IndexCount", new { sortOrder = ViewBag.NameSortParm })
+                </th>
+                <th>
+                    Tennant ID
+                </th>
+                <th>
+                    @Html.ActionLink("Number of Deployments", "IndexCount", new { sortOrder = ViewBag.DeployCountSortParm })
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(item.TennantName))
+                {
+                    @Html.ActionLink(item.TennantName, "Deploy", new { Id = item.TennantID, @class="navbtn"})
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TennantID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeployCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TennantID" class="btn btn-warning btn-default navbtn"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
+                <a asp-action="Details" asp-route-id="@item.TennantID" class="btn btn-primary btn-default navbtn"><span class="glyphicon glyphicon-list"></span> Details</a>
+                <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@item.TennantID"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    <script language='javascript' type='text/javascript'>
+        $(document).ready(function () {
+            var ua = navigator.userAgent.toLowerCase();
+            var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+
+            var item_to_delete;
+            $(".deleteItem").bind(ios_devices, function () {
+                $('#DeleteWarning').fadeIn();
+                item_to_delete = $(this).data('id');
+                $('#DeleteWarning').fadeIn();
+            });
+            $('#DeleteWarningOK').bind(ios_devices, function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Tennant/Delete?id=" + item_to_delete,
+                    contentType: "application/text",
+                    success: function (result) {
+                        $('#DeleteWarning').fadeOut();
+                        var url = window.location.href;
+                        window.location.href = url;
+                    }
+                });
+
+            });
+            $('#DeleteWarningClose').bind(ios_devices, function () {
+                $('#responsive').fadeOut();
+                $('#DeleteWarning').fadeOut();
+            });
+        });
+
+    </script>
+}

@@ -151,7 +151,7 @@ namespace Deploy.Service
             var sasToken = AzureHelper.GetSASToken(_storageConfig);
 
             //Create json for deployment to be amended.
-            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/deployments/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
 
             //Set Deploy Template dependent on Deployment Type
@@ -254,7 +254,7 @@ namespace Deploy.Service
             var sasToken = AzureHelper.GetSASToken(_storageConfig);
 
             //Create relevant JSON Object for deployment.
-            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/deployments/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
 
             //Set Deploy Template dependent on Deployment Type
@@ -374,7 +374,7 @@ namespace Deploy.Service
             var sasToken = AzureHelper.GetSASToken(_storageConfig);
 
             //Create json for deployment to be amended.
-            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/deployments/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
 
             //Set Deploy Template dependent on Deployment Type
@@ -472,8 +472,8 @@ namespace Deploy.Service
 
             string jsonResourceGroup = "{ \"location\": \"North Europe\" }";
 
-            //string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/Parameters/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
-            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://cobwebjson.blob.core.windows.net/ansible/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\" } }";
+            //string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\", \"parametersLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/Parameters/{parameters}{sasToken}\", \"contentVersion\": \"1.0.0.0\" } } }";
+            string jsonDeploy = "{\"properties\": { \"templateLink\": { \"uri\": \"https://tighedeploy.blob.core.windows.net/{template}{sasToken}\", \"contentVersion\": \"1.0.0.0\"}, \"mode\": \"Incremental\" } }";
             jsonDeploy = jsonDeploy.Replace("{sasToken}", sasToken);
 
 
@@ -497,8 +497,8 @@ namespace Deploy.Service
             }
 
             linkedTemplate = linkedTemplate.Replace("{VNETDep}", VNETSmallDep);
-            linkedTemplate = linkedTemplate.Replace("{templatelinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Network/VNet1SubnetsGW.json" + sasToken);
-            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://cobwebjson.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + VNETSmallID + "-param.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{templatelinkvnet}", "https://tighedeploy.blob.core.windows.net/ansible/Network/VNet1SubnetsGW.json" + sasToken);
+            linkedTemplate = linkedTemplate.Replace("{parameterlinkvnet}", "https://tighedeploy.blob.core.windows.net/ansible/Parameters/rdssmall-" + deployTypes.FirstOrDefault().Tennants.TennantName + "-" + VNETSmallID + "-param.json" + sasToken);
 
             linkedTemplate = linkedTemplate.Replace("{IDDep}", IdentitySmallDep);
             linkedTemplate = linkedTemplate.Replace("{templatelinkid}", "https://cobwebjson.blob.core.windows.net/ansible/Identity/identitysmallMD.json" + sasToken);
@@ -870,7 +870,7 @@ ______           _           _____   ____________  ________   ___         _
             
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("ansible/");
+            CloudBlobContainer container = blobClient.GetContainerReference("deployments");
             CloudBlockBlob blockBlob1 = container.GetBlockBlobReference(filename);
 
             using (Stream s = GenerateStreamFromString(jsonfull))

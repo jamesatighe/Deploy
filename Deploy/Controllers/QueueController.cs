@@ -208,8 +208,8 @@ namespace Deploy.Controllers
                 //CloudQueueMessage message = new CloudQueueMessage(Id);
                 //await messageQueue.AddMessageAsync(message);
 
-                BackgroundJob.Enqueue(() => _service.DeployfromQueue(Id, Force));
-
+                var result = await _service.DeployfromQueue(Id, Force);
+                
             }
             return RedirectToAction("Edit", "Queue", new { id = QueueList.FirstOrDefault().TennantID });
         }

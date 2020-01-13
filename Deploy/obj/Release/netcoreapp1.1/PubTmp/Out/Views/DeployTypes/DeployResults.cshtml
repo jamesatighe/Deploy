@@ -1,0 +1,20 @@
+@model Deploy.ViewModel.TenantDeploys
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h2>Deployment List</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+<p>
+    <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+</p>
+
+<p>
+
+    <text>
+        @Html.DisplayFor(modelItem => Model.DeployResult)
+    </text>
+

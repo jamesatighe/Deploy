@@ -8,3 +8,15 @@ C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\DTO\bin\Debug\
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.dll
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.pdb
 C:\Users\james.tighe\Documents\Visual Studio 2017\Projects\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.csproj.CoreCompileInputs.cache
+C:\Users\james\Source\Repos\Deploy\DTO\bin\Debug\netcoreapp1.0\DTO.deps.json
+C:\Users\james\Source\Repos\Deploy\DTO\bin\Debug\netcoreapp1.0\DTO.dll
+C:\Users\james\Source\Repos\Deploy\DTO\bin\Debug\netcoreapp1.0\DTO.pdb
+C:\Users\james\Source\Repos\Deploy\DTO\bin\Debug\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james\Source\Repos\Deploy\DTO\bin\Debug\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.csprojAssemblyReference.cache
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.csproj.CoreCompileInputs.cache
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.AssemblyInfoInputs.cache
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.AssemblyInfo.cs
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.csproj.CopyComplete
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.dll
+C:\Users\james\Source\Repos\Deploy\DTO\obj\Debug\netcoreapp1.0\DTO.pdb

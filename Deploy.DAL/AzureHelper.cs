@@ -11,7 +11,7 @@ namespace Deploy.DAL
         {
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("ansible");
+            CloudBlobContainer container = blobClient.GetContainerReference("deployments");
 
             SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy();
             sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddHours(3);

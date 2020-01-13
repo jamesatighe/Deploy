@@ -46,7 +46,6 @@ namespace Deploy
                {
                    options.AddPolicy("Admins", policyBuilder => policyBuilder.RequireRole("DeployAdmins"));
                });
-            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("HangFireDB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,11 +89,6 @@ namespace Deploy
                     
               });
 
-            app.UseHangfireServer();
-            app.UseHangfireDashboard("/jobs", new DashboardOptions
-            {
-                Authorization = new[] { new MyAuthorizationFilter() }
-            });
         }
     }
 }

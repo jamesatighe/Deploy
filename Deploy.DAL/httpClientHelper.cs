@@ -180,7 +180,7 @@ namespace Deploy.DAL
             string[] Keys = new string[3];
             CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("ansible/Keys");
+            CloudBlobContainer container = blobClient.GetContainerReference("keys");
             CloudBlockBlob blockBlob = container.GetBlockBlobReference("keys.txt");
 
             string tempkeys;

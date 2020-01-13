@@ -1,0 +1,45 @@
+﻿@model Deploy.ViewModel.TennantDeployParams
+
+@{
+    ViewData["Title"] = "TempManagement";
+}
+<h2>Template Parameter Upload</h2>
+<div>
+    <p>
+        This page can be used to automatically update the deployment site with new template parameters.
+    </p>
+    <p>
+        Download the template file. Edit to your needs then click browse, select the file and click upload.
+    </p>
+</div>
+<p><h3> CSV Download Links</h3></p>
+<div>
+
+        <p>
+            <a asp-action="Download" asp-controller="TempManagement" class="btn btn-info btn-default" asp-route-type="DeployType"><span class="glyphicon glyphicon-download"></span> Deployment Type</a>
+            <a asp-action="Download" asp-controller="TempManagement" class="btn btn-info btn-default" asp-route-type="DeployChoices"><span class="glyphicon glyphicon-download"></span> Deployment Choices</a>
+            <a asp-action="Download" asp-controller="TempManagement" class="btn btn-info btn-default"><span class="glyphicon glyphicon-download"></span> Deployment Parameters</a>
+        </p>
+   
+</div>
+
+@using (@Html.BeginForm("Index", "TempManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div>
+        <label class="btn btn-primary btn-lg" for="files">
+            <input id="files" name="files" type="file" multiple style="display:none" onchange="$('#upload-file-info').html($(this).val());" /> Browse
+        </label>
+        <span class="label label-info" id="upload-file-info"></span>
+    </div>
+    <div style="margin-top:10px">
+        <input type="submit" class="btn btn-success btn-lg navbtn" name="Submit" id="Submit" value="Upload" />
+    </div>
+}
+<div>
+    <p><h4>@ViewBag.Message</h4></p>
+    <p><h4>@ViewBag.ChoiceResult</h4></p>
+    <p><h4>@ViewBag.ParamResult</h4></p>
+</div>
+
+
+
