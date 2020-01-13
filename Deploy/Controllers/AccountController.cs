@@ -17,7 +17,7 @@ namespace Deploy.Controllers
         public IActionResult SignIn()
         {
             return Challenge(
-                new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
+                new Microsoft.AspNetCore.Authentication.AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         //
@@ -26,7 +26,7 @@ namespace Deploy.Controllers
         public IActionResult SignOut()
         {
             var callbackUrl = Url.Action(nameof(SignedOut), "Account", values: null, protocol: Request.Scheme);
-            return SignOut(new AuthenticationProperties { RedirectUri = callbackUrl },
+            return SignOut(new Microsoft.AspNetCore.Authentication.AuthenticationProperties { RedirectUri = callbackUrl },
                 CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
 

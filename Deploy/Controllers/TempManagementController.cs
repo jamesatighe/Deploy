@@ -36,7 +36,7 @@ namespace Deploy.Controllers
             long size = 0;
             foreach (var file in files)
             {
-                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim('"');
                 filename = filename.Split(Path.DirectorySeparatorChar).Last();
                 filename = hostingEnv.WebRootPath + $@"\csv\{filename}";
 
@@ -68,7 +68,8 @@ namespace Deploy.Controllers
 
                     for (var i = 1; i < csv.Length; i++)
                     {
-                        var results = _context.DeployList.Where(d => d.DeployName == csv[i].Split(',')[0]).FirstOrDefault();
+                        var depname = csv[i].Split(',')[0];
+                        var results = _context.DeployList.Where(d => d.DeployName == depname).FirstOrDefault();
                         if (results != null)
                         {
                             ViewBag.Message = "Deployment Type already exists.";

@@ -15,3 +15,11 @@ C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL
 C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.dll
 C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.pdb
 C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.csprojAssemblyReference.cache
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\bin\Debug\netcoreapp1.0\Deploy.DAL.deps.json
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\bin\Debug\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\bin\Debug\netcoreapp1.0\Deploy.DAL.pdb
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.csprojAssemblyReference.cache
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.AssemblyInfoInputs.cache
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.AssemblyInfo.cs
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.dll
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.DAL\obj\Debug\netcoreapp1.0\Deploy.DAL.pdb

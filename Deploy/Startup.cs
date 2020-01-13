@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Deploy.DAL;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace Deploy
 {
@@ -48,23 +50,49 @@ namespace Deploy
             // Add framework services.
             services.AddMvc();
 
+            //Logging
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddDebug();
+            });
+
             //services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
             services.AddDbContext<DeployDBContext>(options => options.UseSqlServer(Configuration["appSettings:connectionStrings:Deploy"]));
             services.AddOptions();
             services.Configure<AzureStorageConfig>(Configuration.GetSection("AzureStorageConfig"));
+
+            //Auth
             services.AddAuthentication(
-            SharedOptions => SharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+            SharedOptions =>
+            {
+                SharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddOpenIdConnect(SharedOptions =>
+            {
+                SharedOptions.Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"];
+                SharedOptions.ClientSecret = Configuration["Authentication:AzureAd:ClientSecret"];
+                SharedOptions.ClientId = Configuration["Authentication:AzureAd:ClientId"];
+                SharedOptions.CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"];
+                SharedOptions.ResponseType = OpenIdConnectResponseType.IdToken;
+            });
+
             services.AddAuthorization(options =>
                {
                    options.AddPolicy("Admins", policyBuilder => policyBuilder.RequireRole("DeployAdmins"));
                });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/SignIn";
+                    options.LogoutPath = "/Account/SignOut";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+
 
             if (env.IsDevelopment())
             {
@@ -78,16 +106,16 @@ namespace Deploy
 
             app.UseStaticFiles();
 
-            app.UseCookieAuthentication();
+            app.UseAuthentication();
 
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
-            {
-                ClientId = Configuration["Authentication:AzureAd:ClientId"],
-                ClientSecret = Configuration["Authentication:AzureAd:ClientSecret"],
-                Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"],
-                CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"],
-                ResponseType = OpenIdConnectResponseType.IdToken
-            });
+            //app.UseAuthentication(new OpenIdConnectOptions
+            //{
+            //    ClientId = Configuration["Authentication:AzureAd:ClientId"],
+            //    ClientSecret = Configuration["Authentication:AzureAd:ClientSecret"],
+            //    Authority = Configuration["Authentication:AzureAd:AADInstance"] + Configuration["Authentication:AzureAd:TenantId"],
+            //    CallbackPath = Configuration["Authentication:AzureAd:CallbackPath"],
+            //    ResponseType = OpenIdConnectResponseType.IdToken
+            //});
 
             app.UseMvc(routes =>
             {

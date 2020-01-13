@@ -293,7 +293,7 @@ namespace Deploy.Service
             QueueItem.status = "Complete";
             _context.Update(QueueItem);
 
-            await _context.SaveChangesAsync();
+            var content = await _context.SaveChangesAsync();
             return results;
 
         }

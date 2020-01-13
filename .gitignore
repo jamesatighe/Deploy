@@ -3,3 +3,5 @@
 ################################################################################
 
 /.vs/Deploy/v15/Server/sqlite3
+/Deploy/bin/Release/netcoreapp2.2/azurekeyvault.json
+/.vs/Deploy/v16/Server/sqlite3

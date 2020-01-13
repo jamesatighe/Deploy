@@ -10,3 +10,14 @@ C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.csproj.CopyComplete
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.dll
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.pdb
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp1.1\Deploy.Service.deps.json
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp1.1\Deploy.Service.dll
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp1.1\Deploy.Service.pdb
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp1.1\Deploy.DAL.dll
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp1.1\Deploy.DAL.pdb
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.csprojAssemblyReference.cache
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.AssemblyInfoInputs.cache
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.AssemblyInfo.cs
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.csproj.CopyComplete
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.dll
+C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp1.1\Deploy.Service.pdb
