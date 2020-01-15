@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 
 namespace Deploy.Controllers
 {
@@ -39,7 +42,8 @@ namespace Deploy.Controllers
                 string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim('"');
                 filename = filename.Split(Path.DirectorySeparatorChar).Last();
                 filename = hostingEnv.WebRootPath + $@"\csv\{filename}";
-
+                string filenameNoExt = System.IO.Path.GetFileNameWithoutExtension(filename);
+                
                 size += file.Length;
                 using (FileStream fs = System.IO.File.Create(filename))
                 {
@@ -49,49 +53,86 @@ namespace Deploy.Controllers
 
                 string[] csv = System.IO.File.ReadAllLines(filename);
                 //validate if valid csv file
-                if (csv[0] == "ParameterDeployType,ParameterName,ParameterType,ParameterToolTip")
-                {
-                    for (var i = 1; i < csv.Length; i++)
-                    {
-                        var DeployParams = new DeployParam();
-                        DeployParams.ParameterDeployType = csv[i].Split(',')[0];
-                        DeployParams.ParameterName = csv[i].Split(',')[1];
-                        DeployParams.ParameterType = csv[i].Split(',')[2];
-                        DeployParams.ParamToolTip = csv[i].Split(',')[3];
-                        _context.Add(DeployParams);
-                        _context.SaveChanges();
-                    }
-                    ViewBag.Message = "Parameter file uploaded successfully!";
-                }
-                else if (csv[0] == "DeployName,DeployValue,DeployType")
+                if (csv[0] == "{")
                 {
 
-                    for (var i = 1; i < csv.Length; i++)
+                    string joined = string.Join(Environment.NewLine, csv);
+                    dynamic o = JObject.Parse(joined);
+
+
+                    foreach (var param in o.parameters)
                     {
-                        var depname = csv[i].Split(',')[0];
-                        var results = _context.DeployList.Where(d => d.DeployName == depname).FirstOrDefault();
-                        if (results != null)
+                        var tempparam = param.Name;
+                        var tempValue = param.Value;
+                        string type = string.Empty;
+                        string defaultValue = string.Empty;
+                        string description = string.Empty;
+                        foreach (JProperty x in (JToken)tempValue)
                         {
-                            ViewBag.Message = "Deployment Type already exists.";
+                            string name = x.Name;
+                            JToken value = x.Value;
+                            if (name == "type")
+                            {
+                                type = value.ToString();
+                            }
+                            if (name == "defaultValue")
+                            {
+                                defaultValue = value.ToString();
+                            }
+                            if (name == "metadata")
+                            {
+                                JToken props = x.First.First;
+
+                                foreach (dynamic prop in props)
+                                {
+                                    JToken metaValue = prop.Value;
+                                    description = metaValue.ToString();
+                                }
+                            }
                         }
-                        else
-                        {
-                            var DeployList = new DeployList();
-                            DeployList.DeployName = csv[i].Split(',')[0];
-                            DeployList.DeployValue = csv[i].Split(',')[1];
-                            DeployList.DeployType = csv[i].Split(',')[2];
-                            _context.Add(DeployList);
-                            _context.SaveChanges();
-                            ViewBag.Message = "Type file uploaded successfully!";
-                        }
+
+                        var DeployParams = new DeployParam();
+                        DeployParams.ParameterDeployType = filenameNoExt;
+                        DeployParams.ParameterName = tempparam;
+                        DeployParams.ParameterType = type;
+                        DeployParams.ParamToolTip = description;
+                        _context.Add(DeployParams);
+                        _context.SaveChanges();
+                        ViewBag.Message = "Parameter file uploaded successfully!";
                     }
-                    
                 }
-                else if (csv[0] == "BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployCode")
+                //else if (csv[0] == "DeployName,DeployValue,DeployType")
+                //{
+
+                //    for (var i = 1; i < csv.Length; i++)
+                //    {
+                //        var depname = csv[i].Split(',')[0];
+                //        var results = _context.DeployList.Where(d => d.DeployName == depname).FirstOrDefault();
+                //        if (results != null)
+                //        {
+                //            ViewBag.Message = "Deployment Type already exists.";
+                //        }
+                //        else
+                //        {
+                //            var DeployList = new DeployList();
+                //            DeployList.DeployName = csv[i].Split(',')[0];
+                //            DeployList.DeployValue = csv[i].Split(',')[1];
+                //            DeployList.DeployType = csv[i].Split(',')[2];
+                //            _context.Add(DeployList);
+                //            _context.SaveChanges();
+                //            ViewBag.Message = "Type file uploaded successfully!";
+                //        }
+                //    }
+
+                //}
+                else if (csv[0] == "BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployCode,DeployType")
                 {
                     for (var i = 1; i < csv.Length; i++)
                     {
                         var DeployChoices = new DeployChoices();
+                        var DeployList = new DeployList();
+
+
                         DeployChoices.BaseOption = csv[i].Split(',')[0];
                         if (bool.Parse(csv[i].Split(',')[1]) == false)
                         {
@@ -115,6 +156,12 @@ namespace Deploy.Controllers
                         DeployChoices.DeployName = csv[i].Split(',')[6];
                         DeployChoices.DeployCode = csv[i].Split(',')[7];
                         _context.Add(DeployChoices);
+
+                        DeployList.DeployName = csv[i].Split(',')[0];
+                        DeployList.DeployValue = csv[i].Split(',')[6];
+                        DeployList.DeployType = csv[i].Split(',')[8];
+                        _context.Add(DeployList);
+
                         _context.SaveChanges();
                     }
                     ViewBag.Message = "Choices file uploaded successfully!";
@@ -129,6 +176,71 @@ namespace Deploy.Controllers
 
             return View();
         }
+
+        //[HttpPost]
+        //public IActionResult Index(IList<IFormFile> files)
+        //{
+        //    foreach (var file in files)
+        //    {
+        //        string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim('"');
+        //        filename = filename.Split(Path.DirectorySeparatorChar).Last();
+        //        filename = hostingEnv.WebRootPath + $@"\csv\temp\{filename}";
+        //        long size = 0;
+        //        size += file.Length;
+
+        //        using (FileStream fs = System.IO.File.Create(filename))
+        //        {
+        //            file.CopyTo(fs);
+        //            fs.Flush();
+        //        }
+        //        string[] json = System.IO.File.ReadAllLines(filename);
+        //        string joined = string.Join(Environment.NewLine, json);
+        //        dynamic o = JObject.Parse(joined);
+
+
+        //        foreach (var param in o.parameters)
+        //        {
+        //            var tempparam = param.Name;
+        //            var tempValue = param.Value;
+        //            string type = string.Empty;
+        //            string defaultValue = string.Empty;
+        //            string description = string.Empty;
+        //            foreach (JProperty x in (JToken)tempValue)
+        //            {
+        //                string name = x.Name;
+        //                JToken value = x.Value;
+        //                if (name == "type")
+        //                {
+        //                    type = value.ToString();
+        //                }
+        //                if (name == "defaultValue")
+        //                {
+        //                    defaultValue = value.ToString();
+        //                }
+        //                if (name == "metadata")
+        //                {
+        //                    JToken props = x.First.First;
+                            
+        //                    foreach (dynamic prop in props)
+        //                    {
+        //                        JToken metaValue = prop.Value;
+        //                        description = metaValue.ToString();
+        //                    }
+        //                }
+        //            }
+
+        //            var DeployParams = new DeployParam();
+        //            DeployParams.ParameterDeployType = "VM";
+        //            DeployParams.ParameterName = tempparam;
+        //            DeployParams.ParameterType = type;
+        //            DeployParams.ParamToolTip = description;
+        //            _context.Add(DeployParams);
+        //            _context.SaveChanges();
+        //            ViewBag.Message = "Parameter file uploaded successfully!";
+        //        }
+        //    }
+        //    return View();
+        //}
 
 
         public FileResult Download(string type)

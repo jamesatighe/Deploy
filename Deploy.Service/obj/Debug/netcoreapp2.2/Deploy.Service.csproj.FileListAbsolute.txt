@@ -9,3 +9,16 @@ C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.csproj.CopyComplete
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.dll
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.Service.deps.json
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.Service.dll
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.Service.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.DAL.dll
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.DAL.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.csprojAssemblyReference.cache
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.AssemblyInfoInputs.cache
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.AssemblyInfo.cs
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.csproj.CopyComplete
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.dll
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Debug\netcoreapp2.2\Deploy.Service.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.Service.runtimeconfig.json
+C:\Users\james\Source\Repos\Deploy\Deploy.Service\bin\Debug\netcoreapp2.2\Deploy.Service.runtimeconfig.dev.json

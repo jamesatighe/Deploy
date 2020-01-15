@@ -194,18 +194,43 @@ namespace Deploy.Service
                     resultsarr[1] = "TemplateValid";
                     resultsarr[2] = "";
 
-                    var queue = new Queue();
-                    queue.DeployTypeID = Id;
-                    queue.Order = queue.QueueID;
-                    queue.DeployName = deployTypes.DeployName;
-                    queue.Description = deployTypes.Description;
-                    queue.TennantName = deployTypes.Tennants.TennantName;
-                    queue.TennantID = deployTypes.TennantID;
-                    queue.azuredeploy = azuredeploy;
-                    queue.subscriptionID = subscriptionID;
-                    queue.resourcegroup = resourcegroupname;
-                    queue.resource = false;
 
+                    var queue = new Queue();
+                    var queueList = _context.Queue.ToList();
+                    if (queueList.Count() < 1)
+                    {
+                        queue.DeployTypeID = Id;
+                        queue.Order = 1;
+                        queue.DeployName = deployTypes.DeployName;
+                        queue.Description = deployTypes.Description;
+                        queue.TennantName = deployTypes.Tennants.TennantName;
+                        queue.TennantID = deployTypes.TennantID;
+                        queue.azuredeploy = azuredeploy;
+                        queue.subscriptionID = subscriptionID;
+                        queue.resourcegroup = resourcegroupname;
+                        queue.DependsOn = 0;
+                        queue.resource = false;
+
+                    }
+                    else
+                    {
+                        queue.DeployTypeID = Id;
+
+                        queue.DeployName = deployTypes.DeployName;
+                        queue.Description = deployTypes.Description;
+                        queue.TennantName = deployTypes.Tennants.TennantName;
+                        queue.TennantID = deployTypes.TennantID;
+                        queue.azuredeploy = azuredeploy;
+                        queue.subscriptionID = subscriptionID;
+                        queue.resourcegroup = resourcegroupname;
+                        queue.resource = false;
+
+                        //Get last item QueueID
+                        int id = queueList[queueList.Count() - 1].QueueID;
+                        queue.DependsOn = id;
+                        queue.Order = (queueList.Count()+1);
+
+                    }
                     _context.Add(queue);
                     await _context.SaveChangesAsync();
 
@@ -232,6 +257,9 @@ namespace Deploy.Service
         {
 
             var results = string.Empty;
+
+            //Get DeployType to allow update of DeployState
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
 
             //Get Queue Item to process
             var QueueItem = _context.Queue.Include(q => q.DeployTypes).Include(q => q.DeployTypes.Tennants).Where(q => q.DeployTypeID == Id).FirstOrDefault();
@@ -268,6 +296,10 @@ namespace Deploy.Service
             //Run main deploy REST API call to Azure
             var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy, false);
             JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
+
+            //Make DeployState as Queued
+            deployTypes.DeployState = "Queued";
+            _context.Update(deployTypes);
 
             //Run CheckQueue method to ensure deployment complete before moving onto next item.
             var check = CheckQueue(Id);

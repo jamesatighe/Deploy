@@ -9,7 +9,6 @@ using Deploy.Service;
 using Deploy.ViewModel;
 using System.Net;
 using Microsoft.Extensions.Options;
-using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Deploy.Controllers
@@ -27,6 +26,11 @@ namespace Deploy.Controllers
             _context = context;
             _storageConfig = config.Value;
             _service = new TenantParameters(_context, config);
+        }
+
+        public IActionResult Index(int Id)
+        {
+            return View();
         }
 
         public async Task<IActionResult> IndexSelected(int Id)
@@ -121,12 +125,24 @@ namespace Deploy.Controllers
             {
                 for (var i = 0; i < QueueList.Queues.Count(); i++)
                 {
+
+                    var order = QueueList.Queues[i].Order;
                     var queueItem = _context.Queue.Where(q => q.QueueID == QueueList.Queues[i].QueueID).FirstOrDefault();
+                    
                     if (queueItem != null)
                     {
-                        queueItem.Order = QueueList.Queues[i].Order;
+                        if (order > 1)
+                        {
+                            var prevQueueItem = QueueList.Queues.Where(q => q.Order == (order - 1)).FirstOrDefault();
+                            queueItem.Order = order;
+                            queueItem.DependsOn = prevQueueItem.QueueID;
+                        }
+                        else
+                        {
+                            queueItem.Order = QueueList.Queues[i].Order;
+                            queueItem.DependsOn = 0;
+                        }
                     }
-
                     _context.Update(queueItem);
                     await _context.SaveChangesAsync();
                 }

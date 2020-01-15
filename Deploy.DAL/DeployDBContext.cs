@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +17,7 @@ namespace Deploy.DAL
             : base(options)
         {
         }
+
 
         public DbSet<Tennant> Tennants { get; set; }
         public DbSet<DeployType> DeployTypes { get; set; }

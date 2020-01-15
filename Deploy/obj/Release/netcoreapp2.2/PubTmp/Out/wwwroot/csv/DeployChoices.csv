@@ -1,5 +1,0 @@
-BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployCode
-VirtualMachine,False,False,N/A,VirtualMachine/UbuntuNoDomainNoDisk.json,Parameters/UbuntuNoDomainNoDisk-{tennant}-{id}-param.json,UbuntuVM (No Domain, No Data Disk),UBUNTUNODOMNODISK
-VirtualMachine,True,False,N/A,VirtualMachine/UbuntuNoDisk.json,Parameters/UbuntuNoDisk-{tennant}-{id}-param.json,UbuntuVM (No Domain),UBUNTUNODOM
-VirtualMachine,False,True,N/A,VirtualMachine/UbuntuNoDomain.json,Parameters/UbuntuNoDomain-{tennant}-{id}-param.json,UbuntuVM (No Data Disk),UBUNTUNODISK
-VirtualMachine,True,True,N/A,VirtualMachine/Ubuntuk.json,Parameters/Ubuntu-{tennant}-{id}-param.json,UbuntuVM,UBUNTU

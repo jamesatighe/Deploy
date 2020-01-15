@@ -1,0 +1,10 @@
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\bin\Release\netcoreapp2.0\Deploy.DAL.deps.json
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\bin\Release\netcoreapp2.0\Deploy.DAL.runtimeconfig.json
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\bin\Release\netcoreapp2.0\Deploy.DAL.runtimeconfig.dev.json
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\bin\Release\netcoreapp2.0\Deploy.DAL.dll
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\bin\Release\netcoreapp2.0\Deploy.DAL.pdb
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Release\netcoreapp2.0\Deploy.DAL.csprojAssemblyReference.cache
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Release\netcoreapp2.0\Deploy.DAL.AssemblyInfoInputs.cache
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Release\netcoreapp2.0\Deploy.DAL.AssemblyInfo.cs
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Release\netcoreapp2.0\Deploy.DAL.dll
+C:\Users\james\Source\Repos\Deploy\Deploy.DAL\obj\Release\netcoreapp2.0\Deploy.DAL.pdb

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Deploy;
 
 namespace Deploy.DAL
 {
@@ -17,6 +19,7 @@ namespace Deploy.DAL
         public string resourcegroup { get; set; }
         public string azuredeploy { get; set; }
         public int Order { get; set; }
+        public int DependsOn { get; set; }
         public bool resource { get; set; }
         public virtual DeployType DeployTypes { get; set; }
     }

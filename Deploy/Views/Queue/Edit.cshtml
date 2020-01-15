@@ -64,6 +64,7 @@
                     </th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -99,12 +100,13 @@
                             </td>
                             <td hidden="hidden">
                             @Html.HiddenFor(modelItem => Model.Queues[i].azuredeploy, new { name = "Queues[" + i + "].azuredeploy" })
-                            @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypeID, new { name = "Queues[" + i + "].DeployTypeID" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypes, new { name = "Queues[" + i + "].DeployTypes" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].QueueID, new { name = "Queues[" + i + "].QueueID" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].resource, new { name = "Queues[" + i + "].resource" }))
-                            @Html.HiddenFor(modelItem => Model.Queues[i].subscriptionID, new { name = "Queues[" + i + "].subscriptionID" }))
+                            @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypeID, new { name = "Queues[" + i + "].DeployTypeID" })
+                            @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypes, new { name = "Queues[" + i + "].DeployTypes" })
+                            @Html.HiddenFor(modelItem => Model.Queues[i].QueueID, new { name = "Queues[" + i + "].QueueID" })
+                            @Html.HiddenFor(modelItem => Model.Queues[i].resource, new { name = "Queues[" + i + "].resource" })
+                            @Html.HiddenFor(modelItem => Model.Queues[i].subscriptionID, new { name = "Queues[" + i + "].subscriptionID" })
                             @Html.HiddenFor(modelItem => Model.Queues[i].TennantID, new { name = "Queues[" + i + "].TennantID" }))
+                            @Html.HiddenFor(modelItem => Model.Queues[i].DependsOn, new {  name = "Queues[" + i + "].DependsOn" })
                             </td>
                         </tr>
 
