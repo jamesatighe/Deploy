@@ -802,7 +802,7 @@ ______           _           _____   ____________  ________   ___         _
 
                     else
                     {
-                      azuredeploy = deployTypes[i].AzureDeployName;
+                        azuredeploy = deployTypes[i].AzureDeployName;
                     }
                 }
                 var results = RESTApi.PostAction(tennantID, clientID, secret);
@@ -811,26 +811,32 @@ ______           _           _____   ____________  ________   ___         _
 
                 var getcontent = RESTApi.GetAsync(subscriptionID, resourcegroupname, accesstoken, azuredeploy);
 
-                if (await getcontent == null)
-                {
-                    deployTypes[i].DeployResult = " ";
-                }
-                else
-                {
-                    deployTypes[i].DeployResult = await getcontent;
-                }
-                if (getcontent.Result.Contains("\"provisioningState\":\"Succeeded"))
-                    queueItem.status = "Completed";
-                if (getcontent.Result.Contains("\"provisioningState\":\"Running"))
-                    queueItem.status = "Running";
-                if (getcontent.Result.Contains("\"provisioningState\":\"Accepted"))
-                    queueItem.status = "Accepted";
-                if (getcontent.Result.Contains("\"provisioningState\":\"Failed"))
-                    queueItem.status = "Failed";
-                if (getcontent.Result.Contains("Queued"))
-                    queueItem.status = "Queued";
 
-                _context.Update(queueItem);
+                if (queueItem != null)
+                {
+                    if (await getcontent == null)
+                    {
+                        deployTypes[i].DeployResult = " ";
+                    }
+                    else
+                    {
+                        deployTypes[i].DeployResult = await getcontent;
+                    }
+                    if (getcontent.Result.Contains("\"provisioningState\":\"Succeeded"))
+                        queueItem.status = "Completed";
+                    if (getcontent.Result.Contains("\"provisioningState\":\"Running"))
+                        queueItem.status = "Running";
+                    if (getcontent.Result.Contains("\"provisioningState\":\"Accepted"))
+                        queueItem.status = "Accepted";
+                    if (getcontent.Result.Contains("\"provisioningState\":\"Failed"))
+                        queueItem.status = "Failed";
+                    if (getcontent.Result.Contains("Queued"))
+                        queueItem.status = "Queued";
+
+                    _context.Update(queueItem);
+                }
+
+
                 _context.Update(deployTypes[i]);
                 await _context.SaveChangesAsync();
             }
