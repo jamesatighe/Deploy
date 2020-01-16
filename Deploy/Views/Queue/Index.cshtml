@@ -1,6 +1,201 @@
-﻿<h1>Index</h1>
+﻿@model Deploy.ViewModel.QueueViewModel
 
-<body>
-    Stuff!
-</body>
+@{
+    ViewData["Title"] = "Edit Queue";
+}
+
+<div id="DeleteWarning" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="font-size:18px;">
+                <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+                <p style="margin-top:15px">Are you sure you wish to delete this queue item?</p>
+                <p>Please confirm you choice, or cancel to return to the queue.</p>
+                <button id="DeleteWarningClose" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+                <button id="DeleteWarningOK" class="btn btn-danger btn-lg">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Deployment Queue</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.Queues.FirstOrDefault().TennantName)</span>
+</p>
+
+@*@{
+    var QueueRunning = 0;
+
+    for (var i = 0; i < Model.Queues.Count(); i++)
+    {
+        if (Model.Queues[i].status == "Running" || Model.Queues[i].status == "Complete" || Model.Queues[i].status == "Failed")
+        {
+            QueueRunning++;
+        }
+    }
+}*@
+@*@if (Model.Queues.FirstOrDefault().DeployTypeID != 0 && QueueRunning == 0)
+{*@
+<a asp-action="DeployfromQueue" class="btn btn-success btn-lg navbtn" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" asp-route-force="True"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+@*}*@
+<a asp-action="Index" asp-controller="DeployTypes" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+<form asp-action="Index">
+    <div class="form-horizontal">
+        <h4>Deployment Queue</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <table class="table tablesorter-bootstrap" id="queue">
+            <thead>
+                <tr id="header">
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Deploy Type
+                    </th>
+                    <th>
+                        Tenant Name
+                    </th>
+                    <th>
+                        Resource Group
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Queues.FirstOrDefault().DeployTypeID ==  0)
+                {
+                <tr><td>No items in Queue. . . </td></tr>
+                }
+                else
+                {
+                @for (var i = 0; i < Model.Queues.Count(); i++)
+                    {
+                <tr id=@i>
+                    <td>
+                        @Html.EditorFor(modelItem => Model.Queues[i].Description, new { name = "Queues[" + i + "].Description", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => Model.Queues[i].DeployName, new { name = "Queues[" + i + "].DeployName", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => Model.Queues[i].TennantName, new { name = "Queues[" + i + "].TennantName", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => Model.Queues[i].resourcegroup, new { name = "Queues[" + i + "].resourcegroup", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => Model.Queues[i].status, new { name = "Queues[" + i + "].status", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td class="order" hidden="hidden">
+                        @Html.EditorFor(modelItem => Model.Queues[i].Order, new { name = "Queues[" + i + "].Order", htmlAttributes = new { @readonly = "readonly" } })
+                    </td>
+                    <td>
+                        <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@Model.Queues[i].QueueID">Delete</a>
+                    </td>
+                    <td hidden="hidden">
+                        @Html.HiddenFor(modelItem => Model.Queues[i].azuredeploy, new { name = "Queues[" + i + "].azuredeploy" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypeID, new { name = "Queues[" + i + "].DeployTypeID" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].DeployTypes, new { name = "Queues[" + i + "].DeployTypes" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].QueueID, new { name = "Queues[" + i + "].QueueID" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].resource, new { name = "Queues[" + i + "].resource" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].subscriptionID, new { name = "Queues[" + i + "].subscriptionID" })
+                        @Html.HiddenFor(modelItem => Model.Queues[i].TennantID, new { name = "Queues[" + i + "].TennantID" }))
+                        @Html.HiddenFor(modelItem => Model.Queues[i].DependsOn, new {  name = "Queues[" + i + "].DependsOn" })
+                    </td>
+                </tr>
+
+                    }
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</form>
+
+@section Scripts {
+    <script language='javascript' type='text/javascript'>
+        $(document).ready(function () {
+            var tRow = document.getElementById('queue').getElementsByTagName('tr');
+            var count = 0;
+            for (var i = 1; i < tRow.length; i++) {
+                var td = tRow[i].cells;
+                for (var y = 0; y < td.length; y++) {
+                    if (td[y].innerHTML.match(/status/)) {
+                        if (td[y].innerHTML.match(/OK to Deploy/)) {
+                            count++;
+                        }
+                    }
+                }
+
+
+            }
+            if (count < 1) {
+                $('#queue tbody').sortable({
+                    update: function (event, ui) {
+
+                        var tRow = document.getElementById('queue').getElementsByTagName('tr');
+
+                        for (var i = 1; i < tRow.length; i++) {
+                            var td = tRow[i].cells;
+                            for (var y = 0; y < td.length; y++) {
+                                if (td[y].innerHTML.match(/Order/)) {
+                                    html = td[y].getElementsByTagName('input')[0]
+                                    html.value = i
+                                }
+
+                            }
+
+                        }
+                        $('form').submit();
+
+                    }
+
+
+                });
+            }
+
+            var ua = navigator.userAgent.toLowerCase();
+            var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+
+
+
+
+            var item_to_delete;
+            $(".deleteItem").bind(ios_devices, function () {
+                $('#DeleteWarning').fadeIn();
+                item_to_delete = $(this).data('id');
+                $('#DeleteWarning').fadeIn();
+            });
+            $('#DeleteWarningOK').bind(ios_devices, function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Queue/Delete?id=" + item_to_delete,
+                    contentType: "application/text",
+                    success: function(result) {
+                        $('#DeleteWarning').fadeOut();
+                        var url = window.location.href;
+                        window.location.href = url;
+                    }
+                });
+
+            });
+            $('#DeleteWarningClose').bind(ios_devices, function () {
+                $('#responsive').fadeOut();
+                $('#DeleteWarning').fadeOut();
+            });
+
+
+    });
+
+    </script>
+}
+
 

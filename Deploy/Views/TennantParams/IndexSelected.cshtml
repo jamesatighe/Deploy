@@ -50,7 +50,7 @@
   <a asp-action="Edit" asp-route-id="@Model.DeployTypeID" class="btn btn-warning btn-lg navbtn"><span class="glyphicon glyphicon-wrench"></span> Edit</a>
   <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-success btn-lg navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
   <a id="deleteItem" class="deleteItem btn btn-danger btn-default btn-lg navbtn" data-id="@Model.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</a>
-  <a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+  <a asp-action="Index" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
     @if (Model.DeploySaved == "Yes")
     {
         <a id="DeployToAzure" asp-action="QueueDeployment" asp-controller="TennantParams" asp-route-id="@Model.DeployTypeID" class="btn btn-danger btn-lg navbtn"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>

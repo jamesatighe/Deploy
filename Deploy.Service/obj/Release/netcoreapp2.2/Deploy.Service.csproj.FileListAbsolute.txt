@@ -22,3 +22,5 @@ C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Release\netcoreapp2.2\Depl
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Release\netcoreapp2.2\Deploy.Service.csproj.CopyComplete
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Release\netcoreapp2.2\Deploy.Service.dll
 C:\Users\james\Source\Repos\Deploy\Deploy.Service\obj\Release\netcoreapp2.2\Deploy.Service.pdb
+C:\Users\james.tighe\source\repos\Deploy\Deploy.Service\bin\Release\netcoreapp2.2\Deploy.Service.runtimeconfig.json
+C:\Users\james.tighe\source\repos\Deploy\Deploy.Service\bin\Release\netcoreapp2.2\Deploy.Service.runtimeconfig.dev.json

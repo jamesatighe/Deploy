@@ -1,41 +1,193 @@
-@model Deploy.ViewModel.TenantDeploys
+﻿@model Deploy.ViewModel.TenantDeploys
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+
+<div id="DeleteWarning" class="modal" tabindex="1" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div style="font-size:18px;">
+                <i class="fa fa-2x fa-exclamation-triangle" aria-hidden="true"></i><span style="font-size:32px"><b>  Warning</b></span>
+                <p style="margin-top:15px">Are you sure you wish to delete this Deployment?</p>
+                <p>Please confirm you choice, or cancel to return.</p>
+                <button id="DeleteWarningClose" class="btn btn-success btn-lg" data-dismiss="modal" aria-label="Close">Close</button>
+                <button id="DeleteWarningOK" class="btn btn-danger btn-lg">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Deployment List</h2>
+<p>
+    You are currently working in company: <span style="font-weight:bold;font-size:20px;">@Html.DisplayFor(Model => Model.TennantName)</span>
+</p>
+
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="CreateNew" asp-route-id="@Model.TennantID" class="btn btn-success btn-lg navbtn">Create New</a>
+    <a asp-action="Index" asp-controller="Queue" asp-route-id="@Model.TennantID" class="btn btn-primary btn-lg navbtn">View Queue</a>
+    <a asp-action="CreateRedirect" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+
+    @{
+        var deployCount = 0;
+
+        for (var i = 0; i < Model.DeployTypes.Count(); i++)
+        {
+            if (Model.DeployTypes[i].DeployState != null)
+            {
+                deployCount++;
+            }
+        }
+        if (deployCount > 0)
+        {
+        <a id="GetDeploy" asp-action="GetDeployAll" asp-controller="TennantParams" asp-route-id="@Model.TennantID" class="btn btn-info btn-lg navbtn"><span class="glyphicon glyphicon-check"></span> Check</a>
+        }
+    }
 </p>
-<table class="table">
+@using (Html.BeginForm())
+{
+<p style="margin-top:10px;">
+    <label class="col-lg-1 center">Search: </label> @Html.TextBox("SearchString", null, new { @class = "form-control col-lg-8", id = "search" })
+    <input id="submit navbtn" onkeyup="checkSearchChanged()" class="btn btn-default clickable" style="margin-left:10px;" type="submit" value="Search" />
+</p>
+}
+<table class="table tablesorter-bootstrap">
     <thead>
         <tr>
-                <th>
-                    Deployment Name
-                </th>
             <th>
-                Tennant ID
+                Name
             </th>
+            <th>
+                Deploy Type
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                Resource Group
+            </th>
+            <th>
+                Saved
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Result
+            </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.DeployTypes) {
+        @foreach (var item in Model.DeployTypes) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DeployName)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tennants.TennantID)
+                @if (!string.IsNullOrEmpty(item.DeployName))
+                {
+                @Html.ActionLink(item.DeployName, "DeployParams", new { Id = item.DeployTypeID })
+                }
+
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.DeployTypeID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DeployTypeID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DeployTypeID">Delete</a>
+                @Html.DisplayFor(modelItem => item.DeployTypeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResourceGroupName)
+            </td>
+            <td>
+                @if (item.DeploySaved == "Yes")
+                {
+                <span class="glyphicon glyphicon-ok"></span>
+                }
+                else
+                {
+                <span class="glyphicon glyphicon-remove"></span>
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.DeployResult))
+                {
+                @if (item.DeployResult.Contains("\"provisioningState\":\"Succeeded"))
+                    {
+                <span class="glyphicon glyphicon-ok"><span style="font-family:'Segoe UI'; color:green"> Deployed</span></span>
+                    }
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Running"))
+                    {
+                <span class="glyphicon glyphicon-refresh"><span style="font-family:'Segoe UI'; color:orange"> Running</span></span>
+                    }
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Accepted"))
+                    {
+                <span class="glyphicon glyphicon-thumbs-up"><span style="font-family:'Segoe UI'; color:darkgreen"> Accepted</span></span>
+                    }
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Failed"))
+                    {
+                <span class="glyphicon glyphicon-warning-sign"><span style="font-family:'Segoe UI'; font-weight:bold; color:red"> Failed</span></span>
+                    }
+                    if (item.DeployResult.Contains("Queued"))
+                    {
+                <span class="glyphicon glyphicon-tasks"><span style="font-family:'Segoe UI'; color:orange"> Queued</span></span>
+
+                    }
+                }
+                else
+                {
+                @Html.DisplayFor(modelItem => item.DeployState)
+
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.DeployResult))
+                {
+                @Html.ActionLink("Result", "DeployResults", new { Id = item.DeployTypeID })
+                }
+            </td>
+            <td>
+                <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+                <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@item.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                @*<a asp-action="Delete" asp-route-id="@item.DeployTypeID" class="btn btn-danger btn-default navbtn"><span class="glyphicon glyphicon-remove"></span> Delete</a>*@
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script language='javascript' type='text/javascript'>
+        $(document).ready(function () {
+            var ua = navigator.userAgent.toLowerCase();
+            var ios_devices = ua.match(/(ipad|iphone)/) ? "touchstart" : "click";
+
+            var item_to_delete;
+            $(".deleteItem").bind(ios_devices, function () {
+                $('#DeleteWarning').fadeIn();
+                item_to_delete = $(this).data('id');
+                $('#DeleteWarning').fadeIn();
+            });
+            $('#DeleteWarningOK').bind(ios_devices, function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/Delete?id=" + item_to_delete,
+                    contentType: "application/text",
+                    success: function (result) {
+                        $('#DeleteWarning').fadeOut();
+                        var url = window.location.href;
+                        window.location.href = url;
+                    }
+                });
+
+            });
+            $('#DeleteWarningClose').bind(ios_devices, function () {
+                $('#responsive').fadeOut();
+                $('#DeleteWarning').fadeOut();
+            });
+        });
+    </script>
+}

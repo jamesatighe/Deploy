@@ -191,7 +191,7 @@ namespace Deploy.Controllers
         // GET: Deploy/Deploy/5
         public IActionResult Deploy(int Id)
         {
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = Id });
+            return RedirectToAction("Index", "DeployTypes", new { id = Id });
         }
 
         // GET: Deploy/Delete/5

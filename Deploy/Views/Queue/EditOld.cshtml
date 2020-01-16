@@ -38,7 +38,7 @@
 {
 <a asp-action="DeployfromQueue" class="btn btn-success btn-lg navbtn" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" asp-route-force="True"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
 }
-<a asp-action="IndexSelected" asp-controller="DeployTypes" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
+<a asp-action="Index" asp-controller="DeployTypes" asp-route-id="@Model.Queues.FirstOrDefault().TennantID" class="btn btn-primary btn-lg navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
 <form asp-action="Edit">
     <div class="form-horizontal">
         <h4>Edit Deployment Queue</h4>

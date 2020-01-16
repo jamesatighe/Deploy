@@ -37,7 +37,6 @@ namespace Deploy
                 $"https://{config["azureKeyVault:vault"]}.vault.azure.net/",
                 config["azureKeyVault:clientId"],
                 config["azureKeyVault:clientSecret"]
-
                 );
             Configuration = builder.Build();
         }

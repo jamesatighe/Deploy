@@ -29,13 +29,10 @@ C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\CreateNew.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\Delete.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\DeployResults.cshtml.g.cs
-C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\Index.cshtml.g.cs
-C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\IndexSelected.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Home\About.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Home\Contact.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Home\PowerShell.cshtml.g.cs
-C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Queue\Edit.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Shared\Layout.cshtml.g.cs
 C:\Users\james.tighe\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Shared\_Layout.cshtml.g.cs
@@ -121,3 +118,7 @@ C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Deploy.cspro
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Deploy.dll
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Deploy.pdb
 C:\Users\james\Source\Repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Queue\Index.cshtml.g.cs
+C:\Users\james.tighe\source\repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Queue\EditOld.cshtml.g.cs
+C:\Users\james.tighe\source\repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\Queue\Index.cshtml.g.cs
+C:\Users\james.tighe\source\repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\IndexSelectedold.cshtml.g.cs
+C:\Users\james.tighe\source\repos\Deploy\Deploy\obj\Release\netcoreapp2.2\Razor\Views\DeployTypes\Index.cshtml.g.cs

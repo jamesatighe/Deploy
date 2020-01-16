@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\Deploy.csproj": {}
+    "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy\\Deploy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
+    "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj",
+        "projectUniqueName": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj",
         "projectName": "Deploy.DAL",
-        "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj",
-        "packagesPath": "C:\\Users\\james\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\obj\\",
+        "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj",
+        "packagesPath": "C:\\Users\\james.tighe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\james\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\james.tighe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -51,7 +51,11 @@
             },
             "Microsoft.AspNetCore.Mvc": {
               "target": "Package",
-              "version": "[1.1.1, )"
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Razor": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -116,20 +120,20 @@
         }
       }
     },
-    "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj": {
+    "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj",
+        "projectUniqueName": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj",
         "projectName": "Deploy.Service",
-        "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj",
-        "packagesPath": "C:\\Users\\james\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\obj\\",
+        "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj",
+        "packagesPath": "C:\\Users\\james.tighe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\james\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\james.tighe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -142,8 +146,8 @@
         "frameworks": {
           "netcoreapp2.2": {
             "projectReferences": {
-              "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
-                "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj"
+              "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
+                "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj"
               }
             }
           }
@@ -167,7 +171,7 @@
             },
             "Microsoft.AspNetCore.Mvc": {
               "target": "Package",
-              "version": "[1.1.1, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -228,20 +232,20 @@
         }
       }
     },
-    "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\Deploy.csproj": {
+    "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy\\Deploy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\Deploy.csproj",
+        "projectUniqueName": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy\\Deploy.csproj",
         "projectName": "Deploy",
-        "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\Deploy.csproj",
-        "packagesPath": "C:\\Users\\james\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy\\obj\\",
+        "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy\\Deploy.csproj",
+        "packagesPath": "C:\\Users\\james.tighe\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\james\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\james.tighe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -254,11 +258,11 @@
         "frameworks": {
           "netcoreapp2.2": {
             "projectReferences": {
-              "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
-                "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj"
+              "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj": {
+                "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.DAL\\Deploy.DAL.csproj"
               },
-              "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj": {
-                "projectPath": "C:\\Users\\james\\Source\\Repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj"
+              "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj": {
+                "projectPath": "C:\\Users\\james.tighe\\source\\repos\\Deploy\\Deploy.Service\\Deploy.Service.csproj"
               }
             }
           }
@@ -366,7 +370,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[1.1.0-msbuild3-final, )"
+              "version": "[2.2.4, )"
             },
             "NETStandard.Library": {
               "target": "Package",
@@ -383,10 +387,6 @@
             "System.Net.Http": {
               "target": "Package",
               "version": "[4.3.4, )"
-            },
-            "System.Runtime.Serialization.Formatters": {
-              "target": "Package",
-              "version": "[4.3.0, )"
             },
             "System.Text.RegularExpressions": {
               "target": "Package",

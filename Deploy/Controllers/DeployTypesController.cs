@@ -40,8 +40,35 @@ namespace Deploy.Controllers
             return View();
         }
 
-        public async Task<IActionResult> IndexSelected(int Id,string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
+        public async Task<IActionResult> Index(int Id, string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
         {
+            //var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Include(x => x.TennantParams).Where(d => d.TennantID == Id).ToListAsync();
+
+            //var viewModel = new Deploy.ViewModel.TenantDeploys();
+            //viewModel.TennantID = Id;
+            //viewModel.TennantName = "";
+            //viewModel.TennantName = deployTypes.First().Tennants.TennantName;
+            //viewModel.DeployTypes = new List<DeployType>();
+            //foreach (var deployType in deployTypes)
+            //{
+            //    viewModel.DeployTypes.Add(new DeployType()
+            //    {
+            //        DeployName = deployType.DeployName,
+            //        Description = deployType.Description,
+            //        DeployTypeID = deployType.DeployTypeID,
+            //        TennantID = deployType.TennantID,
+            //        Tennants = deployType.Tennants,
+            //        DeploySaved = deployType.DeploySaved,
+            //        TennantParams = deployType.TennantParams,
+            //        DeployState = deployType.DeployState,
+            //        DeployResult = deployType.DeployResult,
+            //        AzureDeployName = deployType.AzureDeployName,
+            //        ResourceGroupName = deployType.ResourceGroupName
+            //    });
+            //}
+
+            //return View(viewModel);
+
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "DeployName_desc" : "";
 
             ViewBag.DeployExists = DeployExists;
@@ -53,7 +80,7 @@ namespace Deploy.Controllers
             if (DeployExist != null)
             {
                 var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Include(x => x.TennantParams).Where(d => d.TennantID == Id).ToListAsync();
- 
+
                 //var deployTypes = await _context.DeployTypes.Where(d => d.TennantID == Id).ToListAsync();
                 var viewModel = new Deploy.ViewModel.TenantDeploys();
                 viewModel.TennantID = Id;
@@ -102,9 +129,142 @@ namespace Deploy.Controllers
             else
             {
 
-                return RedirectToAction("CreateNew", new { id = Id });;
+                return RedirectToAction("CreateNew", new { id = Id }); ;
+            }
+
+        }
+
+        public async Task<IActionResult> IndexSelected(int Id, string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
+        {
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "DeployName_desc" : "";
+
+            ViewBag.DeployExists = DeployExists;
+            ViewBag.TemplateInvalid = TemplateInvalid;
+            ViewBag.TemplateError = TemplateError;
+
+
+            var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
+            if (DeployExist != null)
+            {
+                var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Include(x => x.TennantParams).Where(d => d.TennantID == Id).ToListAsync();
+
+                //var deployTypes = await _context.DeployTypes.Where(d => d.TennantID == Id).ToListAsync();
+                var viewModel = new Deploy.ViewModel.TenantDeploys();
+                viewModel.TennantID = Id;
+                viewModel.TennantName = "";
+                viewModel.TennantName = deployTypes.First().Tennants.TennantName;
+                viewModel.DeployTypes = new List<DeployType>();
+                foreach (var deployType in deployTypes)
+                {
+                    viewModel.DeployTypes.Add(new DeployType()
+                    {
+                        DeployName = deployType.DeployName,
+                        Description = deployType.Description,
+                        DeployTypeID = deployType.DeployTypeID,
+                        TennantID = deployType.TennantID,
+                        Tennants = deployType.Tennants,
+                        DeploySaved = deployType.DeploySaved,
+                        TennantParams = deployType.TennantParams,
+                        DeployState = deployType.DeployState,
+                        DeployResult = deployType.DeployResult,
+                        AzureDeployName = deployType.AzureDeployName,
+                        ResourceGroupName = deployType.ResourceGroupName
+                    });
+                }
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToString();
+                    searchString = searchString.ToUpper();
+                    viewModel.DeployTypes = viewModel.DeployTypes.Where(t => t.DeployName.ToUpper().Contains(searchString)).ToList();
+                }
+
+                switch (sortOrder)
+                {
+                    case "DeployName_desc":
+                        viewModel.DeployTypes = viewModel.DeployTypes.OrderByDescending(t => t.DeployName).ToList();
+                        break;
+                    case "TenantName":
+                        viewModel.DeployTypes = viewModel.DeployTypes.OrderBy(t => t.DeployName).ToList();
+                        break;
+                    default:
+                        viewModel.DeployTypes = viewModel.DeployTypes.OrderBy(t => t.DeployName).ToList();
+                        break;
+                }
+                return View(viewModel);
+            }
+            else
+            {
+
+                return RedirectToAction("CreateNew", new { id = Id }); ;
             }
         }
+
+        //public async Task<IActionResult> Index(int Id,string sortOrder, string searchString, bool DeployExists, bool TemplateInvalid, string TemplateError)
+        //{
+        //    ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "DeployName_desc" : "";
+
+        //    ViewBag.DeployExists = DeployExists;
+        //    ViewBag.TemplateInvalid = TemplateInvalid;
+        //    ViewBag.TemplateError = TemplateError;
+
+
+        //    var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
+        //    if (DeployExist != null)
+        //    {
+        //        var deployTypes = await _context.DeployTypes.Include(x => x.Tennants).Include(x => x.TennantParams).Where(d => d.TennantID == Id).ToListAsync();
+ 
+        //        //var deployTypes = await _context.DeployTypes.Where(d => d.TennantID == Id).ToListAsync();
+        //        var viewModel = new Deploy.ViewModel.TenantDeploys();
+        //        viewModel.TennantID = Id;
+        //        viewModel.TennantName = "";
+        //        viewModel.TennantName = deployTypes.First().Tennants.TennantName;
+        //        viewModel.DeployTypes = new List<DeployType>();
+        //        foreach (var deployType in deployTypes)
+        //        {
+        //            viewModel.DeployTypes.Add(new DeployType()
+        //            {
+        //                DeployName = deployType.DeployName,
+        //                Description = deployType.Description,
+        //                DeployTypeID = deployType.DeployTypeID,
+        //                TennantID = deployType.TennantID,
+        //                Tennants = deployType.Tennants,
+        //                DeploySaved = deployType.DeploySaved,
+        //                TennantParams = deployType.TennantParams,
+        //                DeployState = deployType.DeployState,
+        //                DeployResult = deployType.DeployResult,
+        //                AzureDeployName = deployType.AzureDeployName,
+        //                ResourceGroupName = deployType.ResourceGroupName
+        //            });
+        //        }
+
+        //        if (!string.IsNullOrEmpty(searchString))
+        //        {
+        //            searchString = searchString.ToString();
+        //            searchString = searchString.ToUpper();
+        //            viewModel.DeployTypes = viewModel.DeployTypes.Where(t => t.DeployName.ToUpper().Contains(searchString)).ToList();
+        //        }
+
+        //        switch (sortOrder)
+        //        {
+        //            case "DeployName_desc":
+        //                viewModel.DeployTypes = viewModel.DeployTypes.OrderByDescending(t => t.DeployName).ToList();
+        //                break;
+        //            case "TenantName":
+        //                viewModel.DeployTypes = viewModel.DeployTypes.OrderBy(t => t.DeployName).ToList();
+        //                break;
+        //            default:
+        //                viewModel.DeployTypes = viewModel.DeployTypes.OrderBy(t => t.DeployName).ToList();
+        //                break;
+        //        }
+        //        return View(viewModel);
+        //    }
+        //    else
+        //    {
+
+        //        return RedirectToAction("CreateNew", new { id = Id });;
+        //    }
+        //}
 
 
 
@@ -188,7 +348,7 @@ namespace Deploy.Controllers
             var DeployExist = _context.DeployTypes.Where(d => d.TennantID == Id).FirstOrDefault();
             if (DeployExist != null)
             {
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = Id });
+                return RedirectToAction("Index", "DeployTypes", new { id = Id });
             }
             else
             {
@@ -198,7 +358,7 @@ namespace Deploy.Controllers
 
         public IActionResult Deploy(int Id)
         {
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = Id });
+            return RedirectToAction("Index", "DeployTypes", new { id = Id });
         }
 
         public IActionResult DeployParams(int Id)
@@ -247,7 +407,7 @@ namespace Deploy.Controllers
                 await _context.SaveChangesAsync();
   
 
-                return RedirectToAction("IndexSelected", new { id = DeployChoices.TennantID });
+                return RedirectToAction("Index", new { id = DeployChoices.TennantID });
             }
             return View(choices);
         }
@@ -305,7 +465,7 @@ namespace Deploy.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("IndexSelected", new { id = deployType.TennantID });
+                return RedirectToAction("Index", new { id = deployType.TennantID });
             }
             ViewData["TennantID"] = new SelectList(_context.Tennants, "TennantID", "TennantID", deployType.TennantID);
             return View(deployType);

@@ -192,9 +192,9 @@ namespace Deploy.Controllers
                     }
                     await _context.SaveChangesAsync();
                 }
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = tennantDeployParams.TennantID });
+                return RedirectToAction("Index", "DeployTypes", new { id = tennantDeployParams.TennantID });
             }
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = tennantDeployParams.TennantID });
+            return RedirectToAction("Index", "DeployTypes", new { id = tennantDeployParams.TennantID });
         }
 
         // GET: TennantParams/Edit/5
@@ -308,9 +308,9 @@ namespace Deploy.Controllers
                     }
                     
                 }
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = tennantDeployParams.TennantID });
+                return RedirectToAction("Index", "DeployTypes", new { id = tennantDeployParams.TennantID });
             }
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = tennantDeployParams.TennantID });
+            return RedirectToAction("Index", "DeployTypes", new { id = tennantDeployParams.TennantID });
         }
 
         // POST: Deploy/Delete/5
@@ -357,7 +357,7 @@ namespace Deploy.Controllers
             }
             else
             {
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+                return RedirectToAction("Index", "DeployTypes", new { id = deployTypes.TennantID });
             }
         }
 
@@ -379,45 +379,8 @@ namespace Deploy.Controllers
             }
             else
             {
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+                return RedirectToAction("Index", "DeployTypes", new { id = deployTypes.TennantID });
             }
-        }
-
-
-
-
-        public async Task<IActionResult> DeployToAzureRDSSmall(int Id)
-        {
-            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdssmall")).ToListAsync();
-            string[]results = await _service.DeployRDSSmall(Id);
-            if (results[1] == "TemplateInvalid")
-            {
-                ViewBag.TemplateInvalid = results[1];
-                ViewBag.TemplateError = results[2];
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID, TemplateInvalid = true, TemplateError = results[2] });
-            }
-            else
-            {
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
-            }
-  
-        }
-
-        public async Task<IActionResult> DeployToAzureRDSMed(int Id)
-        {
-            var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.AzureDeployName.Contains("rdsmedsolution")).ToListAsync();
-            string[]results = await _service.DeployRDSMed(Id);
-            if (results[1] == "TemplateInvalid")
-            {
-                ViewBag.TemplateInvalid = results[1];
-                ViewBag.TemplateError = results[2];
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID, TemplateInvalid = true, TemplateError = results[2] });
-            }
-            else
-            {
-                return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes[0].TennantID });
-            }
-
         }
 
         public async Task<IActionResult> GetDeploy(int Id)
@@ -425,7 +388,7 @@ namespace Deploy.Controllers
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             await _service.GetDeploy(Id);
 
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+            return RedirectToAction("Index", "DeployTypes", new { id = deployTypes.TennantID });
         }
 
 
@@ -434,7 +397,7 @@ namespace Deploy.Controllers
             var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.DeployState != null).ToListAsync();
             await _service.GetDeployAll(Id);
 
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.FirstOrDefault().TennantID });
+            return RedirectToAction("Index", "DeployTypes", new { id = deployTypes.FirstOrDefault().TennantID });
         }
 
         public async Task<IActionResult> SaveToAzure(int Id)
@@ -443,7 +406,7 @@ namespace Deploy.Controllers
             //var tennantParams = await _context.TennantParams.Where(t => t.DeployTypeID == Id).ToListAsync();
             await _service.SaveToAzure(Id);
 
-            return RedirectToAction("IndexSelected", "DeployTypes", new { id = deployTypes.TennantID });
+            return RedirectToAction("Index", "DeployTypes", new { id = deployTypes.TennantID });
         }
 
         public static Stream GenerateStreamFromString(string s)

@@ -28,9 +28,29 @@ namespace Deploy.Controllers
             _service = new TenantParameters(_context, config);
         }
 
-        public IActionResult Index(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            return View();
+            var queues = await _context.Queue.Where(d => d.TennantID == Id).ToListAsync();
+
+            var viewModel = new Deploy.ViewModel.QueueViewModel();
+            viewModel.Queues = new List<Queue>();
+            foreach (var queue in queues)
+            {
+                viewModel.Queues.Add(new Queue()
+                {
+                    QueueID = queue.QueueID,
+                    DeployTypeID = queue.DeployTypeID,
+                    DeployName = queue.DeployName,
+                    Description = queue.Description,
+                    TennantID = queue.TennantID,
+                    TennantName = queue.TennantName,
+                    resourcegroup = queue.resourcegroup,
+                    status = queue.status,
+                    Order = queue.Order
+                });
+            }
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> IndexSelected(int Id)
@@ -46,11 +66,12 @@ namespace Deploy.Controllers
                     QueueID = queue.QueueID,
                     DeployTypeID = queue.DeployTypeID,
                     DeployName = queue.DeployName,
-                    Description = queue.DeployTypes.Description,
+                    Description = queue.Description,
                     TennantID = queue.TennantID,
                     TennantName = queue.TennantName,
+                    resourcegroup = queue.resourcegroup,
                     status = queue.status,
-                    Order = queue.QueueID
+                    Order = queue.Order
                 });
             }
 
@@ -58,8 +79,9 @@ namespace Deploy.Controllers
             return View(viewModel);
         }
 
+    
 
-        public async Task<IActionResult> Edit(int? Id, string sortOrder)
+        public async Task<IActionResult> Index(int? Id, string sortOrder)
         {
 
             ViewBag.OrderSortParm = string.IsNullOrEmpty(sortOrder) ? "Order" : "";
@@ -80,7 +102,6 @@ namespace Deploy.Controllers
                     TennantID = Tenant.TennantID,
                     DeployTypeID = 0,
                 });
-                Console.WriteLine("Test");
                 return View(viewModel);
             }
             else
@@ -119,7 +140,7 @@ namespace Deploy.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(QueueViewModel QueueList)
+        public async Task<IActionResult> Index(QueueViewModel QueueList)
         {
             if (ModelState.IsValid)
             {
@@ -146,11 +167,11 @@ namespace Deploy.Controllers
                     _context.Update(queueItem);
                     await _context.SaveChangesAsync();
                 }
-                return RedirectToAction("Edit", new { id = QueueList.Queues.FirstOrDefault().TennantID });
+                return RedirectToAction("Index", new { id = QueueList.Queues.FirstOrDefault().TennantID });
             }
             else
             {
-                return RedirectToAction("Edit", new { id = QueueList.Queues.FirstOrDefault().TennantID });
+                return RedirectToAction("Index", new { id = QueueList.Queues.FirstOrDefault().TennantID });
             }
         }
 
@@ -173,61 +194,16 @@ namespace Deploy.Controllers
 
         public async Task<IActionResult> DeployfromQueue(int id, bool Force)
         {
-            var QueueList = await _context.Queue.Where(q => q.TennantID == id).Where(q => q.status != "Completed").OrderBy(q => q.Order).ToListAsync();
-            var CobwebVars = await _context.Tennants.Where(t => t.TennantName == "Cobweb Solutions Ltd - IaaS").SingleOrDefaultAsync();
+            var QueueList = await _context.Queue.Where(q => q.TennantID == id).Where(q => q.status == "New").OrderBy(q => q.Order).ToListAsync();
             for (var i = 0; i < QueueList.Count(); i ++)
             {
-                //var Id = QueueList[i].DeployTypeID.ToString();
                 var Id = QueueList[i].DeployTypeID;
                 var TenantId = QueueList[i].TennantID.ToString();
-
-                ////Get Access Token for REST Call
-                //var results = RESTApi.PostAction(CobwebVars.AzureTennantID, CobwebVars.AzureClientID, CobwebVars.AzureClientSecret);
-                //RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(results.Result);
-                //string accesstoken = AccessToken.access_token;
-
-                //StringBuilder tempjson = new StringBuilder();
-                //tempjson.AppendLine("{");
-                //tempjson.AppendLine("\t\"parameters\": {");
-                //tempjson.AppendLine("\t\t\"namespaceName\": \"cobwebdeployment\",");
-                //tempjson.AppendLine("\t\t\"resourceGroupName\": \"Deployment\",");
-                //tempjson.AppendLine("\t\t\"queueName\": \"" + TenantId + "\",");
-                //tempjson.AppendLine("\t\t\"api-version\": \"2015-08-01\",");
-                //tempjson.AppendLine("\t\t\"subscriptionId\": \"" + CobwebVars.AzureSubscriptionID + "\",");
-                //tempjson.AppendLine("\t\t\"parameters\": {");
-                //tempjson.AppendLine("\t\t\t\"properties\": {");
-                //tempjson.AppendLine("\t\t\t\t\"enableExpress\": false,");
-                //tempjson.AppendLine("\t\t\t\t\"enablePartitioning\": false");
-                //tempjson.AppendLine("\t\t\t},");
-                //tempjson.AppendLine("\t\t\t\"location\": \"North Europe\"");
-                //tempjson.AppendLine("\t\t}");
-                //tempjson.AppendLine("\t}");
-                //tempjson.AppendLine("}");
-
-                //var jsonfull = tempjson.ToString();
-
-                //var putcontent = RESTApi.PutAsyncSB(TenantId, accesstoken, jsonfull);
-
-                //var connectionString = _storageConfig.SBConnectionString;
-                //var queueName = TenantId;
-                //var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
-                //Message message = new Message(Encoding.UTF8.GetBytes(Id));
-                //await client.SendAsync(message);
-                
-                
-                //CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_storageConfig.SBConnectionString);
-                //CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
-                //CloudQueue messageQueue = queueClient.GetQueueReference("messagequeue");
-
-                //await messageQueue.CreateIfNotExistsAsync();
-
-                //CloudQueueMessage message = new CloudQueueMessage(Id);
-                //await messageQueue.AddMessageAsync(message);
 
                 var result = await _service.DeployfromQueue(Id, Force);
                 
             }
-            return RedirectToAction("Edit", "Queue", new { id = QueueList.FirstOrDefault().TennantID });
+            return RedirectToAction("Index", "Queue", new { id = QueueList.FirstOrDefault().TennantID });
         }
 
     }

@@ -196,8 +196,8 @@ namespace Deploy.Service
 
 
                     var queue = new Queue();
-                    var queueList = _context.Queue.ToList();
-                    if (queueList.Count() < 1)
+                    var queueList = _context.Queue.OrderBy(q => q.Order).ToList();
+                    if (queueList.Count() < 2)
                     {
                         queue.DeployTypeID = Id;
                         queue.Order = 1;
@@ -209,6 +209,7 @@ namespace Deploy.Service
                         queue.subscriptionID = subscriptionID;
                         queue.resourcegroup = resourcegroupname;
                         queue.DependsOn = 0;
+                        queue.status = "New";
                         queue.resource = false;
 
                     }
@@ -223,6 +224,7 @@ namespace Deploy.Service
                         queue.azuredeploy = azuredeploy;
                         queue.subscriptionID = subscriptionID;
                         queue.resourcegroup = resourcegroupname;
+                        queue.status = "New";
                         queue.resource = false;
 
                         //Get last item QueueID
@@ -297,32 +299,25 @@ namespace Deploy.Service
             var putcontent = RESTApi.PutAsync(subscriptionID, resourcegroup, azuredeploy, accesstoken, jsonDeploy, false);
             JObject json = JsonConvert.DeserializeObject<JObject>(putcontent.Result);
 
-            //Make DeployState as Queued
+            //Check if DependsOn
+            if (QueueItem.DependsOn != 0)
+            {
+                var preDeploy = _context.Queue.Where(q => q.QueueID == QueueItem.DependsOn).FirstOrDefault();
+
+                var checkDependancy = await CheckQueue(preDeploy.DeployTypeID);
+ 
+                if (!checkDependancy.Contains("Succeeded"))
+                {
+                    results = "Dependancy Running";
+                    return results;
+                }
+            }
+
             deployTypes.DeployState = "Queued";
             _context.Update(deployTypes);
 
-            //Run CheckQueue method to ensure deployment complete before moving onto next item.
-            var check = CheckQueue(Id);
-            while (!check.Result.Contains("Succeeded") && !check.Result.Contains("Failed"))
-            {
-                QueueItem.status = "Running";
-                _context.Update(QueueItem);
-                await _context.SaveChangesAsync();
-                //Currently set to sleep for 30 secs
-                //Thread.Sleep(30000);
-                check = CheckQueue(Id);
-            }
-
-            //Check to see if deployment failed.
-            if (check.Result.Contains("Failed"))
-            {
-                results = "Failed";
-                QueueItem.status = "Failed - See Results";
-                _context.Update(QueueItem);
-            }
-            //On successful completion of deployment mark Queue Item to Complete.
-            results = "Succeeded";
-            QueueItem.status = "Complete";
+            results = "Queued";
+            QueueItem.status = "Queued";
             _context.Update(QueueItem);
 
             var content = await _context.SaveChangesAsync();
@@ -747,7 +742,7 @@ ______           _           _____   ____________  ________   ___         _
         public async Task GetDeployAll(int Id)
         {
             var deployTypes = await _context.DeployTypes.Include(d => d.Tennants).Where(d => d.TennantID == Id).Where(d => d.DeployState != null).ToListAsync();
-
+            
             string tennantID = deployTypes.FirstOrDefault().Tennants.AzureTennantID;
             string clientID = deployTypes.FirstOrDefault().Tennants.AzureClientID;
             string secret = deployTypes.FirstOrDefault().Tennants.AzureClientSecret;
@@ -765,6 +760,8 @@ ______           _           _____   ____________  ________   ___         _
 
             for (var i = 0; i < deployTypes.Count(); i++)
             {
+
+                var queueItem = _context.Queue.Where(q => q.DeployTypeID == deployTypes[i].DeployTypeID).FirstOrDefault();
                 string resourcegroupname = deployTypes[i].ResourceGroupName;
                 if (string.IsNullOrEmpty(resourcegroupname) == true)
                 {
@@ -822,6 +819,18 @@ ______           _           _____   ____________  ________   ___         _
                 {
                     deployTypes[i].DeployResult = await getcontent;
                 }
+                if (getcontent.Result.Contains("\"provisioningState\":\"Succeeded"))
+                    queueItem.status = "Completed";
+                if (getcontent.Result.Contains("\"provisioningState\":\"Running"))
+                    queueItem.status = "Running";
+                if (getcontent.Result.Contains("\"provisioningState\":\"Accepted"))
+                    queueItem.status = "Accepted";
+                if (getcontent.Result.Contains("\"provisioningState\":\"Failed"))
+                    queueItem.status = "Failed";
+                if (getcontent.Result.Contains("Queued"))
+                    queueItem.status = "Queued";
+
+                _context.Update(queueItem);
                 _context.Update(deployTypes[i]);
                 await _context.SaveChangesAsync();
             }
