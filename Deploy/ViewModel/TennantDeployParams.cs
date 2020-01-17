@@ -20,6 +20,7 @@ namespace Deploy.ViewModel
         public List<string> ParamName { get; set; }
         public List<string> ParamType { get; set; }
         public List<string> ParamToolTip { get; set; }
+        public List<string> DefaultValue { get; set; }
         [Display(Name = "Tennant Name")]
         public string TennantName { get; set; }
         public int TennantID { get; set; }

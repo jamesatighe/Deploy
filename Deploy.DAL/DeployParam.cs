@@ -12,5 +12,6 @@ namespace Deploy.DAL
         public string ParameterName { get; set; }
         public string ParameterType { get; set; }
         public string ParamToolTip { get; set; }
+        public string DefaultValue { get; set; }
     }
 }

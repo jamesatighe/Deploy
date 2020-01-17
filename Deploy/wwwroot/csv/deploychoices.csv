@@ -1,0 +1,7 @@
+﻿BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployType
+Linked to Parameter file,Has additional disk,Connected to Domain,"Small, Med, Large, N/A",path to file,path to file,Name shown in list,Deployment Category
+VMDOMDISK,TRUE,TRUE,N/A,deployments/virtualmachine/VMDomNoDisk.json,,Parameters/VMDiskNoDomain.json,Virtual Machine
+,,,,,,,
+,,,,,,,
+,,,,,,,
+Fill in as required and remove this row and also row 2 and 3.,,,,,,,

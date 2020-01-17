@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div id="Type" class="form-group" >
+            <div id="Type" class="form-group">
                 <label class="col-md-2 control-label">Type</label>
                 <span id="virtualmachines" class="button-checkbox" style="margin-left:15px">
                     <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select VM Templates" data-color="primary">VMs</button>
@@ -53,7 +53,15 @@
                     <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">PaaS</button>
                     <input type="checkbox" class="hidden" />
                 </span>
-                
+                <span id="fileserver" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">File Server</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+                <span id="monitoring" class="button-checkbox">
+                    <button type="button" class="btn-lg" data-toggle="tooltip" data-placement="top" title="Select Networking Templates" data-color="primary">Monitoring</button>
+                    <input type="checkbox" class="hidden" />
+                </span>
+
             </div>
             <div id="options" class="form-group" hidden="hidden">
                 <label class="col-md-2 control-label">Options</label>
@@ -131,7 +139,6 @@
                     $('#virtualmachines button').attr("disabled", false);
                     $('#paas button').attr("disabled", false);
                 }
-
             });
             
             $('#paas button').on('click', function () {
@@ -145,9 +152,41 @@
                     $('#virtualmachines button').attr("disabled", false);
                     $('#networking button').attr("disabled", false);
                 }
-
             });
 
+            $('#fileserver button').on('click', function () {
+                if ($('#fileserver button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="File Server"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#networking button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                    $('#monitoring button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="File Server"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#networking button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                    $('#monitoring button').attr("disabled", false);
+                }
+             });
+
+            $('#monitoring button').on('click', function () {
+                if ($('#monitoring button').hasClass("active")) {
+                    $('#deploynames optgroup').not('[label*="Monitoring"]').wrap('<span/>');
+                    $('#virtualmachines button').attr("disabled", true);
+                    $('#networking button').attr("disabled", true);
+                    $('#paas button').attr("disabled", true);
+                    $('#fileserver button').attr("disabled", true);
+                }
+                else {
+                    $('#deploynames optgroup').not('[label*="Monitoring"]').unwrap();
+                    $('#virtualmachines button').attr("disabled", false);
+                    $('#networking button').attr("disabled", false);
+                    $('#paas button').attr("disabled", false);
+                    $('#fileserver button').attr("disabled", false);
+                }
+            });
 
             // VM options
             $('#domain button').on('click', function () {

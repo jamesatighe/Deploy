@@ -119,7 +119,7 @@ namespace Deploy.DAL
 
         public static async Task<string> GetAsync(string subscriptionID, string resourcegroup, string accesstoken, string azuredeploy)
         {
-            string uri = "https://management.azure.com/subscriptions/" + subscriptionID + "/resourcegroups/" + resourcegroup + "/providers/Microsoft.Resources/deployments/" + azuredeploy + "?api-version=2015-01-01";
+            string uri = "https://management.azure.com/subscriptions/" + subscriptionID + "/resourcegroups/" + resourcegroup + "/providers/Microsoft.Resources/deployments/" + azuredeploy + "/?api-version=2019-10-01";
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
             var response = httpClient.GetAsync(uri);

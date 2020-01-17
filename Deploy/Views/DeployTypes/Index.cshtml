@@ -126,7 +126,7 @@
                     {
                 <span class="glyphicon glyphicon-thumbs-up"><span style="font-family:'Segoe UI'; color:darkgreen"> Accepted</span></span>
                     }
-                    if (item.DeployResult.Contains("\"provisioningState\":\"Failed"))
+                    if (item.DeployResult.Contains("\"provisioningState\":\"Failed") || item.DeployResult.Contains("\"DeploymentFailed\""))
                     {
                 <span class="glyphicon glyphicon-warning-sign"><span style="font-family:'Segoe UI'; font-weight:bold; color:red"> Failed</span></span>
                     }

@@ -111,7 +111,8 @@ namespace Deploy.Service
                     ParameterName = param.ParameterName,
                     ParameterType = param.ParameterType,
                     ParameterDeployType = param.ParameterDeployType,
-                    ParamToolTip = param.ParamToolTip
+                    ParamToolTip = param.ParamToolTip,
+                    DefaultValue = param.DefaultValue
                 });
             }
 
@@ -820,7 +821,16 @@ ______           _           _____   ____________  ________   ___         _
                     }
                     else
                     {
-                        deployTypes[i].DeployResult = await getcontent;
+                        var result = await getcontent;
+                        if (result.Contains("\"error\":"))
+                        {
+                            string errorMessage = result.Substring(result.IndexOf("error"));
+                            deployTypes[i].DeployResult = errorMessage;
+                        }
+                        else
+                        {
+                            deployTypes[i].DeployResult = result;
+                        }
                     }
                     if (getcontent.Result.Contains("\"provisioningState\":\"Succeeded"))
                         queueItem.status = "Completed";
@@ -891,6 +901,10 @@ ______           _           _____   ____________  ________   ___         _
                 {
                     var decrypted = encryption.DecryptString(tennantParams[i].ParamValue);
                     tempjson.AppendLine("\t\t\t\"value\": " + "\"" + decrypted + "\"");
+                }
+                else if (tennantParams[i].ParamType == "int")
+                {
+                    tempjson.AppendLine("\t\t\t\"value\": " + tennantParams[i].ParamValue);
                 }
                 else
                 {

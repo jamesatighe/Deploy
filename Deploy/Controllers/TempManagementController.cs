@@ -66,7 +66,7 @@ namespace Deploy.Controllers
                         var tempValue = param.Value;
                         string type = string.Empty;
                         string defaultValue = string.Empty;
-                        string description = string.Empty;
+                        string description = "None";
                         foreach (JProperty x in (JToken)tempValue)
                         {
                             string name = x.Name;
@@ -91,11 +91,13 @@ namespace Deploy.Controllers
                             }
                         }
 
+                        System.IO.File.Delete(filename);
                         var DeployParams = new DeployParam();
                         DeployParams.ParameterDeployType = filenameNoExt;
                         DeployParams.ParameterName = tempparam;
                         DeployParams.ParameterType = type;
                         DeployParams.ParamToolTip = description;
+                        DeployParams.DefaultValue = defaultValue;
                         _context.Add(DeployParams);
                         _context.SaveChanges();
                         ViewBag.Message = "Parameter file uploaded successfully!";
@@ -125,7 +127,7 @@ namespace Deploy.Controllers
                 //    }
 
                 //}
-                else if (csv[0] == "BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployCode,DeployType")
+                else if (csv[0] == "BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployType")
                 {
                     for (var i = 1; i < csv.Length; i++)
                     {
@@ -154,12 +156,12 @@ namespace Deploy.Controllers
                         DeployChoices.DeployFile = csv[i].Split(',')[4];
                         DeployChoices.ParamsFile = csv[i].Split(',')[5];
                         DeployChoices.DeployName = csv[i].Split(',')[6];
-                        DeployChoices.DeployCode = csv[i].Split(',')[7];
+                        DeployChoices.DeployCode = csv[i].Split(',')[0];
                         _context.Add(DeployChoices);
 
                         DeployList.DeployName = csv[i].Split(',')[0];
                         DeployList.DeployValue = csv[i].Split(',')[6];
-                        DeployList.DeployType = csv[i].Split(',')[8];
+                        DeployList.DeployType = csv[i].Split(',')[7];
                         _context.Add(DeployList);
 
                         _context.SaveChanges();
@@ -177,94 +179,12 @@ namespace Deploy.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Index(IList<IFormFile> files)
-        //{
-        //    foreach (var file in files)
-        //    {
-        //        string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim('"');
-        //        filename = filename.Split(Path.DirectorySeparatorChar).Last();
-        //        filename = hostingEnv.WebRootPath + $@"\csv\temp\{filename}";
-        //        long size = 0;
-        //        size += file.Length;
-
-        //        using (FileStream fs = System.IO.File.Create(filename))
-        //        {
-        //            file.CopyTo(fs);
-        //            fs.Flush();
-        //        }
-        //        string[] json = System.IO.File.ReadAllLines(filename);
-        //        string joined = string.Join(Environment.NewLine, json);
-        //        dynamic o = JObject.Parse(joined);
-
-
-        //        foreach (var param in o.parameters)
-        //        {
-        //            var tempparam = param.Name;
-        //            var tempValue = param.Value;
-        //            string type = string.Empty;
-        //            string defaultValue = string.Empty;
-        //            string description = string.Empty;
-        //            foreach (JProperty x in (JToken)tempValue)
-        //            {
-        //                string name = x.Name;
-        //                JToken value = x.Value;
-        //                if (name == "type")
-        //                {
-        //                    type = value.ToString();
-        //                }
-        //                if (name == "defaultValue")
-        //                {
-        //                    defaultValue = value.ToString();
-        //                }
-        //                if (name == "metadata")
-        //                {
-        //                    JToken props = x.First.First;
-                            
-        //                    foreach (dynamic prop in props)
-        //                    {
-        //                        JToken metaValue = prop.Value;
-        //                        description = metaValue.ToString();
-        //                    }
-        //                }
-        //            }
-
-        //            var DeployParams = new DeployParam();
-        //            DeployParams.ParameterDeployType = "VM";
-        //            DeployParams.ParameterName = tempparam;
-        //            DeployParams.ParameterType = type;
-        //            DeployParams.ParamToolTip = description;
-        //            _context.Add(DeployParams);
-        //            _context.SaveChanges();
-        //            ViewBag.Message = "Parameter file uploaded successfully!";
-        //        }
-        //    }
-        //    return View();
-        //}
-
-
-        public FileResult Download(string type)
+      
+        public FileResult Download()
         {
-            if (type == "DeployType")
-            {
-                var filename = hostingEnv.WebRootPath + $@"\csv\DeployType.csv";
-                byte[] filebytes = System.IO.File.ReadAllBytes(filename);
-                return File(filebytes, "application/x-msdownload", filename);
-            }
-            if (type == "DeployChoices")
-            {
-                var filename = hostingEnv.WebRootPath + $@"\csv\DeployChoices.csv";
-                byte[] filebytes = System.IO.File.ReadAllBytes(filename);
-                return File(filebytes, "application/x-msdownload", filename);
-            }
-            else
-            {
-                var filename = hostingEnv.WebRootPath + $@"\csv\DeployParams.csv";
-                byte[] filebytes = System.IO.File.ReadAllBytes(filename);
-                return File(filebytes, "application/x-msdownload", filename);
-            }
-
-
+            var filename = hostingEnv.WebRootPath + $@"\csv\deploychoices.csv";
+            byte[] filebytes = System.IO.File.ReadAllBytes(filename);
+            return File(filebytes, "application/x-msdownload", filename);
         }
 
         //#########################################

@@ -125,7 +125,6 @@ namespace Deploy.Controllers
             viewModel.DeployName = deploy.DeployName;
             viewModel.DeploySaved = deploy.DeploySaved;
 
-            //var service = new TenantParameters(_context, _storageConfig);
             var TenantParams = await _service.CreateTenantParams(Id);
             var parameters = TenantParams.DeployParams.ToList();
 
@@ -133,6 +132,7 @@ namespace Deploy.Controllers
             viewModel.DeployParams = new List<DeployParam>();
             viewModel.TennantName = deploy.Tennants.TennantName;
             viewModel.TennantID = deploy.Tennants.TennantID;
+    
 
             viewModel.DeployParamID = new List<int>();
 
@@ -146,8 +146,10 @@ namespace Deploy.Controllers
                     ParameterName = param.ParameterName,
                     ParameterType = param.ParameterType,
                     ParameterDeployType = param.ParameterDeployType,
-                    ParamToolTip = param.ParamToolTip
-                });
+                    ParamToolTip = param.ParamToolTip,
+                    DefaultValue = param.DefaultValue,
+                    
+                }) ;
             }
 
             return View(viewModel);

@@ -68,6 +68,7 @@
         </div>
         @for (var i = 0; i < Model.DeployParams.Count(); i++)
         {
+
             if (Model.DeployParams[i].ParameterName.Contains("vmSize") || Model.DeployParams[i].ParameterName.Contains("VMSize"))
             {
                 <div class="form-group">
@@ -205,15 +206,30 @@
             }
             else
             {
-                <div class="form-group">
-                    <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
-                    <div class="col-md-4">
-                        <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                if (Model.DeployParams[i].DefaultValue != "none")
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
+                        <div class="col-md-4">
+                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" value="@Model.DeployParams[i].DefaultValue" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            @Model.DeployParams[i].ParamToolTip
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        @Model.DeployParams[i].ParamToolTip
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
+                        <div class="col-md-4">
+                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            @Model.DeployParams[i].ParamToolTip
+                        </div>
                     </div>
-                </div>
+                }
             }
             @*<div class="form-group">
                 <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
@@ -243,9 +259,9 @@
                     <input asp-for="@Model.DeployParams[i].ParameterType" name="ParamType[@(i)]" class="form-control" />
                 </div>
             </div>
-            <div class="form-group hidden" >
+            <div class="form-group hidden">
                 <div class="col-md-2 control-label" style="font-weight:bold">@Html.DisplayNameFor(modelItem => Model.DeployParamID)</div>
-               <div class="col-md-10">
+                <div class="col-md-10">
                     <input asp-for="@Model.DeployParams[i].DeployParamID" name="DeployParamID[@(i)]" class="form-control" />
                 </div>
             </div>
@@ -255,7 +271,7 @@
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default btn-success navbtn" />
                 <a asp-action="Index" asp-controller="DeployTypes" asp-route-id="@Model.TennantID" class="btn btn-primary btn-default navbtn"><span class="glyphicon glyphicon-triangle-left"></span> Back</a>
-             </div>
+            </div>
         </div>
     </div>
 </form>
@@ -277,98 +293,104 @@
 
         $(document).ready(function () {
 
-
-            $.ajax({
-                type: "POST",
-                url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=VM",
-                beforeSend: function () {
-                    var select = $('#vmSize');
-                    var option = $('<option>', {
-                        value: "loading"
-                    }).html("Loading . . .").appendTo(select);
-                },
-                contentType: "application/text",
-                success: function (data) {
-                    $('#vmSize').empty();
-                    var select = $('#vmSize');
-                    $.each(data.value, function (i, item) {
+            
+            if (document.getElementById("vmSize")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=VM",
+                    beforeSend: function () {
+                        var select = $('#vmSize');
                         var option = $('<option>', {
-                            value: item.name
-                        }).html(item.name + ", Cores: " + item.numberOfCores + ", RAM: " + item.memoryInMB / 1024 + "GB").appendTo(select);
-                    })
-                }
-            });
+                            value: "loading"
+                        }).html("Loading . . .").appendTo(select);
+                    },
+                    contentType: "application/text",
+                    success: function (data) {
+                        $('#vmSize').empty();
+                        var select = $('#vmSize');
+                        $.each(data.value, function (i, item) {
+                            var option = $('<option>', {
+                                value: item.name
+                            }).html(item.name + ", Cores: " + item.numberOfCores + ", RAM: " + item.memoryInMB / 1024 + "GB").appendTo(select);
+                        })
+                    }
+                });
+            }
 
-            $.ajax({
-                type: "POST",
-                url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=resourceGroup",
-                beforeSend: function () {
-                    var select = $('#existingVirtualNetworkResourceGroup');
-                    var option = $('<option>', {
-                        value: "loading"
-                    }).html("Loading . . .").appendTo(select);
-                },
-                contentType: "application/text",
-                success: function (data) {
-                    $('#existingVirtualNetworkResourceGroup').empty();
-                    var select = $('#existingVirtualNetworkResourceGroup');
-                    select.children.value
-                    $.each(data.value, function (i, item) {
-                        var option = $('<option>', { value: item.name }).html(item.name).appendTo(select);
-                    })
-                    getVNET();
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=publisher",
-                beforeSend: function () {
-                    var select = $('#vmPublisher');
-                    var option = $('<option>', {
-                        value: "loading"
-                    }).html("Loading . . .").appendTo(select);
-                },
-                contentType: "application/text",
-                success: function (data) {
-                    $('#vmPublisher').empty();
-                    var select = $('#vmPublisher');
-                    select.children.value
-                    $.each(data.value, function (i, item) {
+            if (document.getElementById("existingVirtualNetworkResourceGroup")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=resourceGroup",
+                    beforeSend: function () {
+                        var select = $('#existingVirtualNetworkResourceGroup');
                         var option = $('<option>', {
-                            value: item.name
-                        }).html(item.name).appendTo(select);
+                            value: "loading"
+                        }).html("Loading . . .").appendTo(select);
+                    },
+                    contentType: "application/text",
+                    success: function (data) {
+                        $('#existingVirtualNetworkResourceGroup').empty();
+                        var select = $('#existingVirtualNetworkResourceGroup');
+                        select.children.value
+                        $.each(data.value, function (i, item) {
+                            var option = $('<option>', { value: item.name }).html(item.name).appendTo(select);
+                        })
+                        getVNET();
+                    }
+                });
+            }
 
-                    })
-                    $('#vmPublisher').val("MicrosoftWindowsServer");
-                    getOffering();
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=SKU" + "&publisher=" + publisher + "&offering=" + offering,
-                beforeSend: function () {
-                    var select = $('#vmSKU');
-                    var option = $('<option>', {
-                        value: "loading"
-                    }).html("Loading . . .").appendTo(select);
-                },
-                contentType: "application/text",
-                success: function (data) {
-                    $('#vmSKU').empty();
-                    var select = $('#vmSKU');
-                    select.children.value
-                    $.each(data.value, function (i, item) {
+            if (document.getElementById("vmPublisher")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=publisher",
+                    beforeSend: function () {
+                        var select = $('#vmPublisher');
                         var option = $('<option>', {
-                            value: item.name
-                        }).html(item.name).appendTo(select);
+                            value: "loading"
+                        }).html("Loading . . .").appendTo(select);
+                    },
+                    contentType: "application/text",
+                    success: function (data) {
+                        $('#vmPublisher').empty();
+                        var select = $('#vmPublisher');
+                        select.children.value
+                        $.each(data.value, function (i, item) {
+                            var option = $('<option>', {
+                                value: item.name
+                            }).html(item.name).appendTo(select);
 
-                    })
-                }
-            });
+                        })
+                        $('#vmPublisher').val("MicrosoftWindowsServer");
+                        getOffering();
+                    }
+                });
+            }
 
+            if (document.getElementById("vmSKU")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/DeployTypes/GetDeployJson?id=" + deployTypeID + "&type=SKU" + "&publisher=" + publisher + "&offering=" + offering,
+                    beforeSend: function () {
+                        var select = $('#vmSKU');
+                        var option = $('<option>', {
+                            value: "loading"
+                        }).html("Loading . . .").appendTo(select);
+                    },
+                    contentType: "application/text",
+                    success: function (data) {
+                        $('#vmSKU').empty();
+                        var select = $('#vmSKU');
+                        select.children.value
+                        $.each(data.value, function (i, item) {
+                            var option = $('<option>', {
+                                value: item.name
+                            }).html(item.name).appendTo(select);
 
+                        })
+                    }
+                });
+            }
 
             $('#vmPublisher').change(function () {
                 var publisher = $("#vmPublisher :selected").text();
@@ -398,8 +420,7 @@
                     }
                 });
             });
-
-
+           
 
             $('#vmPublisherOffering').change(function () {
                 var publisher = $("#vmPublisher :selected").text();
