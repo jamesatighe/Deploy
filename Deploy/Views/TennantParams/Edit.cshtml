@@ -170,7 +170,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
                     <div class="col-md-4">
-                        <input asp-for="@Model.ParamValue[i]" id="vmPrivateIP1" data-value="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                        <input asp-for="@Model.ParamValue[i]" id="vmPrivateIP1" data-value="@Model.ParamValue[i]" name="ParamValue[@(i)]"  class="form-control" />
                     </div>
                     <div class="col-md-6">
                         @Model.ParamToolTip[i]
@@ -183,7 +183,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
                     <div class="col-md-4">
-                        <select asp-for="@Model.ParamValue[i]" data-value="@Model.ParamValue[i]" class="form-control">
+                        <select asp-for="@Model.ParamValue[i]" data-value="@Model.ParamValue[i]" id="@Model.ParamName[i]" class="form-control">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
@@ -199,7 +199,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.ParamName[i])</label>
                     <div class="col-md-4">
-                        <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                        <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" id="@Model.ParamName[i]" class="form-control" />
                     </div>
                     <div class="col-md-6">
                         @Model.ParamToolTip[i]
@@ -271,7 +271,16 @@
         var oldVNET = $('#existingVirtualNetworkName').data('value');
         var oldIP = $('#vmPrivateIP1').data('value');
 
+        var domainJoin = $("#DomainJoin").find(':selected').text();
+
+        if (domainJoin == "No") {
+            $('#DomainName')[0].value = "N/A";
+            $('#DomainAdminUsername')[0].value = "N/A";
+            $('#DomainAdminPassword')[0].value = "N/A";
+        };
+
         $(document).ready(function () {
+
 
 
             $.ajax({
@@ -462,6 +471,17 @@
                     var option = $('#subnetName').find('option[value*=' + oldValue.toString() + ']').text();
                     $('#subnetName option:contains("' + option + '")').prop('selected', true);
                 }
+            });
+
+            $('#DomainJoin').change(function () {
+                var domainJoin = $("#DomainJoin").find(':selected').text();
+
+                if (domainJoin == "No") {
+                    $('#DomainName')[0].value = "N/A";
+                    $('#DomainAdminUsername')[0].value = "N/A";
+                    $('#DomainAdminPassword')[0].value = "N/A";
+                };
+
             });
 
             $('#vmPublisher').change(function () {

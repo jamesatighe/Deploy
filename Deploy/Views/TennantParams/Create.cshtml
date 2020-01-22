@@ -192,7 +192,7 @@
                 <div class="form-group">
                     <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
                     <div class="col-md-4">
-                        <select asp-for="@Model.ParamValue[i]" class="form-control">
+                        <select asp-for="@Model.ParamValue[i]" id="@Model.DeployParams[i].ParameterName" class="form-control">
                             <option value="No">No</option>
                             <option value="Yes">Yes</option>
                         </select>
@@ -211,7 +211,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
                         <div class="col-md-4">
-                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" value="@Model.DeployParams[i].DefaultValue" class="form-control" />
+                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" id="@Model.DeployParams[i].ParameterName" value="@Model.DeployParams[i].DefaultValue" class="form-control" />
                         </div>
                         <div class="col-md-6">
                             @Model.DeployParams[i].ParamToolTip
@@ -223,7 +223,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">@Html.DisplayFor(modelItem => Model.DeployParams[i].ParameterName)</label>
                         <div class="col-md-4">
-                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" class="form-control" />
+                            <input asp-for="@Model.ParamValue[i]" name="ParamValue[@(i)]" id="@Model.DeployParams[i].ParameterName" class="form-control" />
                         </div>
                         <div class="col-md-6">
                             @Model.DeployParams[i].ParamToolTip
@@ -290,6 +290,18 @@
 
         var publisher = null;
         var offering = null;
+
+        var domainJoin = $("#DomainJoin").find(':selected').text();
+
+        if (domainJoin == "No") {
+            $('#DomainName')[0].value = "N/A";
+            $('#DomainAdminUsername')[0].value = "N/A";
+            $('#DomainAdminPassword')[0].value = "N/A";
+        } else if (domainJoin == "Yes") {
+            $('#DomainName')[0].empty();
+            $('#DomainAdminUsername')[0].empty();
+            $('#DomainAdminPassword')[0].empty();
+        }
 
         $(document).ready(function () {
 
@@ -391,6 +403,21 @@
                     }
                 });
             }
+
+            
+            $('#DomainJoin').change(function () {
+                var domainJoin = $("#DomainJoin").find(':selected').text();
+
+                if (domainJoin == "No") {
+                    $('#DomainName')[0].value = "N/A";
+                    $('#DomainAdminUsername')[0].value = "N/A";
+                    $('#DomainAdminPassword')[0].value = "N/A";
+                } else if (domainJoin == "Yes") {
+                    $('#DomainName')[0].value = "";
+                    $('#DomainAdminUsername')[0].value = "";
+                    $('#DomainAdminPassword')[0].value = "";
+                };
+            });
 
             $('#vmPublisher').change(function () {
                 var publisher = $("#vmPublisher :selected").text();

@@ -194,7 +194,12 @@ namespace Deploy.Controllers
 
         public async Task<IActionResult> DeployfromQueue(int id, bool Force)
         {
+            int tenantID = id;
             var QueueList = await _context.Queue.Where(q => q.TennantID == id).Where(q => q.status == "New").OrderBy(q => q.Order).ToListAsync();
+            if (QueueList.Count() < 1)
+            {
+                return RedirectToAction("Index", "Queue", new { id = tenantID });
+            }
             for (var i = 0; i < QueueList.Count(); i ++)
             {
                 var Id = QueueList[i].DeployTypeID;

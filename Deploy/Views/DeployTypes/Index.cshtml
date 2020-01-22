@@ -115,9 +115,9 @@
                 @if (!string.IsNullOrEmpty(item.DeployResult))
                 {
                 @if (item.DeployResult.Contains("\"provisioningState\":\"Succeeded"))
-                    {
+                {
                 <span class="glyphicon glyphicon-ok"><span style="font-family:'Segoe UI'; color:green"> Deployed</span></span>
-                    }
+                }
                     if (item.DeployResult.Contains("\"provisioningState\":\"Running"))
                     {
                 <span class="glyphicon glyphicon-refresh"><span style="font-family:'Segoe UI'; color:orange"> Running</span></span>
@@ -151,7 +151,10 @@
             <td>
                 <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
                 <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@item.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</a>
-                @*<a asp-action="Delete" asp-route-id="@item.DeployTypeID" class="btn btn-danger btn-default navbtn"><span class="glyphicon glyphicon-remove"></span> Delete</a>*@
+                @if (item.DeploySaved == "Yes")
+                {
+                    <a id="DeployToAzure" asp-action="QueueDeployment" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-danger navbtn"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+                }
             </td>
         </tr>
 }
