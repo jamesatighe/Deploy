@@ -1,0 +1,202 @@
+CAPOLICIES
+{
+    "displayName": "Multi-Factor",
+    "state": "enabled",
+    "conditions": {
+        "users": {
+            "includeUsers": [
+                "1d204d52-4a0f-4cf7-b913-3ccced4c3ee2"
+            ]
+        },
+        "applications": {
+            "includeApplications": [
+                "All"
+            ]
+        }
+    },
+    "grantControls": {
+        "operator": "OR",
+        "builtInControls": [
+            "mfa"
+        ]
+    }
+}
+@
+{
+    "displayName": "DEMO - iOS/Android - MFA for Non-Compliant Devices",
+    "state": "enabled",
+    "conditions": {
+        "users": {
+            "includeGroups": [
+                "831fb175-3ac9-4cbd-919e-2057d70bfb64"
+            ],
+            "excludeGroups": [
+                "b9ae72a7-ecfe-4f48-b70e-ec9fde0f75b1"
+            ]
+        },
+        "applications": {
+            "includeApplications": [
+                "All"
+            ]
+        },
+        "clientAppTypes": [
+            "modern"
+        ],
+        "platforms": {
+			"includePlatforms": [
+				"iOS",
+				"android"
+			]
+		}
+    },
+    "grantControls": {
+        "operator": "OR",
+        "builtInControls": [
+            "mfa",           
+            "compliantDevice"
+        ]
+    }
+}
+@
+{
+    "displayName": "DEMO iOS/Android - Modern Auth - Enforce App",
+    "state": "enabled",
+    "conditions": {
+        "users": {
+            "includeGroups": [
+                "831fb175-3ac9-4cbd-919e-2057d70bfb64"
+            ],
+            "excludeGroups": [
+                "b9ae72a7-ecfe-4f48-b70e-ec9fde0f75b1"
+            ]
+        },
+        "applications": {
+            "includeApplications": [
+                "All"
+            ]
+        },
+        "clientAppTypes": [
+            "modern"
+        ],
+        "platforms": {
+			"includePlatforms": [
+				"iOS",
+				"android"
+			]
+        },
+        "locations":{
+            "includeLocations":[
+                "All"
+            ]
+        }
+    },
+    "grantControls": {
+        "operator": "AND",
+        "builtInControls": [
+            "approvedApplication",
+            "compliantApplication"
+        ]
+    }
+}
+@
+{
+	"displayName": "DEMO - iOS/Android - EAS - Block Access",
+	"state": "disabled",
+	"conditions": {
+		"users": {
+			"includeGroups": [
+                "831fb175-3ac9-4cbd-919e-2057d70bfb64"
+			],
+            "excludeGroups": [
+                "b9ae72a7-ecfe-4f48-b70e-ec9fde0f75b1"
+            ]
+		},
+		"applications": {
+			"includeApplications": [
+				"00000002-0000-0ff1-ce00-000000000000",
+			]
+		},
+		"clientAppTypes": [
+            "easSupported",
+            "easUnsupported"
+		]
+	},
+	"grantControls": {
+		"operator": "OR",
+		"builtInControls": [
+            "block"
+		]
+	}
+}
+@
+{
+	"displayName": "DEMO - iOS/Android - EAS",
+	"state": "disabled",
+	"conditions": {
+		"users": {
+			"includeGroups": [
+                "831fb175-3ac9-4cbd-919e-2057d70bfb64"
+			],
+            "excludeGroups": [
+                "b9ae72a7-ecfe-4f48-b70e-ec9fde0f75b1"
+            ]
+		},
+		"applications": {
+			"includeApplications": [
+				"00000002-0000-0ff1-ce00-000000000000",
+			]
+		},
+		"clientAppTypes": [
+            "easSupported",
+            "easUnsupported"
+        ],
+        "platforms": {
+            "includePlatforms": [
+				"iOS",
+				"android"
+			]
+        }
+	},
+	"grantControls": {
+		"operator": "OR",
+		"builtInControls": [
+            "mfa",
+            "compliantDevice"
+		]
+	}
+}
+@
+{
+	"displayName": "DEMO - Windows Phone",
+	"state": "disabled",
+	"conditions": {
+		"users": {
+			"includeGroups": [
+                "831fb175-3ac9-4cbd-919e-2057d70bfb64"
+			],
+            "excludeGroups": [
+                "b9ae72a7-ecfe-4f48-b70e-ec9fde0f75b1"
+            ]
+		},
+		"applications": {
+			"includeApplications": [
+				"All",
+			]
+		},
+		"clientAppTypes": [
+            "easSupported",
+            "easUnsupported"
+        ],
+        "platforms": {
+            "includePlatforms": [
+				"windowsPhone"
+			]
+        }
+	},
+	"grantControls": {
+		"operator": "OR",
+		"builtInControls": [
+            "block"
+		]
+	}
+}

@@ -368,11 +368,13 @@ namespace Deploy.Controllers
 
         public IActionResult DeployResults(int Id)
         {
-            var deployTypes = _context.DeployTypes.Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            var deployTypes = _context.DeployTypes.Include(d => d.TennantParams).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             var viewModel = new TenantDeploys();
             viewModel.DeployTypeID = deployTypes.DeployTypeID;
             viewModel.DeployResult = deployTypes.DeployResult;
+            viewModel.AzureDeployName = deployTypes.AzureDeployName;
             viewModel.TennantID = deployTypes.TennantID;
+            viewModel.TennantParams = new List<TennantParam>(deployTypes.TennantParams);
             return View(viewModel);
         }
 

@@ -149,11 +149,19 @@
                 }
             </td>
             <td>
-                <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+                @if (!item.AzureDeployName.Contains("CONACCESS"))
+                {
+                    <a asp-action="SaveToAzure" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success btn-default navbtn"><span class="glyphicon glyphicon-floppy-save"></span> Save</a>
+                }
                 <a id="deleteItem" class="deleteItem btn btn-danger btn-default navbtn" data-id="@item.DeployTypeID"><span class="glyphicon glyphicon-remove"></span> Delete</a>
-                @if (item.DeploySaved == "Yes")
+                @if (item.DeploySaved == "Yes" && !item.AzureDeployName.Contains("CONACCESS"))
                 {
                     <a id="DeployToAzure" asp-action="QueueDeployment" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-danger navbtn"><span class="glyphicon glyphicon-cloud-upload"></span> Deploy</a>
+                }
+                @if (item.AzureDeployName.Contains("CONACCESS"))
+                {
+                    <a id="GetPolicy" asp-action="GetConAccessPolicy" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-success navbtn"><span class="glyphicon glyphicon-cloud-upload"></span>Get</a>
+                    <a id="GetPolicy" asp-action="CreateConAccessPolicy" asp-controller="TennantParams" asp-route-id="@item.DeployTypeID" class="btn btn-danger navbtn"><span class="glyphicon glyphicon-cloud-upload"></span>Create</a>
                 }
             </td>
         </tr>

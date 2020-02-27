@@ -10,6 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Deploy.Controllers
 {
@@ -23,11 +27,13 @@ namespace Deploy.Controllers
         private readonly DeployDBContext _context;
         private AzureStorageConfig _storageConfig;
         private readonly TenantParameters _service;
-        public TennantParamsController(DeployDBContext context, IOptions<AzureStorageConfig> config)
+        private IHostingEnvironment hostingEnv;
+        public TennantParamsController(DeployDBContext context, IOptions<AzureStorageConfig> config, IHostingEnvironment env)
         {
             _context = context;
             _storageConfig = config.Value;
             _service = new TenantParameters(_context, config);
+            this.hostingEnv = env;
         }
 
 
@@ -163,7 +169,7 @@ namespace Deploy.Controllers
         public async Task<IActionResult> Create(TennantDeployParams tennantDeployParams)
         {
 
-            var encrypt = new RESTApi(_storageConfig);
+            var encrypt = new RESTApi(_storageConfig, hostingEnv);
             string []Keys = await encrypt.EncryptionKeys();
             var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 
@@ -202,7 +208,7 @@ namespace Deploy.Controllers
         // GET: TennantParams/Edit/5
         public async Task<IActionResult> Edit(int Id)
         {
-            var encrypt = new RESTApi(_storageConfig);
+            var encrypt = new RESTApi(_storageConfig, hostingEnv);
             string[] Keys = await encrypt.EncryptionKeys();
             var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 
@@ -258,7 +264,7 @@ namespace Deploy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TennantDeployParams tennantDeployParams)
         {
-            var encrypt = new RESTApi(_storageConfig);
+            var encrypt = new RESTApi(_storageConfig, hostingEnv);
             string[] Keys = await encrypt.EncryptionKeys();
             var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 
@@ -424,6 +430,79 @@ namespace Deploy.Controllers
         private bool TennantParamExists(int id)
         {
             return _context.TennantParams.Any(e => e.TennantParamID == id);
+        }
+
+        public async Task<IActionResult> GetConAccessPolicy(int Id)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+
+            var tokenResults = RESTApi.GraphToken(deployTypes.Tennants.AzureTennantID, deployTypes.Tennants.AzureClientID, deployTypes.Tennants.AzureClientSecret);
+            RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(tokenResults.Result);
+            string accesstoken = AccessToken.access_token;
+            string uri = "https://graph.microsoft.com/beta/conditionalAccess/Policies";
+            var result = await RESTApi.GraphGetAction(accesstoken, uri);
+
+            JObject o = JObject.Parse(result);
+
+            deployTypes.DeploySaved = "N/A";
+            deployTypes.DeployResult = result;
+            deployTypes.DeployState = "N/A";
+            deployTypes.DeployState = "Deployed";
+            _context.Update(deployTypes);
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction("Index", "DeployTypes", new { Id = deployTypes.TennantID });
+        }
+
+        public async Task<IActionResult> CreateConAccessPolicy(int Id)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
+            var policyPath = _context.TennantParams.Where(t => t.ParamName == "PolicyPath").FirstOrDefault();
+            string path = policyPath.ParamValue;
+
+            var tokenResults = RESTApi.GraphToken(deployTypes.Tennants.AzureTennantID, deployTypes.Tennants.AzureClientID, deployTypes.Tennants.AzureClientSecret);
+            RESTApi.AccessToken AccessToken = JsonConvert.DeserializeObject<RESTApi.AccessToken>(tokenResults.Result);
+            string accesstoken = AccessToken.access_token;
+
+            string uri = "https://graph.microsoft.com/beta/conditionalAccess/Policies";
+            var restAPI = new RESTApi(_storageConfig, hostingEnv);
+
+            var result = await restAPI.GraphPostAction(accesstoken, uri, path);
+            string filename = path;
+            filename = hostingEnv.WebRootPath + $@"\csv\{filename}";
+            
+
+            if (!System.IO.File.Exists(filename))
+            {
+                System.IO.File.WriteAllText(filename, result);
+            }
+
+            deployTypes.DeploySaved = "N/A";
+            deployTypes.DeployResult = result;
+            deployTypes.DeployState = "N/A";
+            deployTypes.DeployState = "Deployed";
+            _context.Update(deployTypes);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "DeployTypes", new { Id = deployTypes.TennantID });
+
+
+        }
+
+        public FileResult Download(int deployTypeID)
+        {
+            var deployTypes = _context.DeployTypes.Include(d => d.TennantParams).Where(d => d.DeployTypeID == deployTypeID).FirstOrDefault();
+            string file = "tempresults.txt";
+            string filename = hostingEnv.WebRootPath + $@"\csv\{file}";
+
+            var result = deployTypes.DeployResult;
+            
+            if (!System.IO.File.Exists(filename))
+            {
+                System.IO.File.WriteAllText(filename, result);
+            }
+
+            byte[] filebytes = System.IO.File.ReadAllBytes(filename);
+            return File(filebytes, "application/x-msdownload", file);
         }
     }
 }

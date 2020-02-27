@@ -3,22 +3,23 @@
 @{
     ViewData["Title"] = "TempManagement";
 }
-<h2>Template Parameter Upload</h2>
+<h2>File Uploads</h2>
 <div>
     <p>
-        This page can be used to automatically update the deployment site with new template parameters.
+        This page can be used to automatically update the deployment site with new template parameters and Conditional Access Policies.
     </p>
     <p>
         Download the template file. Edit to your needs then click browse, select the file and click upload.
     </p>
 </div>
-<p><h3> CSV Download Links</h3></p>
+<p><h3> Template Links</h3></p>
 <div>
 
-        <p>
-            <a asp-action="Download" asp-controller="TempManagement" class="btn btn-info btn-default"><span class="glyphicon glyphicon-download"></span> Deployment Choices</a>
-        </p>
-   
+    <p>
+        <a asp-action="Download" asp-controller="TempManagement" asp-route-type="DeployChoices" class="btn btn-info btn-default"><span class="glyphicon glyphicon-download"></span> Deployment Choices</a>
+        <a asp-action="Download" asp-controller="TempManagement" asp-route-type="CAPolicy" class="btn btn-info btn-default"><span class="glyphicon glyphicon-download"></span> CA Policies</a>
+    </p>
+
 </div>
 
 @using (@Html.BeginForm("Index", "TempManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -33,6 +34,8 @@
         <input type="submit" class="btn btn-success btn-lg navbtn" name="Submit" id="Submit" value="Upload" />
     </div>
 }
+
+
 <div>
     <p><h4>@ViewBag.Message</h4></p>
     <p><h4>@ViewBag.ChoiceResult</h4></p>

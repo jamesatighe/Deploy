@@ -15,12 +15,14 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Deploy.Service
 {
     [Authorize(Policy = "Admins")]
     public class TenantParameters
     {
+        private IHostingEnvironment hostingEnv;
         private readonly DeployDBContext _context;
         private readonly AzureStorageConfig _storageConfig;
 
@@ -863,7 +865,7 @@ ______           _           _____   ____________  ________   ___         _
             var deployTypes = _context.DeployTypes.Include(d => d.Tennants).Where(d => d.DeployTypeID == Id).FirstOrDefault();
             var sasToken = AzureHelper.GetSASToken(_storageConfig);
 
-            var encrypt = new RESTApi(_storageConfig);
+            var encrypt = new RESTApi(_storageConfig, hostingEnv);
             string[] Keys = await encrypt.EncryptionKeys();
             var encryption = new Encryption(Keys[1], Keys[0], 1, Keys[2], 256);
 

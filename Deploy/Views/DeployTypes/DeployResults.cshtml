@@ -13,8 +13,14 @@
 </p>
 
 <p>
-
+    @if (Model.AzureDeployName.Contains("CONACCESS"))
+    {
+    <p>
+        <a asp-action="Download" asp-controller="TennantParams" class="btn btn-info btn-default" asp-route-deployTypeID="@Model.DeployTypeID"><span class="glyphicon glyphicon-download"></span>Download Results</a>
+    </p>
+}
     <text>
         @Html.DisplayFor(modelItem => Model.DeployResult)
     </text>
+
 

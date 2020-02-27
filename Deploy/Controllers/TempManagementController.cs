@@ -103,30 +103,6 @@ namespace Deploy.Controllers
                         ViewBag.Message = "Parameter file uploaded successfully!";
                     }
                 }
-                //else if (csv[0] == "DeployName,DeployValue,DeployType")
-                //{
-
-                //    for (var i = 1; i < csv.Length; i++)
-                //    {
-                //        var depname = csv[i].Split(',')[0];
-                //        var results = _context.DeployList.Where(d => d.DeployName == depname).FirstOrDefault();
-                //        if (results != null)
-                //        {
-                //            ViewBag.Message = "Deployment Type already exists.";
-                //        }
-                //        else
-                //        {
-                //            var DeployList = new DeployList();
-                //            DeployList.DeployName = csv[i].Split(',')[0];
-                //            DeployList.DeployValue = csv[i].Split(',')[1];
-                //            DeployList.DeployType = csv[i].Split(',')[2];
-                //            _context.Add(DeployList);
-                //            _context.SaveChanges();
-                //            ViewBag.Message = "Type file uploaded successfully!";
-                //        }
-                //    }
-
-                //}
                 else if (csv[0] == "BaseOption,DataDisk,Domain,Size,DeployFile,ParamsFile,DeployName,DeployType")
                 {
                     for (var i = 1; i < csv.Length; i++)
@@ -168,23 +144,37 @@ namespace Deploy.Controllers
                     }
                     ViewBag.Message = "Choices file uploaded successfully!";
                 }
+                else if (csv[0] == "CAPOLICIES")
+                {
+                    ViewBag.Message = "CA Policies uploaded successfully!";
+                }
                 else
                 {
                     ViewBag.Message = $"{file.FileName} is not a valid CSV file.";
+                    System.IO.File.Delete(filename);
                 }
-                System.IO.File.Delete(filename);
+
 
             }
 
             return View();
         }
 
-      
-        public FileResult Download()
+        public FileResult Download(string type)
         {
-            var filename = hostingEnv.WebRootPath + $@"\csv\deploychoices.csv";
-            byte[] filebytes = System.IO.File.ReadAllBytes(filename);
-            return File(filebytes, "application/x-msdownload", filename);
+            if (type == "DeployChoices")
+            {
+                var filename = hostingEnv.WebRootPath + $@"\csv\deploychoices.csv";
+                byte[] filebytes = System.IO.File.ReadAllBytes(filename);
+                return File(filebytes, "application/x-msdownload", "deploychoices.csv");
+            }
+            else 
+            {
+                var filename = hostingEnv.WebRootPath + $@"\csv\example.txt";
+                byte[] filebytes = System.IO.File.ReadAllBytes(filename);
+                return File(filebytes, "application/x-msdownload", "example.txt");
+            }
+
         }
 
         //#########################################

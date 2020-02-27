@@ -7,16 +7,18 @@ using System.IO;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Deploy.DAL
 {
     public class RESTApi
     {
-
-        private AzureStorageConfig _storageConfig;
-        public RESTApi(AzureStorageConfig config)
+        private IHostingEnvironment hostingEnv;
+        public AzureStorageConfig _storageConfig;
+        public RESTApi(AzureStorageConfig config, IHostingEnvironment env)
         {
             _storageConfig = config;
+            this.hostingEnv = env;
         }
         public class AccessToken
         {
@@ -50,6 +52,76 @@ namespace Deploy.DAL
             return await result.ReadAsStringAsync();
         }
 
+        //Get Bearer token for Graph
+        public static async Task<string> GraphToken(string tennantID, string clientID, string secret)
+        {
+            string req = "grant_type=client_credentials&client_id=" + clientID + "&client_secret=" + secret + "&resource=https://graph.microsoft.com";
+            string TokenEndpoint = "https://login.windows.net/" + tennantID;
+            const string resource = "/oauth2/token";
+            string uri = TokenEndpoint + resource;
+
+            var httpClient = new HttpClient();
+            var buffer = System.Text.Encoding.UTF8.GetBytes(req);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+            var response = httpClient.PostAsync(uri, byteContent);
+
+            var result = response.Result.Content;
+
+            return await result.ReadAsStringAsync();
+        }
+
+        public static async Task<string> GraphGetAction(string accesstoken, string uri)
+        {
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
+            var response = httpClient.GetAsync(uri);
+            var result = response.Result.Content;
+
+            return await result.ReadAsStringAsync();
+        }
+
+        public async Task<string> GraphPostAction(string accesstoken, string uri, string policyPath)
+        {
+            string content = string.Empty;
+            //CloudStorageAccount storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_storageConfig.AccountName, _storageConfig.AccountKey), true);
+            //CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            //CloudBlobContainer container = blobClient.GetContainerReference("conditionalaccess");
+            //CloudBlockBlob blockBlob1 = container.GetBlockBlobReference(policyPath);
+
+
+
+            //string contents = blockBlob1.DownloadTextAsync().Result;
+
+            var filename = hostingEnv.WebRootPath + $@"\csv\example.txt";
+            string contents = System.IO.File.ReadAllText(filename);
+                       
+            //return File(filebytes, "application/x-msdownload", "example.txt");
+
+            string[] policies = contents.Split('@');
+            
+
+            
+            foreach (var policy in policies)
+            {
+                //var content1 = new StringContent(policy, Encoding.UTF8, "application/json");
+
+                var httpClient = new HttpClient();
+                var buffer = System.Text.Encoding.UTF8.GetBytes(policy);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
+                var response = httpClient.PostAsync(uri, byteContent);
+                
+                content += await response.Result.Content.ReadAsStringAsync();
+                content += "  ";
+            }
+
+            return content;
+
+        }
 
         // Deploy API
         public static async Task<string> PutAsync(string subscriptionID, string resourcegroup, string azuredeploy, string accesstoken, string JObj, bool resource)
@@ -66,6 +138,7 @@ namespace Deploy.DAL
 
             var content1 = new StringContent(JObj, Encoding.UTF8, "application/json");
             var httpClient = new HttpClient();
+
 
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accesstoken);
             var response = httpClient.PutAsync(uri, content1);
